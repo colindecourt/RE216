@@ -68,6 +68,8 @@ int do_connect(int sockfd, const struct sockaddr_in addr) {
     perror("error connection : ");
     exit(EXIT_FAILURE);
   }
+  else
+    printf("Connexion ok\n");
   return res;
 }
 

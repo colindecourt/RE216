@@ -91,7 +91,8 @@ int do_accept(int sock, struct sockaddr_in adr){
     else if (connection >0)
       printf("Connection ok");
 
-    return connection;
+    //return connection;
+    printf("%i\n", connection);
 }
 
 //Read message
@@ -160,6 +161,7 @@ int main(int argc, char** argv)
   int backlog = 20;
 
   listen(s_server, backlog);
+
 
 
 
