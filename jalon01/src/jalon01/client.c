@@ -61,22 +61,42 @@ int do_socket(int domain, int type, int protocol) {
 
 
 
-void do_connect(int sockfd, const struct sockaddr_in addr) {
+int do_connect(int sockfd, const struct sockaddr_in addr) {
   int res = connect(sockfd, (struct sockaddr *) &addr, sizeof(struct sockaddr_in));
   if (res != 0) {
     //fprintf(stderr,"Error : Unable to connect\n");
     perror("error connection : ");
     exit(EXIT_FAILURE);
   }
-  printf("connection ok \n");
+  return res;
 }
 
 
+ssize_t readline(int sockfd, void*str, size_t maxlen){
+  ssize_t msg = read(sockfd, str, maxlen);
+  if(msg == -1){
+    printf("Unable to read message");
+  }
+  else
+    return msg;
+}
+
+void handle_client_message(int sockfd, char*buffer){
+  printf("Write your message");
+  fgets(buffer, sizeof(buffer), stdin); //read the message in stdin
+}
 
 
 int main(int argc,char** argv){
 
+  char msg_cli[50000];
+  char msg_ser[50000];
+  char end[] = "End of message\n";
+
+  memset(msg_cli,0,sizeof(msg_cli));
+  memset(msg_ser,0,sizeof(msg_ser));
   char * ip = argv[1];
+
   if (argc != 3)
   {
     fprintf(stderr,"usage: RE216_CLIENT hostname port\n");
@@ -94,14 +114,22 @@ int main(int argc,char** argv){
   int s = do_socket(AF_INET, SOCK_STREAM,IPPROTO_TCP);
 
   //connect to remote socket
-  do_connect(s, serv_addr);
+  int connect = do_connect(s, serv_addr);
 
+  while (strcmp(msg_cli,end) !=0){
+    if (connect == -1){
+      printf("No connection \n");
+      break;
+    }
+    handle_client_message(s,msg_cli);
+    readline(s,msg_ser,sizeof(msg_cli));
+    //Memory libeation
+    memset(msg_ser, 0, sizeof(msg_ser));
+  }
 
-  //get user input
-  //readline()
+  //close Connection
+  close(s);
 
-  //send message to the server
-  //handle_client_message()
 
 
   return 0;

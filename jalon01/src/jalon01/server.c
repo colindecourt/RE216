@@ -142,8 +142,9 @@ int main(int argc, char** argv)
   int s_server = do_socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 
   //create message pointer
-  //char msg[10000];
-  //memset(msg,0,sizeof(msg));
+  char msg_ser[50000];
+  char end[] = "End of message\n";
+  memset(msg_ser,0,sizeof(msg_ser));
 
   //init the serv_add structure
   struct sockaddr_in serv_addr;
@@ -167,6 +168,10 @@ int main(int argc, char** argv)
   //accept connection from client
   int s_client = do_accept(s_server,serv_addr);
 
+  while(strcmp(msg_ser,end) != 0){
+    do_read(s_client, msg_ser,sizeof(msg_ser));
+    do_write(s_client, msg_ser,sizeof(msg_ser));
+  }
   //read what the client has to say
   //do_read(sock,msg,)
 
@@ -174,9 +179,11 @@ int main(int argc, char** argv)
   //do_write()
 
   //clean up client socket
+  memset(msg_ser,0,sizeof(msg_ser));
+  close(s_client);
 }
 
 //clean up server socket
-
+  close(s_server);
 return 0;
 }
