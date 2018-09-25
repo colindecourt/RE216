@@ -83,13 +83,11 @@ void do_bind(int sock, struct sockaddr_in adr){
 
 //Accept the connection
 
-int do_accept(int sock, struct sockaddr_in adr){
-    int connection = accept(sock,(struct sockaddr *)&adr,(socklen_t*) &adr);
+void do_accept(int sock, struct sockaddr_in adr){
+    int connection = accept(sock,(struct sockaddr *)&adr,(socklen_t*)sizeof(struct sockaddr_in));
     if (connection == -1)
         error("accept ERROR\n");
-    else if (connection > 0)
-        printf("Connection made\n");
-    return connection;
+    printf("%i\n", connection);
 }
 
 //Read message
@@ -155,16 +153,14 @@ int main(int argc, char** argv)
   int backlog = 20;
   int retlisten;
   retlisten = listen(s, backlog);
-  printf("%i\n",retlisten );
   if (retlisten == -1){
     fprintf(stderr,"Error : listen failed\n");
   }
 
   for (;;)
   {
-
   //accept connection from client
-  do_accept(s, serv_addr);
+  do_accept(s,serv_addr);
 
   //read what the client has to say
   //do_read(sock,msg,)
