@@ -13,7 +13,7 @@
 #include <arpa/inet.h>
 
 
-void get_addr_info(const char* port, struct sockaddr_in* serv_addr1, char* ip) {
+struct sockaddr_in get_addr_info(const char* port, struct sockaddr_in* serv_addr1, char* ip) {
   int portno;
 
   //clean the serv_add structure
@@ -91,7 +91,7 @@ int main(int argc,char** argv){
 
 
   //get the socket
-  int s = do_socket(AF_INET, SOCK_STREAM, 0);
+  int s = do_socket(AF_INET, SOCK_STREAM,IPPROTO_TCP);
 
   //connect to remote socket
   do_connect(s, serv_addr);

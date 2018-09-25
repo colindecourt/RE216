@@ -51,7 +51,7 @@ void init_serv_addr(const char* port, struct sockaddr_in* serv_addr) {
   memset( serv_addr, '\0', sizeof(struct sockaddr_in));
 
   //cast the port from a string to an int
-  portno   = (int)&port;
+  portno   = atoi(port);
 
   //internet family protocol
   serv_addr->sin_family = AF_INET;
@@ -79,15 +79,19 @@ void do_bind(int sock, struct sockaddr_in adr){
   printf("bind ok \n");
 }
 
-//bind(sock, (struct sockaddrr *) &saddr_in, sizeof(saddr_in));
+
 
 //Accept the connection
 
-void do_accept(int sock, struct sockaddr_in adr){
-    int connection = accept(sock,(struct sockaddr *)&adr,(socklen_t*)sizeof(struct sockaddr_in));
+int do_accept(int sock, struct sockaddr_in adr){
+    int adr_len = sizeof(adr);
+    int connection = accept(sock,(struct sockaddr *)&adr,(socklen_t*)&adr_len);
     if (connection == -1)
         error("accept ERROR\n");
-    printf("%i\n", connection);
+    else if (connection >0)
+      printf("Connection ok");
+
+    return connection;
 }
 
 //Read message
@@ -132,35 +136,36 @@ int main(int argc, char** argv)
     return 1;
   }
 
+  const char * port = argv[1];
 
   //create the socket, check for validity!
-  int s = do_socket(AF_INET, SOCK_STREAM, 0);
+  int s_server = do_socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+
   //create message pointer
-  char msg[10000];
-  memset(msg,0,sizeof(msg));
+  //char msg[10000];
+  //memset(msg,0,sizeof(msg));
 
   //init the serv_add structure
   struct sockaddr_in serv_addr;
-  init_serv_addr(argv[1], &serv_addr);
+  init_serv_addr(port, &serv_addr);
 
   //perform the binding
   //we bind on the tcp port specified
-  do_bind(s, serv_addr);
+  do_bind(s_server, serv_addr);
 
 
 
   //specify the socket to be a server socket and listen for at most 20 concurrent client
   int backlog = 20;
-  int retlisten;
-  retlisten = listen(s, backlog);
-  if (retlisten == -1){
-    fprintf(stderr,"Error : listen failed\n");
-  }
+
+  listen(s_server, backlog);
+
+
 
   for (;;)
   {
   //accept connection from client
-  do_accept(s,serv_addr);
+  int s_client = do_accept(s_server,serv_addr);
 
   //read what the client has to say
   //do_read(sock,msg,)
