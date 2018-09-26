@@ -68,30 +68,32 @@ int do_connect(int sockfd, const struct sockaddr_in addr) {
     perror("error connection : ");
     exit(EXIT_FAILURE);
   }
+  printf("connection ok\n");
   return res;
 }
 
 
-ssize_t readline(int sockfd, void*str, size_t maxlen){
+ssize_t readline(int sockfd, char* str, size_t maxlen){
   ssize_t msg = read(sockfd, str, maxlen);
   if(msg == -1){
     printf("Unable to read message");
   }
   else
+  printf("voici le msg\n");
     return msg;
 }
 
 void handle_client_message(int sockfd, char*buffer){
-  printf("Write your message");
+  printf("Write your message : \n");
   fgets(buffer, sizeof(buffer), stdin); //read the message in stdin
 }
 
 
 int main(int argc,char** argv){
 
-  char msg_cli[50000];
-  char msg_ser[50000];
-  char end[] = "End of message\n";
+  char* msg_cli = malloc(50000*sizeof(char));
+  char* msg_ser= malloc(50000*sizeof(char));
+  char* end= "End of message\n";
 
   memset(msg_cli,0,sizeof(msg_cli));
   memset(msg_ser,0,sizeof(msg_ser));
@@ -121,8 +123,8 @@ int main(int argc,char** argv){
       printf("No connection \n");
       break;
     }
-    handle_client_message(s,msg_cli);
-    readline(s,msg_ser,sizeof(msg_cli));
+    handle_client_message(s, msg_cli);
+    readline(s,msg_cli,sizeof(msg_cli));
     //Memory libeation
     memset(msg_ser, 0, sizeof(msg_ser));
   }
