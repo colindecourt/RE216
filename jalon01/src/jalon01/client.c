@@ -12,6 +12,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
+#define BUFF_LEN_MAX 100
 
 struct sockaddr_in get_addr_info(const char* port, struct sockaddr_in* serv_addr1, char* ip) {
   int portno;
@@ -68,40 +69,46 @@ int do_connect(int sockfd, const struct sockaddr_in addr) {
     perror("error connection : ");
     exit(EXIT_FAILURE);
   }
-<<<<<<< HEAD
-  else
-    printf("Connexion ok\n");
-=======
   printf("connection ok\n");
->>>>>>> a2cc8ff91746386e29cb7812d87b68464332785d
   return res;
 }
 
 
-ssize_t readline(int sockfd, char* str, size_t maxlen){
-  ssize_t msg = read(sockfd, str, maxlen);
-  if(msg == -1){
-    printf("Unable to read message");
-  }
-  else
-  printf("voici le msg\n");
-    return msg;
+
+char* handle_client_message(int sockfd, char*buffer){
+  printf("Write your message : \n");
+  fgets(buffer, BUFF_LEN_MAX, stdin); //read the message in stdin
+  return buffer;
 }
 
-void handle_client_message(int sockfd, char*buffer){
-  printf("Write your message : \n");
-  fgets(buffer, sizeof(buffer), stdin); //read the message in stdin
+void do_send(int sockfd, char* msg, int len) {
+  int retour;
+  size_t taille = (size_t)len;
+  void * cast_msg = (void*)msg;
+  retour = send(sockfd, cast_msg, taille, 0);
+  if (retour == -1)
+  printf("error : send");
+}
+
+//Read message
+
+void do_recv(int sockfd, void*buff){
+  int msg_recv;
+  msg_recv = recv(sockfd, buff, BUFF_LEN_MAX, 0);
+  if (msg_recv == -1)
+  printf("reception error");
 }
 
 
 int main(int argc,char** argv){
 
-  char* msg_cli = malloc(50000*sizeof(char));
-  char* msg_ser= malloc(50000*sizeof(char));
-  char* end= "End of message\n";
+  char* msg_cli = malloc(BUFF_LEN_MAX*sizeof(char));
+  void* msg= malloc(BUFF_LEN_MAX*sizeof(char));
+  char* end= "quit";
+
 
   memset(msg_cli,0,sizeof(msg_cli));
-  memset(msg_ser,0,sizeof(msg_ser));
+
   char * ip = argv[1];
 
   if (argc != 3)
@@ -123,16 +130,24 @@ int main(int argc,char** argv){
   //connect to remote socket
   int connect = do_connect(s, serv_addr);
 
-  while (strcmp(msg_cli,end) !=0){
-    if (connect == -1){
-      printf("No connection \n");
-      break;
+
+
+  while(strncmp(msg_cli,"/quit",5) != 0){
+    if(strncmp(msg_cli,"/quit",5)!=0){
+      handle_client_message(s, msg_cli);
+      do_send(s, msg_cli, strlen(msg_cli));
+      do_recv(s,msg);
+      char*msg_ser =(char*)msg;
+      printf("Server say :%s\n", msg_ser);
     }
-    handle_client_message(s, msg_cli);
-    readline(s,msg_cli,sizeof(msg_cli));
-    //Memory libeation
-    memset(msg_ser, 0, sizeof(msg_ser));
+    else {
+      printf("Connection closed");
+    }
+
   }
+  //Memory libeation
+  memset(msg_cli,0,sizeof(msg_cli));
+
 
   //close Connection
   close(s);

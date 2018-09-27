@@ -9,7 +9,7 @@
 
 #include <arpa/inet.h>
 
-
+#define BUFF_LEN_MAX 100
 
 void error(const char *msg)
 {
@@ -51,7 +51,7 @@ void init_serv_addr(const char* port, struct sockaddr_in* serv_addr) {
   memset( serv_addr, '\0', sizeof(struct sockaddr_in));
 
   //cast the port from a string to an int
-  portno   = atoi(port);
+  portno = atoi(port);
 
   //internet family protocol
   serv_addr->sin_family = AF_INET;
@@ -76,7 +76,6 @@ void do_bind(int sock, struct sockaddr_in adr){
     perror("error bind : ");
     exit(EXIT_FAILURE);
   }
-  printf("bind ok \n");
 }
 
 
@@ -84,47 +83,36 @@ void do_bind(int sock, struct sockaddr_in adr){
 //Accept the connection
 
 int do_accept(int sock, struct sockaddr_in adr){
-    int adr_len = sizeof(adr);
-    int connection = accept(sock,(struct sockaddr *)&adr,(socklen_t*)&adr_len);
-    if (connection == -1)
-        error("accept ERROR\n");
-    else if (connection >0)
-      printf("Connection ok");
+  int adr_len = sizeof(adr);
+  int connection = accept(sock,(struct sockaddr *)&adr,(socklen_t*)&adr_len);
+  if (connection == -1)
+  error("accept ERROR\n");
+  else if (connection >0)
+  printf("Connection ok\n");
 
-    //return connection;
-    printf("%i\n", connection);
+  return connection;
 }
 
 //Read message
 
-ssize_t do_read(int sock, void *data_ptr, size_t to_recv){
-    int recv = 0;
-    do{
-      recv += read(sock, &sock + recv, to_recv - recv);
-
-    } while(recv != to_recv);
-
-    if (recv == -1){
-      error("Data not read");
-    }
-    else{
-      return recv;
-    }
+void do_recv(int sockfd, void*buff){
+  int msg_recv;
+  msg_recv = recv(sockfd, buff, BUFF_LEN_MAX, 0);
+  if (msg_recv == -1)
+  printf("reception error");
 }
 
-ssize_t do_write(int sock, void *data_ptr, size_t to_send){
-  int sent = 0;
-  do{
-    sent += write(sock, &sock + sent, to_send - sent);
-  } while(sent != to_send);
+//Send message
 
-  if (sent == -1){
-    error("Data not send");
-  }
-  else {
-    return sent;
-  }
+void do_send(int sockfd, char* msg, int len) {
+  int retour;
+  size_t taille = (size_t)len;
+  void * cast_msg = (void*)msg;
+  retour = send(sockfd, cast_msg, taille, 0);
+  if (retour == -1)
+  printf("error : send");
 }
+
 
 
 
@@ -143,9 +131,10 @@ int main(int argc, char** argv)
   int s_server = do_socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 
   //create message pointer
-  char msg_ser[50000];
-  char end[] = "End of message\n";
-  memset(msg_ser,0,sizeof(msg_ser));
+  void* msg = malloc(BUFF_LEN_MAX*sizeof(char));
+
+  char *end = "quit";
+
 
   //init the serv_add structure
   struct sockaddr_in serv_addr;
@@ -167,25 +156,30 @@ int main(int argc, char** argv)
 
   for (;;)
   {
-  //accept connection from client
-  int s_client = do_accept(s_server,serv_addr);
+    //accept connection from client
+    int s_client = do_accept(s_server,serv_addr);
 
-  while(strcmp(msg_ser,end) != 0){
-    do_read(s_client, msg_ser,sizeof(msg_ser));
-    do_write(s_client, msg_ser,sizeof(msg_ser));
+    char* msg_cli = malloc(BUFF_LEN_MAX*sizeof(char));
+
+
+    while(strncmp(msg_cli,"/quit",5) != 0){
+      do_recv(s_client, msg);
+      msg_cli = (char*)msg;
+      if(strncmp(msg_cli,"/quit",5) != 0){
+        do_send(s_client, msg_cli, strlen(msg_cli));
+        printf("Client say :%s\n", msg_cli);
+      }
+      else {
+        char * close_co = "Close connexion\n";
+        do_send(s_client,close_co,strlen(close_co));
+      }
+    }
+    //clean up client socket
+    memset(msg_cli,0,sizeof(msg_cli));
+    close(s_client);
   }
-  //read what the client has to say
-  //do_read(sock,msg,)
 
-  //we write back to the client
-  //do_write()
-
-  //clean up client socket
-  memset(msg_ser,0,sizeof(msg_ser));
-  close(s_client);
-}
-
-//clean up server socket
+  //clean up server socket
   close(s_server);
-return 0;
+  return 0;
 }
