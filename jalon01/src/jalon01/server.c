@@ -17,9 +17,6 @@ void error(const char *msg)
   exit(1);
 }
 
-
-
-
 int do_socket(int domain, int type, int protocol) {
   int sockfd;
   int yes = 1;
@@ -38,10 +35,6 @@ int do_socket(int domain, int type, int protocol) {
 
   return sockfd;
 }
-
-
-
-
 
 void init_serv_addr(const char* port, struct sockaddr_in* serv_addr) {
 
@@ -77,8 +70,6 @@ void do_bind(int sock, struct sockaddr_in adr){
     exit(EXIT_FAILURE);
   }
 }
-
-
 
 //Accept the connection
 

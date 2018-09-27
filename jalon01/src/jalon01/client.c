@@ -35,10 +35,6 @@ struct sockaddr_in get_addr_info(const char* port, struct sockaddr_in* serv_addr
   serv_addr1->sin_port = htons(portno);
 }
 
-
-
-
-
 int do_socket(int domain, int type, int protocol) {
   int sockfd;
   int yes = 1;
@@ -58,10 +54,6 @@ int do_socket(int domain, int type, int protocol) {
   return sockfd;
 }
 
-
-
-
-
 int do_connect(int sockfd, const struct sockaddr_in addr) {
   int res = connect(sockfd, (struct sockaddr *) &addr, sizeof(struct sockaddr_in));
   if (res != 0) {
@@ -72,8 +64,6 @@ int do_connect(int sockfd, const struct sockaddr_in addr) {
   printf("connection ok\n");
   return res;
 }
-
-
 
 char* handle_client_message(int sockfd, char*buffer){
   printf("Write your message : \n");
@@ -91,7 +81,6 @@ void do_send(int sockfd, char* msg, int len) {
 }
 
 //Read message
-
 void do_recv(int sockfd, void*buff){
   int msg_recv;
   msg_recv = recv(sockfd, buff, BUFF_LEN_MAX, 0);
