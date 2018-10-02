@@ -140,8 +140,8 @@ int main(int argc, char** argv)
   //complete the pollfd structure
    struct pollfd fds[BACKLOG];
    int nfds = 1;
-   int current_size = 0 //number of wait fd
-   int i,j;
+   int current_size = 0; //number of wait fd
+  
    
 
   for (;;)
