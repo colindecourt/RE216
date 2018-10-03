@@ -11,7 +11,7 @@
       
 #define BUFF_LEN_MAX 100      
 //specify the socket to be a server socket and listen for at most 20 concurrent client      
-#define BACKLOG 20      
+#define BACKLOG 3      
       
 void error(const char *msg)     
 {     
@@ -154,28 +154,28 @@ int main(int argc, char** argv)
       
     //Detect which socket try to talk 
     current_size = nfds;    
-    for(int i=0; i<current_size; i++){ 
+      for(int i=0; i<current_size; i++){ 
 
-      if(fds[i].revents == POLLIN) {//c'est lui qui a déclenché l'évènement       
+        if(fds[i].revents == POLLIN) {//c'est lui qui a déclenché l'évènement       
+
+          if(fds[i].fd == s_server){     
+            //accept connection from client     
+            s_client = do_accept(s_server,serv_addr);     
+            fds[nfds].fd = s_client;
+            fds[nfds].events = POLLIN; 
+            nfds++;  
+          }   
       
-        if(fds[i].fd == s_server){     
-          //accept connection from client     
-          s_client = do_accept(s_server,serv_addr);     
-          fds[nfds].fd = s_client;
-          fds[nfds].events = POLLIN; 
-          nfds++;  
+          else{
+            char* msg_cli = malloc(BUFF_LEN_MAX*sizeof(char));          
+            do_recv(fds[i].fd, msg);      
+            msg_cli = (char*)msg;     
+            do_send(fds[i].fd, msg_cli, strlen(msg_cli));     
+            printf("Client say :%s\n", msg_cli);              
+          }
         }     
+      }          
       
-        else{
-          char* msg_cli = malloc(BUFF_LEN_MAX*sizeof(char));          
-          do_recv(fds[i].fd, msg);      
-          msg_cli = (char*)msg;     
-          do_send(fds[i].fd, msg_cli, strlen(msg_cli));     
-          printf("Client say :%s\n", msg_cli);              
-          }     
-        }          
-    }     
-            
     //clean up client socket      
     //memset(msg_cli,0,sizeof(msg_cli));      
     //close(s_client);      
