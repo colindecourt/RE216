@@ -91,7 +91,6 @@ int main(int argc,char** argv){
 
   char* msg_cli = malloc(BUFF_LEN_MAX*sizeof(char));
   void* msg= malloc(BUFF_LEN_MAX*sizeof(char));
-  char* end= "quit";
 
 
   memset(msg_cli,0,sizeof(msg_cli));
