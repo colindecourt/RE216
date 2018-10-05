@@ -170,15 +170,18 @@ int main(int argc, char** argv)
           //accept connection from client
           do_send(fds[i].fd, msg_cli, strlen(msg_cli));
           printf("Client n°%i say :%s\n",i, msg_cli);
-          if(strcmp(msg_cli,"/quit") == 0){
+          if(strncmp(msg_cli,"/quit",5) == 0){
             close(fds[i].fd);
             fds[i].fd = -1;
-            printf("Client n°%i close connection", i);
+            printf("Client n°%i close connection\n", i);
             //for (int i = 0; i < nfds; i++){ //on remplace les socket inutilisées
               if (fds[i].fd == -1){
-                for(int j = i; j < nfds; j++){
+                memmove(fds+i, fds+(i+1), (nfds-i));
+                /*for(int j = i; j < nfds; j++){
                   fds[j].fd = fds[j+1].fd;
-                }
+                  fds[j].events = fds[j+1].events;
+                  fds[j].revents = fds[j+1].revents;
+                }*/
                 //i--;
                 nfds--;
               //}
