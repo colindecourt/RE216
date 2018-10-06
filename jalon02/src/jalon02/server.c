@@ -157,11 +157,11 @@ int main(int argc, char** argv)
 
     //Detect which socket try to talk
     current_size = nfds;
-    char* msg_close = "close";
+    char* msg_close = "error, connection closed";
     for(int i=0; i<current_size; i++){
       if(fds[i].revents == POLLIN) {//c'est lui qui a déclenché l'évènement
         if(fds[i].fd == s_server){
-        nb_clients ++;
+          nb_clients ++;
           s_client = do_accept(s_server,serv_addr,current_size, nb_clients);
           if (nb_clients>BACKLOG){
             close(s_client);//fermer la socket du client en trop
