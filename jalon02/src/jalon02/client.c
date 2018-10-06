@@ -9,8 +9,12 @@
 #include <sys/socket.h>
 #include <netdb.h>
 
+#include <poll.h>
+
 #include <netinet/in.h>
 #include <arpa/inet.h>
+
+
 
 #define BUFF_LEN_MAX 100
 
@@ -59,7 +63,7 @@ int do_connect(int sockfd, const struct sockaddr_in addr) {
     perror("error connection : ");
     exit(EXIT_FAILURE);
   }
-  printf("Connection ok with server\n");
+  //printf("Connection with server\n");
   return res;
 }
 
@@ -117,23 +121,52 @@ int main(int argc,char** argv){
   int connect = do_connect(s, serv_addr);
 
 
-  while(strncmp(msg_cli,"/quit",5) != 0){
-    if(strncmp(msg_cli,"/quit",5)!=0){
-      handle_client_message(s, msg_cli);
-      do_send(s, msg_cli, strlen(msg_cli));
+  struct pollfd fds[2];
+
+  memset(fds,0,sizeof(fds));
+
+  //pour les messages envoyés du serveur
+  fds[0].fd = s;
+  fds[0].events = POLLIN;
+  fds[0].revents = 0;
+  //pour les messages envoyés depuis le client
+  fds[1].fd = 0;
+  fds[1].events = POLLIN;
+
+
+
+  while(1){
+    int rc = poll(fds,2,-1);
+
+    if(fds[0].revents == POLLIN){
       do_recv(s,msg);
-      char*msg_ser =(char*)msg;
-      printf("Server says :%s\n", msg_ser);
+      char *msg_ser =(char*)msg;
+      if (strncmp(msg_ser, "close", 5)==0){
+        printf("error in connection, to many clients\n");
+      }
+      break;
     }
+
     else {
-      printf("Connection closed");
+      printf("Connection with server ok \n");
+
+      while(strncmp(msg_cli,"/quit",5) != 0){
+        if(strncmp(msg_cli,"/quit",5)!=0){
+          handle_client_message(s, msg_cli);
+          do_send(s, msg_cli, strlen(msg_cli));
+          do_recv(s,msg);
+          char*msg_ser =(char*)msg;
+          printf("Server says :%s\n", msg_ser);
+        }
+        else {
+          printf("Connection closed");
+        }
+
+      }
+      //Memory libeation
+      memset(msg_cli,0,sizeof(msg_cli));
     }
-
   }
-  //Memory libeation
-  memset(msg_cli,0,sizeof(msg_cli));
-
-
   //close Connection
   close(s);
 

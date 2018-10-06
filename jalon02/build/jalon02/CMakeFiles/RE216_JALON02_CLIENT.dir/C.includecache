@@ -23,6 +23,8 @@ sys/socket.h
 -
 netdb.h
 -
+poll.h
+-
 netinet/in.h
 -
 arpa/inet.h
