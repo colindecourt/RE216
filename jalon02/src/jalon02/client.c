@@ -28,7 +28,7 @@ struct sockaddr_in get_addr_info(const char* port, struct sockaddr_in* serv_addr
 
   //we bind to any ip form the host
   serv_addr1->sin_addr.s_addr = inet_addr(ip);
- 
+
   //we bind on the tcp port specified
   serv_addr1->sin_port = htons(portno);
 }
@@ -117,14 +117,13 @@ int main(int argc,char** argv){
   int connect = do_connect(s, serv_addr);
 
 
-
   while(strncmp(msg_cli,"/quit",5) != 0){
     if(strncmp(msg_cli,"/quit",5)!=0){
       handle_client_message(s, msg_cli);
       do_send(s, msg_cli, strlen(msg_cli));
       do_recv(s,msg);
       char*msg_ser =(char*)msg;
-      printf("Server say :%s\n", msg_ser);
+      printf("Server says :%s\n", msg_ser);
     }
     else {
       printf("Connection closed");

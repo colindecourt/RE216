@@ -74,13 +74,15 @@ void do_bind(int sock, struct sockaddr_in adr){
 
 //Accept the connection
 
-int do_accept(int sock, struct sockaddr_in adr,int i){
+int do_accept(int sock, struct sockaddr_in adr,int i, int nb_clients){
   int adr_len = sizeof(adr);
   int connection = accept(sock,(struct sockaddr *)&adr,(socklen_t*)&adr_len);
   if (connection == -1)
-  error("accept ERROR\n");
+    error("accept ERROR\n");
+  else if (nb_clients>BACKLOG) // teste si il n'y a pas trop de clients connectés
+    printf("Too many clients, connection failed\n");
   else if (connection >0)
-  printf("Connection ok with client n°%i\n",i);
+    printf("Connection ok with client n°%i\n",i);
 
   return connection;
 }
@@ -155,30 +157,21 @@ int main(int argc, char** argv)
 
     //Detect which socket try to talk
     current_size = nfds;
+    char* msg_close = "close";
     for(int i=0; i<current_size; i++){
       if(fds[i].revents == POLLIN) {//c'est lui qui a déclenché l'évènement
         if(fds[i].fd == s_server){
-          s_client = do_accept(s_server,serv_addr,current_size);
-          nb_clients ++;
-          fds[nfds].fd = s_client;
-          fds[nfds].events = POLLIN;
-          nfds++;
+        nb_clients ++;
+          s_client = do_accept(s_server,serv_addr,current_size, nb_clients);
           if (nb_clients>BACKLOG){
-            close(fds[i].fd);
+            close(s_client);//fermer la socket du client en trop
+            printf("connection fermée\n");
             nb_clients--;
-            fds[i].fd = -1;
-            //fds[i].events = -1;
-            //fds[i].revents = -1;
-            printf("To many clients : Client n°%i can't be connected\n", i);
-            for (int i = 0; i < nfds; i++){ //on remplace les socket inutilisées
-              if (fds[i].fd == -1){
-                for(int j = i; j < nfds; j++){//memmove
-                  fds[j].fd = fds[j+1].fd;
-                }
-                i--;
-                nfds--;
-              }
-            }
+          }
+          else {
+            fds[nfds].fd = s_client;
+            fds[nfds].events = POLLIN;
+            nfds++;
           }
         }
 
