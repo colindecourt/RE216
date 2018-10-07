@@ -9,9 +9,9 @@
 
 #include <arpa/inet.h>
 
-#define BUFF_LEN_MAX 100
+#define BUFF_LEN_MAX 1000
 //specify the socket to be a server socket and listen for at most 20 concurrent client
-#define BACKLOG 20
+#define BACKLOG 2
 
 void error(const char *msg)
 {
@@ -163,7 +163,7 @@ int main(int argc, char** argv)
         if(fds[i].fd == s_server){
           nb_clients ++;
           s_client = do_accept(s_server,serv_addr,current_size, nb_clients);
-          if (nb_clients>BACKLOG){
+          if (nb_clients==BACKLOG){
             do_send(s_client, msg_close, strlen(msg_close));
             close(s_client);//fermer la socket du client en trop
             printf("connection fermée\n");

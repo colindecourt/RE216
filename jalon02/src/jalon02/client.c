@@ -16,7 +16,7 @@
 
 
 
-#define BUFF_LEN_MAX 100
+#define BUFF_LEN_MAX 1000
 
 struct sockaddr_in get_addr_info(const char* port, struct sockaddr_in* serv_addr1, char* ip) {
   int portno;
@@ -69,6 +69,7 @@ int do_connect(int sockfd, const struct sockaddr_in addr) {
 
 char* handle_client_message(int sockfd, char*buffer){
   printf("Write your message : \n");
+  fflush(stdout);
   fgets(buffer, BUFF_LEN_MAX, stdin); //read the message in stdin
   return buffer;
 }
@@ -135,7 +136,7 @@ int main(int argc,char** argv){
 
 
 
-  while(1){
+  for(;;){
     int rc = poll(fds,2,-1);
 
     if(fds[0].revents == POLLIN){
@@ -149,24 +150,19 @@ int main(int argc,char** argv){
 
     else {
       printf("Connection with server ok \n");
-
-      while(strncmp(msg_cli,"/quit",5) != 0){
-        if(strncmp(msg_cli,"/quit",5)!=0){
-          handle_client_message(s, msg_cli);
-          do_send(s, msg_cli, strlen(msg_cli));
-          do_recv(s,msg);
-          char*msg_ser =(char*)msg;
-          printf("Server says :%s\n", msg_ser);
-        }
-        else {
-          printf("Connection closed");
-        }
-
+      handle_client_message(s,msg_cli);
+      fflush(stdout);
+      do_send(s,msg_cli,strlen(msg_cli));
+      do_recv(s,msg);
+      char*msg_ser =(char*)msg;
+      printf("Server says :%s\n", msg_ser);
+      if(strncmp(msg_cli,"/quit",5)==0){
+        break;
       }
+    }
       //Memory libeation
       memset(msg_cli,0,sizeof(msg_cli));
     }
-  }
   //close Connection
   close(s);
 
