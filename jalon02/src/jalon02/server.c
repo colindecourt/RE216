@@ -78,11 +78,11 @@ int do_accept(int sock, struct sockaddr_in adr,int i, int nb_clients){
   int adr_len = sizeof(adr);
   int connection = accept(sock,(struct sockaddr *)&adr,(socklen_t*)&adr_len);
   if (connection == -1)
-    error("accept ERROR\n");
-  else if (nb_clients>BACKLOG) // teste si il n'y a pas trop de clients connectés
-    printf("Too many clients, connection failed\n");
+  error("accept ERROR\n");
+  else if (nb_clients>=BACKLOG) // teste si il n'y a pas trop de clients connectés
+  printf("Too many clients, connection failed\n");
   else if (connection >0)
-    printf("Connection ok with client n°%i\n",i);
+  printf("Connection ok with client n°%i\n",i);
 
   return connection;
 }
@@ -125,7 +125,7 @@ int main(int argc, char** argv)
 
   //create message pointer
   void* msg = malloc(BUFF_LEN_MAX*sizeof(char));
-
+  char * msg_connection ="server_client";
   //init the serv_add structure
   struct sockaddr_in serv_addr;
   init_serv_addr(port, &serv_addr);
@@ -137,13 +137,13 @@ int main(int argc, char** argv)
   listen(s_server, BACKLOG);
 
   //complete the pollfd structure
-   struct pollfd fds[BACKLOG+5];
-   int nfds = 1;
-   int current_size = 0; //number of wait sockets
-   int nb_clients = 0;
-   memset(fds,0,sizeof(fds));
-   fds[0].fd = s_server;
-   fds[0].events = POLLIN;
+  struct pollfd fds[BACKLOG+5];
+  int nfds = 1;
+  int current_size = 0; //number of wait sockets
+  int nb_clients = 0;
+  memset(fds,0,sizeof(fds));
+  fds[0].fd = s_server;
+  fds[0].events = POLLIN;
 
 
 
@@ -157,54 +157,56 @@ int main(int argc, char** argv)
 
     //Detect which socket try to talk
     current_size = nfds;
-    char* msg_close = "close";
+    char* msg_close = "_kill_";
     for(int i=0; i<current_size; i++){
       if(fds[i].revents == POLLIN) {//c'est lui qui a déclenché l'évènement
-        if(fds[i].fd == s_server){
-          nb_clients ++;
-          s_client = do_accept(s_server,serv_addr,current_size, nb_clients);
-          if (nb_clients==BACKLOG){
-            do_send(s_client, msg_close, strlen(msg_close));
-            close(s_client);//fermer la socket du client en trop
-            printf("connection fermée\n");
-            nb_clients--;
-          }
-          else {
-            fds[nfds].fd = s_client;
-            fds[nfds].events = POLLIN;
-            nfds++;
-          }
-        }
+      if(fds[i].fd == s_server){
+        nb_clients ++;
+        s_client = do_accept(s_server,serv_addr,current_size, nb_clients);
 
-        else{
-          char* msg_cli = malloc(BUFF_LEN_MAX*sizeof(char));
-          do_recv(fds[i].fd, msg);
-          msg_cli = (char*)msg;
-          //accept connection from client
-          do_send(fds[i].fd, msg_cli, strlen(msg_cli));
-          printf("Client n°%i say :%s\n",i, msg_cli);
-          if(strncmp(msg_cli,"/quit",5) == 0){
-            close(fds[i].fd);
-            nb_clients--;
-            fds[i].fd = -1;
-            //fds[i].events = -1;
-            //fds[i].revents = -1;
-            printf("Client n°%i close connection\n", i);
-            for (int i = 0; i < nfds; i++){ //on remplace les socket inutilisées
-              if (fds[i].fd == -1){
-                for(int j = i; j < nfds; j++){//memmove
-                  fds[j].fd = fds[j+1].fd;
-                }
-                i--;
-                nfds--;
+        if (nb_clients>=BACKLOG){
+          do_send(s_client, msg_close, strlen(msg_close));
+          close(s_client);//fermer la socket du client en trop
+          printf("connection fermée\n");
+          nb_clients--;
+        }
+        else {
+          do_send(s_client,msg_connection,strlen(msg_connection));
+          fds[nfds].fd = s_client;
+          fds[nfds].events = POLLIN;
+          nfds++;
+        }
+      }
+
+      else{
+        char* msg_cli = malloc(BUFF_LEN_MAX*sizeof(char));
+        do_recv(fds[i].fd, msg);
+        msg_cli = (char*)msg;
+        //accept connection from client
+        do_send(fds[i].fd, msg_cli, strlen(msg_cli));
+        printf("Client n°%i say :%s\n",i, msg_cli);
+        if(strncmp(msg_cli,"/quit",5) == 0){
+          close(fds[i].fd);
+          nb_clients--;
+          fds[i].fd = -1;
+          //fds[i].events = -1;
+          //fds[i].revents = -1;
+          printf("Client n°%i close connection\n", i);
+          for (int i = 0; i < nfds; i++){ //on remplace les socket inutilisées
+            if (fds[i].fd == -1){
+              for(int j = i; j < nfds; j++){//memmove
+                fds[j].fd = fds[j+1].fd;
               }
+              i--;
+              nfds--;
             }
           }
         }
-       }
       }
     }
-  //clean up server socket
-  //close(s_server);
-  return 0;
+  }
+}
+//clean up server socket
+//close(s_server);
+return 0;
 }

@@ -95,8 +95,9 @@ void do_recv(int sockfd, void*buff){
 int main(int argc,char** argv){
 
   char* msg_cli = malloc(BUFF_LEN_MAX*sizeof(char));
-  void* msg= malloc(BUFF_LEN_MAX*sizeof(char));
-
+  char* msg1 = malloc(BUFF_LEN_MAX*sizeof(char));
+  void*msg = (void*)msg1;
+  char* death_msg = "_kill_";
 
   memset(msg_cli,0,sizeof(msg_cli));
 
@@ -119,54 +120,36 @@ int main(int argc,char** argv){
   int s = do_socket(AF_INET, SOCK_STREAM,IPPROTO_TCP);
 
   //connect to remote socket
+  char*msg_co = malloc(100*sizeof(char));
+  void * msg_connection1 = (void*)msg_co;
   int connect = do_connect(s, serv_addr);
+  do_recv(s,msg_connection1);
+  char*msg_connection = (char*)msg_connection1;
 
+  if(strncmp(msg_connection,death_msg,7)==0){
+    printf("Too many connection. Server close connection \n");
+    close(s);
+  }
+  else if(strncmp(msg_connection,"server_client",14)==0){
+    printf("Connection with server ok \n");
+    for(;;){
 
-  struct pollfd fds[2];
-
-  memset(fds,0,sizeof(fds));
-
-  //pour les messages envoyés du serveur
-  fds[0].fd = s;
-  fds[0].events = POLLIN;
-  fds[0].revents = 0;
-  //pour les messages envoyés depuis le client
-  fds[1].fd = 0;
-  fds[1].events = POLLIN;
-
-
-
-  for(;;){
-    int rc = poll(fds,2,-1);
-
-    if(fds[0].revents == POLLIN){
-      do_recv(s,msg);
-      char *msg_ser =(char*)msg;
-      if (strncmp(msg_ser, "close", 5)==0){
-        printf("error in connection, to many clients\n");
-      }
-      break;
-    }
-
-    else {
-      printf("Connection with server ok \n");
       handle_client_message(s,msg_cli);
       fflush(stdout);
       do_send(s,msg_cli,strlen(msg_cli));
       do_recv(s,msg);
       char*msg_ser =(char*)msg;
       printf("Server says :%s\n", msg_ser);
+      printf("%s\n", msg_ser);
       if(strncmp(msg_cli,"/quit",5)==0){
         break;
       }
-    }
       //Memory libeation
       memset(msg_cli,0,sizeof(msg_cli));
     }
-  //close Connection
-  close(s);
-
-
+    //close Connection
+    close(s);
+  }
 
   return 0;
 
