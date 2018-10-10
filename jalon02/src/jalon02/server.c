@@ -6,18 +6,22 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <poll.h>
-
 #include <arpa/inet.h>
+
+
+// ---------- FUNCTIONS ------------- //
 
 #define BUFF_LEN_MAX 1000
 //specify the socket to be a server socket and listen for at most 20 concurrent client
-#define BACKLOG 2
+#define BACKLOG 21 //Maximum clients = 20 
 
 void error(const char *msg)
 {
   perror(msg);
   exit(1);
 }
+
+// ------------------------- //
 
 int do_socket(int domain, int type, int protocol) {
   int sockfd;
@@ -37,6 +41,8 @@ int do_socket(int domain, int type, int protocol) {
 
   return sockfd;
 }
+
+// ------------------------ //
 
 void init_serv_addr(const char* port, struct sockaddr_in* serv_addr) {
 
@@ -59,6 +65,7 @@ void init_serv_addr(const char* port, struct sockaddr_in* serv_addr) {
 
 }
 
+// ----------------------- //
 
 void do_bind(int sock, struct sockaddr_in adr){
 
@@ -72,22 +79,20 @@ void do_bind(int sock, struct sockaddr_in adr){
   }
 }
 
-//Accept the connection
+// ------- Accept the connection ------- //
 
-int do_accept(int sock, struct sockaddr_in adr,int i, int nb_clients){
+int do_accept(int sock, struct sockaddr_in adr,int id_client){
   int adr_len = sizeof(adr);
   int connection = accept(sock,(struct sockaddr *)&adr,(socklen_t*)&adr_len);
   if (connection == -1)
   error("accept ERROR\n");
-  else if (nb_clients>=BACKLOG) // teste si il n'y a pas trop de clients connectés
-  printf("Too many clients, connection failed\n");
   else if (connection >0)
-  printf("Connection ok with client n°%i\n",i);
+  printf("Connection ok with client n°%i\n",id_client );
 
   return connection;
 }
 
-//Read message
+// ------- Read message -------- //
 
 void do_recv(int sockfd, void*buff){
   int msg_recv;
@@ -96,7 +101,7 @@ void do_recv(int sockfd, void*buff){
   printf("reception error");
 }
 
-//Send message
+// ------ Send message ------- //
 
 void do_send(int sockfd, char* msg, int len) {
   int retour;
@@ -107,6 +112,7 @@ void do_send(int sockfd, char* msg, int len) {
   printf("error : send");
 }
 
+// ------- MAIN -------- //
 
 int main(int argc, char** argv)
 {
@@ -137,76 +143,77 @@ int main(int argc, char** argv)
   listen(s_server, BACKLOG);
 
   //complete the pollfd structure
-  struct pollfd fds[BACKLOG+5];
-  int nfds = 1;
-  int current_size = 0; //number of wait sockets
+  struct pollfd fds[BACKLOG+1];
+
   int nb_clients = 0;
-  memset(fds,0,sizeof(fds));
+  memset(fds,-1,sizeof(fds));
   fds[0].fd = s_server;
   fds[0].events = POLLIN;
-
 
 
   for (;;){
 
     printf("Waiting on poll...\n");
-    int rs = poll(fds,nfds,-1);
+    int rs = poll(fds,BACKLOG+1,-1);
     if(rs<0){
       printf("Error, poll failed \n");
     }
 
     //Detect which socket try to talk
-    current_size = nfds;
     char* msg_close = "_kill_";
-    for(int i=0; i<current_size; i++){
-      if(fds[i].revents == POLLIN) {//c'est lui qui a déclenché l'évènement
-      if(fds[i].fd == s_server){
-        nb_clients ++;
-        s_client = do_accept(s_server,serv_addr,current_size, nb_clients);
 
+
+    for(int i=1; i<=BACKLOG; i++){
+
+      if(fds[0].revents == POLLIN) {//c'est lui qui a déclenché l'évènement
+
+      if(fds[i].fd == -1){
+
+        s_client = do_accept(s_server,serv_addr,i);
+        nb_clients++;
         if (nb_clients>=BACKLOG){
           do_send(s_client, msg_close, strlen(msg_close));
           close(s_client);//fermer la socket du client en trop
-          printf("connection fermée\n");
           nb_clients--;
+          printf("Too many connection, client closed\n");
+          break;
         }
-        else {
-          do_send(s_client,msg_connection,strlen(msg_connection));
-          fds[nfds].fd = s_client;
-          fds[nfds].events = POLLIN;
-          nfds++;
-        }
-      }
 
-      else{
+        do_send(s_client,msg_connection, strlen(msg_connection));
+        fds[i].fd = s_client;
+        fds[i].events = POLLIN;
+
+        break;
+
+      }
+    }
+
+    else{
+
+      if(fds[i].revents == POLLIN){
+
         char* msg_cli = malloc(BUFF_LEN_MAX*sizeof(char));
         do_recv(fds[i].fd, msg);
         msg_cli = (char*)msg;
         //accept connection from client
         do_send(fds[i].fd, msg_cli, strlen(msg_cli));
-        printf("Client n°%i say :%s\n",i, msg_cli);
+
         if(strncmp(msg_cli,"/quit",5) == 0){
           close(fds[i].fd);
           nb_clients--;
           fds[i].fd = -1;
-          //fds[i].events = -1;
-          //fds[i].revents = -1;
+          fds[i].events = -1;
           printf("Client n°%i close connection\n", i);
-          for (int i = 0; i < nfds; i++){ //on remplace les socket inutilisées
-            if (fds[i].fd == -1){
-              for(int j = i; j < nfds; j++){//memmove
-                fds[j].fd = fds[j+1].fd;
-              }
-              i--;
-              nfds--;
-            }
-          }
+          break;
         }
+
       }
     }
   }
+
 }
 //clean up server socket
-//close(s_server);
+printf("Close socket server\n");
+close(s_server);
 return 0;
 }

@@ -2,19 +2,15 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <string.h>
-
 #include <error.h>
-
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netdb.h>
-
 #include <poll.h>
-
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
-
+// ------------ FONCTIONS ------------ //
 
 #define BUFF_LEN_MAX 1000
 
@@ -37,24 +33,25 @@ struct sockaddr_in get_addr_info(const char* port, struct sockaddr_in* serv_addr
   serv_addr1->sin_port = htons(portno);
 }
 
+// ------------------------------------------------------------- //
+
 int do_socket(int domain, int type, int protocol) {
   int sockfd;
   int yes = 1;
   //create the socket
   sockfd = socket( domain, type, protocol );
-
   //check for socket validity
   if (sockfd == -1){
     fprintf(stderr,"Error : Unvalid socket\n");
   }
-
   // set socket option, to prevent "already in use" issue when rebooting the server right on
-
   if (setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int)) == -1)
   fprintf(stderr,"ERROR setting socket options\n");
 
   return sockfd;
 }
+
+// ------------------------------------------------------ //
 
 int do_connect(int sockfd, const struct sockaddr_in addr) {
   int res = connect(sockfd, (struct sockaddr *) &addr, sizeof(struct sockaddr_in));
@@ -67,41 +64,47 @@ int do_connect(int sockfd, const struct sockaddr_in addr) {
   return res;
 }
 
-char* handle_client_message(int sockfd, char*buffer){
-  printf("Write your message : \n");
+// -------------------------------------------- //
+
+char* handle_client_message(int sockfd, char*buffer, int port){
+  printf("[ CLIENT %i ] : \n", port);
   fflush(stdout);
   fgets(buffer, BUFF_LEN_MAX, stdin); //read the message in stdin
   return buffer;
 }
 
+// ----------------------------------------- //
+
 void do_send(int sockfd, char* msg, int len) {
   int retour;
-  size_t taille = (size_t)len;
   void * cast_msg = (void*)msg;
-  retour = send(sockfd, cast_msg, taille, 0);
+  retour = send(sockfd, cast_msg, strlen(msg), 0);
   if (retour == -1)
   printf("error : send");
 }
 
-//Read message
-void do_recv(int sockfd, void*buff){
+// ---------- Read message -------------//
+
+void do_recv(int sockfd, char *buff){
   int msg_recv;
-  msg_recv = recv(sockfd, buff, BUFF_LEN_MAX, 0);
+  void * buffer = (void*)buff;
+  msg_recv = recv(sockfd, buffer, BUFF_LEN_MAX, 0);
   if (msg_recv == -1)
   printf("reception error");
 }
 
+// ----------- MAIN ------------- //
 
 int main(int argc,char** argv){
 
   char* msg_cli = malloc(BUFF_LEN_MAX*sizeof(char));
-  char* msg1 = malloc(BUFF_LEN_MAX*sizeof(char));
-  void*msg = (void*)msg1;
+  char* msg = malloc(BUFF_LEN_MAX*sizeof(char));
   char* death_msg = "_kill_";
 
   memset(msg_cli,0,sizeof(msg_cli));
 
   char * ip = argv[1];
+  int port = atoi(argv[2]);
 
   if (argc != 3)
   {
@@ -120,11 +123,11 @@ int main(int argc,char** argv){
   int s = do_socket(AF_INET, SOCK_STREAM,IPPROTO_TCP);
 
   //connect to remote socket
-  char*msg_co = malloc(100*sizeof(char));
-  void * msg_connection1 = (void*)msg_co;
+  char*msg_connection = malloc(100*sizeof(char));
+
   int connect = do_connect(s, serv_addr);
-  do_recv(s,msg_connection1);
-  char*msg_connection = (char*)msg_connection1;
+  do_recv(s,msg_connection);
+
 
   if(strncmp(msg_connection,death_msg,7)==0){
     printf("Too many connection. Server close connection \n");
@@ -134,20 +137,19 @@ int main(int argc,char** argv){
     printf("Connection with server ok \n");
     for(;;){
 
-      handle_client_message(s,msg_cli);
-      fflush(stdout);
+      handle_client_message(s,msg_cli,port);
       do_send(s,msg_cli,strlen(msg_cli));
       do_recv(s,msg);
-      char*msg_ser =(char*)msg;
-      printf("Server says :%s\n", msg_ser);
-      printf("%s\n", msg_ser);
+      printf("[ SERVER ] :%s\n", msg);
       if(strncmp(msg_cli,"/quit",5)==0){
         break;
       }
       //Memory libeation
-      memset(msg_cli,0,sizeof(msg_cli));
+      memset(msg_cli,'\0',sizeof(msg_cli));
+      memset(msg,'\0',sizeof(msg));
     }
     //close Connection
+    printf("Close connection\n");
     close(s);
   }
 
