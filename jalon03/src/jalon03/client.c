@@ -137,6 +137,7 @@ int main(int argc,char** argv){
   }
   else if(strncmp(msg_connection,"server_client",14)==0){
     printf("Connection with server ok \n");
+    printf("[SERVER] : Please login with /nick <your pseudo> \n");
     for(;;){
 
       handle_client_message(s,msg_cli,port);
