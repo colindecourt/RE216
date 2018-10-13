@@ -19,6 +19,8 @@ struct user_table {
   int id_client;
   char * pseudo;
   int n_socket;
+  char *ip;
+  int port;
   struct user_table * next_user;
 };
 
@@ -33,7 +35,9 @@ struct user_table * UserInit(){
   return user;
 }
 
-void addUser(struct user_table * UserTable, int id_client, char * pseudo, int n_socket){
+// -------------------------------------------------------------- //
+
+void addUser(struct user_table * UserTable, int id_client, char * pseudo, int n_socket, char *ip, int port){
   struct user_table * new_user = UserTable;
   while(new_user->next_user != NULL){
     new_user = new_user->next_user;
@@ -41,24 +45,29 @@ void addUser(struct user_table * UserTable, int id_client, char * pseudo, int n_
   new_user->id_client = id_client;
   new_user->pseudo = pseudo;
   new_user->n_socket = n_socket;
-  new_user->next_user = UserInit();
+  new_user->ip = ip;
+  new_user->port = port;
+  new_user->next_user = NULL;
 }
 
+// --------------------------------------------------- //
+
 void deleteUser(struct user_table * UserTable){
-  struct user_table * temp;
+  struct user_table * temp = UserTable;
   while(temp->next_user != UserTable){
     temp = temp->next_user;
   }
   UserTable = temp;
 }
 
+// -------------------------------------------------------------- // 
+
 struct user_table * searchUser(struct user_table * UserTable, int id_client, int nb_clients){
   int k;
-  k = 0;
-  struct user_table * temp;
+  k = 1;
+  struct user_table * temp = malloc(sizeof(struct user_table));
   temp = UserTable;
-  while(k<nb_clients){
-
+  while(k<=nb_clients){
     if(temp->id_client == id_client){
       return UserTable;
     }
@@ -158,9 +167,10 @@ int do_accept(int sock, struct sockaddr_in adr,int id_client){
 
 // ------- Read message -------- //
 
-void do_recv(int sockfd, void*buff){
+void do_recv(int sockfd, char *buff){
   int msg_recv;
-  msg_recv = recv(sockfd, buff, BUFF_LEN_MAX, 0);
+  void * buffer = (void*)buff;
+  msg_recv = recv(sockfd, buffer, BUFF_LEN_MAX, 0);
   if (msg_recv == -1)
   printf("reception error");
 }
@@ -233,9 +243,9 @@ int main(int argc, char** argv)
       if(fds[0].revents == POLLIN) {//c'est lui qui a déclenché l'évènement
 
       if(fds[i].fd == -1){
-
+        char * ip = malloc(sizeof(char));
         s_client = do_accept(s_server,serv_addr,i);
-        nb_clients++;
+        nb_clients++; 
         if (nb_clients>=BACKLOG){
           do_send(s_client, msg_close, strlen(msg_close));
           close(s_client);//fermer la socket du client en trop
@@ -246,7 +256,8 @@ int main(int argc, char** argv)
         do_send(s_client,msg_connection, strlen(msg_connection));
         fds[i].fd = s_client;
         fds[i].events = POLLIN;
-        addUser(UserTable,i, "", s_client);
+        do_recv(s_client, ip);
+        addUser(UserTable,i, "", fds[i].fd,ip,atoi(port));
 
         break;
 
@@ -281,9 +292,23 @@ int main(int argc, char** argv)
           curUser = searchUser(UserTable,i,nb_clients);
           editPseudo(curUser, pseudo);
           printf("Welcome on the chat %s\n", pseudo);
-          printf("id %i\n", curUser->id_client);
+          /*printf("id %i\n", curUser->id_client);
           printf("%s\n", curUser->pseudo );
           printf("%i\n", curUser->n_socket);
+          printf("%s\n", curUser->ip);
+          printf("%i\n", curUser->port);*/
+          free(curUser);
+        }
+
+        else if(strncmp(msg_cli, "/who",4)==0){
+          printf("[SERVER : ] Online users are :\n");
+          
+          for (int k=1; k<=nb_clients; k++){
+            struct user_table * curUser = malloc(sizeof(struct user_table));
+            curUser = searchUser(UserTable,k,nb_clients);
+            printf("- %s\n", curUser->pseudo);
+            free(curUser);
+          }
         }
 
       }
