@@ -1,3 +1,11 @@
 {
-    "C_Cpp.errorSquiggles": "Disabled"
+    "C_Cpp.errorSquiggles": "Disabled",
+    "files.associations": {
+        "in.h": "c",
+        "client_tools.h": "c",
+        "common_tools.h": "c",
+        "inet.h": "c",
+        "stdlib.h": "c",
+        "socket.h": "c"
+    }
 }

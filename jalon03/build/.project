@@ -124,7 +124,7 @@
 		<link>
 			<name>[Subprojects]/RE216_JALON03</name>
 			<type>2</type>
-			<location>/home/cdecourt/Documents/RE216/jalon03/src/jalon03</location>
+			<location>/home/cdecourt/Documents/RE216/jalon03/src/jalon03/src</location>
 		</link>
 		<link>
 			<name>[Targets]</name>
@@ -149,12 +149,32 @@
 		<link>
 			<name>[Targets]/[exe] RE216_JALON03_CLIENT/Source Files/client.c</name>
 			<type>1</type>
-			<location>/home/cdecourt/Documents/RE216/jalon03/src/jalon03/client.c</location>
+			<location>/home/cdecourt/Documents/RE216/jalon03/src/jalon03/src/client.c</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] RE216_JALON03_CLIENT/Source Files/common_tools.c</name>
+			<type>1</type>
+			<location>/home/cdecourt/Documents/RE216/jalon03/src/jalon03/src/include/common_tools.c</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] RE216_JALON03_CLIENT/Source Files/client_tools.c</name>
+			<type>1</type>
+			<location>/home/cdecourt/Documents/RE216/jalon03/src/jalon03/src/include/client_tools.c</location>
 		</link>
 		<link>
 			<name>[Targets]/[exe] RE216_JALON03_CLIENT/Header Files</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] RE216_JALON03_CLIENT/Header Files/common_tools.h</name>
+			<type>1</type>
+			<location>/home/cdecourt/Documents/RE216/jalon03/src/jalon03/src/include/common_tools.h</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] RE216_JALON03_CLIENT/Header Files/client_tools.h</name>
+			<type>1</type>
+			<location>/home/cdecourt/Documents/RE216/jalon03/src/jalon03/src/include/client_tools.h</location>
 		</link>
 		<link>
 			<name>[Targets]/[exe] RE216_JALON03_CLIENT/CMake Rules</name>
@@ -194,12 +214,32 @@
 		<link>
 			<name>[Targets]/[exe] RE216_JALON03_SERVER/Source Files/server.c</name>
 			<type>1</type>
-			<location>/home/cdecourt/Documents/RE216/jalon03/src/jalon03/server.c</location>
+			<location>/home/cdecourt/Documents/RE216/jalon03/src/jalon03/src/server.c</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] RE216_JALON03_SERVER/Source Files/common_tools.c</name>
+			<type>1</type>
+			<location>/home/cdecourt/Documents/RE216/jalon03/src/jalon03/src/include/common_tools.c</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] RE216_JALON03_SERVER/Source Files/server_tools.c</name>
+			<type>1</type>
+			<location>/home/cdecourt/Documents/RE216/jalon03/src/jalon03/src/include/server_tools.c</location>
 		</link>
 		<link>
 			<name>[Targets]/[exe] RE216_JALON03_SERVER/Header Files</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] RE216_JALON03_SERVER/Header Files/common_tools.h</name>
+			<type>1</type>
+			<location>/home/cdecourt/Documents/RE216/jalon03/src/jalon03/src/include/common_tools.h</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] RE216_JALON03_SERVER/Header Files/server_tools.h</name>
+			<type>1</type>
+			<location>/home/cdecourt/Documents/RE216/jalon03/src/jalon03/src/include/server_tools.h</location>
 		</link>
 		<link>
 			<name>[Targets]/[exe] RE216_JALON03_SERVER/CMake Rules</name>

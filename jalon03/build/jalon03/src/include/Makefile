@@ -80,14 +80,14 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/cdecourt/Documents/RE216/jalon03/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/cdecourt/Documents/RE216/jalon03/build/CMakeFiles /home/cdecourt/Documents/RE216/jalon03/build/jalon03/CMakeFiles/progress.marks
-	cd /home/cdecourt/Documents/RE216/jalon03/build && $(MAKE) -f CMakeFiles/Makefile2 jalon03/all
+	cd /home/cdecourt/Documents/RE216/jalon03/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/cdecourt/Documents/RE216/jalon03/build/CMakeFiles /home/cdecourt/Documents/RE216/jalon03/build/jalon03/src/include/CMakeFiles/progress.marks
+	cd /home/cdecourt/Documents/RE216/jalon03/build && $(MAKE) -f CMakeFiles/Makefile2 jalon03/src/include/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/cdecourt/Documents/RE216/jalon03/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/cdecourt/Documents/RE216/jalon03/build && $(MAKE) -f CMakeFiles/Makefile2 jalon03/clean
+	cd /home/cdecourt/Documents/RE216/jalon03/build && $(MAKE) -f CMakeFiles/Makefile2 jalon03/src/include/clean
 .PHONY : clean
 
 # The main clean target
@@ -97,12 +97,12 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/cdecourt/Documents/RE216/jalon03/build && $(MAKE) -f CMakeFiles/Makefile2 jalon03/preinstall
+	cd /home/cdecourt/Documents/RE216/jalon03/build && $(MAKE) -f CMakeFiles/Makefile2 jalon03/src/include/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/cdecourt/Documents/RE216/jalon03/build && $(MAKE) -f CMakeFiles/Makefile2 jalon03/preinstall
+	cd /home/cdecourt/Documents/RE216/jalon03/build && $(MAKE) -f CMakeFiles/Makefile2 jalon03/src/include/preinstall
 .PHONY : preinstall/fast
 
 # clear depends

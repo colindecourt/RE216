@@ -1,4 +1,4 @@
-# Install script for directory: /home/cdecourt/Documents/RE216/jalon03/src/jalon03
+# Install script for directory: /home/cdecourt/Documents/RE216/jalon03/src/jalon03/src/include
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -35,11 +35,5 @@ endif()
 # Is this installation the result of a crosscompile?
 if(NOT DEFINED CMAKE_CROSSCOMPILING)
   set(CMAKE_CROSSCOMPILING "FALSE")
-endif()
-
-if(NOT CMAKE_INSTALL_LOCAL_ONLY)
-  # Include the install script for each subdirectory.
-  include("/home/cdecourt/Documents/RE216/jalon03/build/jalon03/src/cmake_install.cmake")
-
 endif()
 
