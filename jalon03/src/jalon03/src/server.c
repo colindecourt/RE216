@@ -145,20 +145,19 @@ int main(int argc, char** argv)
 
 
           struct user_table * curUser = NULL;
-          curUser = searchUser(UserTable, 1, nb_clients, curUser);
+          curUser = searchUser(UserTable, nb_clients, nb_clients, curUser);
 
-          while(curUser->next_user != NULL){
+          strcpy(msg_who, "\n");
+
+          do {
             //printf("%s\n", curUser->pseudo);
             strcat(msg_who, "- ");
             strcat(msg_who, curUser->pseudo);
             strcat(msg_who, "\n");
-            printf("pseudo = %s\n", msg_who);
             curUser = curUser->next_user;
-          }
-          strcpy(msg_who,curUser->pseudo);
+          } while(curUser->next_user != NULL);
+          strcat(msg_who,curUser->pseudo);
           int send = do_send(fds[i].fd,msg_who,strlen(msg_who));
-          printf("msg_who = %s\n", msg_who);
-          printf("retour send = %d\n", send);
 
           }
         }

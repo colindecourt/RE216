@@ -77,7 +77,7 @@ int main(int argc,char** argv){
         printf("%s\n", "coucou");
         int ret = do_recv(s,msg_who);
         printf("%s\n", "coucou1");
-        printf("[SERVER : ] Online users are : -%s\n",msg_who);
+        printf("[SERVER : ] Online users are : %s\n",msg_who);
         printf("%d\n", ret);
       }
 
