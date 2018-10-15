@@ -38,21 +38,22 @@ int do_socket(int domain, int type, int protocol) {
 
 // ------- Read message -------- //
 
-void do_recv(int sockfd, char *buff){
+int do_recv(int sockfd, char *buff){
   int msg_recv;
   void * buffer = (void*)buff;
   msg_recv = recv(sockfd, buffer, BUFF_LEN_MAX, 0);
   if (msg_recv == -1)
   printf("reception error");
+  return msg_recv;
 }
 
 // ------ Send message ------- //
 
-void do_send(int sockfd, char* msg, int len) {
+int do_send(int sockfd, char* msg, int len) {
   int retour;
   void * cast_msg = (void*)msg;
   retour = send(sockfd, cast_msg, strlen(msg), 0);
   if (retour == -1)
   printf("error : send");
+  return retour;
 }
-

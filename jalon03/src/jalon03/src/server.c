@@ -40,6 +40,7 @@ int main(int argc, char** argv)
   //create message pointer
   void* msg = malloc(BUFF_LEN_MAX*sizeof(char));
   char * msg_connection ="server_client";
+  char *msg_who=malloc(PSEUDO_LEN_MAX*20);
   //init the serv_add structure
   struct sockaddr_in serv_addr;
   init_serv_addr(port, &serv_addr);
@@ -78,7 +79,7 @@ int main(int argc, char** argv)
       if(fds[i].fd == -1){
         char * ip = malloc(sizeof(char)*20);
         s_client = do_accept(s_server,serv_addr,i);
-        nb_clients++; 
+        nb_clients++;
         if (nb_clients>=BACKLOG){
           do_send(s_client, msg_close, strlen(msg_close));
           close(s_client);//fermer la socket du client en trop
@@ -123,24 +124,49 @@ int main(int argc, char** argv)
           struct user_table * curUser=NULL;
           curUser = searchUser(UserTable,i,nb_clients,curUser);
           strcpy(curUser->pseudo, pseudo);
-          printf("Welcome on the chat %s\n", pseudo);      
+          printf("Welcome on the chat %s\n", pseudo);
         }
 
         else if(strncmp(msg_cli, "/who",4)==0){
-          for (int k=1; k<=nb_clients; k++){
-            struct user_table * curUser = NULL;
-            curUser = searchUser(UserTable,k,nb_clients,curUser);
-            do_send(fds[i].fd,curUser->pseudo,strlen(curUser->pseudo));
-            //printf("- %s\n", curUser->pseudo); 
-          }
+          /*
+          char *msg_who=malloc(PSEUDO_LEN_MAX*nb_clients);
 
+          for (int k=1; k<=nb_clients; k++){
+          struct user_table * curUser = NULL;
+          curUser = searchUser(UserTable,k,nb_clients,curUser);
+          strcat(msg_who+strlen(curUser->pseudo), curUser->pseudo);
+          printf("%s\n", msg_who);
+          //  do_send(fds[i].fd, curUser->pseudo,strlen(curUser->pseudo));
+          //  printf("- %s\n", curUser->pseudo);
         }
 
+        do_send(fds[i].fd,msg_who,strlen(msg_who));
+      }*/
+
+
+          struct user_table * curUser = NULL;
+          curUser = searchUser(UserTable, 1, nb_clients, curUser);
+
+          while(curUser->next_user != NULL){
+            //printf("%s\n", curUser->pseudo);
+            strcat(msg_who, "- ");
+            strcat(msg_who, curUser->pseudo);
+            strcat(msg_who, "\n");
+            printf("pseudo = %s\n", msg_who);
+            curUser = curUser->next_user;
+          }
+          strcpy(msg_who,curUser->pseudo);
+          int send = do_send(fds[i].fd,msg_who,strlen(msg_who));
+          printf("msg_who = %s\n", msg_who);
+          printf("retour send = %d\n", send);
+
+          }
+        }
       }
     }
   }
 
-}
+
 //clean up server socket
 printf("Close socket server\n");
 close(s_server);

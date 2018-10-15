@@ -15,7 +15,7 @@
 
 
 int do_socket(int domain, int type, int protocol);
-void do_recv(int sockfd, char *buff);
-void do_send(int sockfd, char* msg, int len);
+int do_recv(int sockfd, char *buff);
+int do_send(int sockfd, char* msg, int len);
 
 #endif /* COMMON_TOOLS_H */

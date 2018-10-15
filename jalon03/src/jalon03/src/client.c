@@ -21,6 +21,7 @@ int main(int argc,char** argv){
 
   char* msg_cli = malloc(BUFF_LEN_MAX*sizeof(char));
   char* msg = malloc(BUFF_LEN_MAX*sizeof(char));
+  char*msg_who = malloc(1000*sizeof(char));
   char* death_msg = "_kill_";
 
   memset(msg_cli,0,sizeof(msg_cli));
@@ -57,7 +58,7 @@ int main(int argc,char** argv){
   }
   else if(strncmp(msg_connection,"server_client",14)==0){
     do_send(s,ip,strlen(ip));
-    
+
     printf("Connection with server ok \n");
     printf("[SERVER] : Please login with /nick <your pseudo> \n");
     for(;;){
@@ -66,17 +67,24 @@ int main(int argc,char** argv){
       do_send(s,msg_cli,strlen(msg_cli));
       do_recv(s,msg);
       printf("[ SERVER ] :%s\n", msg);
+
       if(strncmp(msg_cli,"/quit",5)==0){
         break;
       }
 
       if(strncmp(msg_cli,"/who",4)==0){
-        do_recv(s,msg);
-        printf("[SERVER : ] Online users are : -%s\n",msg);
+
+        printf("%s\n", "coucou");
+        int ret = do_recv(s,msg_who);
+        printf("%s\n", "coucou1");
+        printf("[SERVER : ] Online users are : -%s\n",msg_who);
+        printf("%d\n", ret);
       }
+
       //Memory libeation
       memset(msg_cli,'\0',BUFF_LEN_MAX*sizeof(char));
       memset(msg,'\0',BUFF_LEN_MAX*sizeof(char));
+      memset(msg_who,'\0',BUFF_LEN_MAX*sizeof(char));
     }
     //close Connection
     printf("Close connection\n");
