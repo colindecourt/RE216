@@ -20,6 +20,21 @@
 
 // ---------- FUNCTIONS ------------- //
 
+char * get_time(){
+  char date [40];
+  char buff[20];
+  char buff1[20];
+  time_t t = time(NULL);
+  struct tm *tm = localtime(&t);
+  strftime(buff, 20, "%F", tm);
+  strftime(buff1,20,"%T",tm);
+  strcat(date,buff);
+  strcat(date," @ ");
+  strcat(date,buff1);
+}
+
+// ----------------------------------- //
+
 struct user_table * UserInit(){
   struct user_table* user = malloc(sizeof(struct user_table));
   if(!user) exit(EXIT_FAILURE);
@@ -29,7 +44,7 @@ struct user_table * UserInit(){
 
 // -------------------------------------------------------------- //
 
-struct user_table * addUser(struct user_table * UserTable, int id_client, char * pseudo, int n_socket, char * ip, int port){
+struct user_table * addUser(struct user_table * UserTable, int id_client, char *pseudo, int n_socket, char * ip, int port){
   struct user_table * new_user; //ajout à gauche 
   new_user = malloc(sizeof(struct user_table));
   new_user->id_client = id_client;
@@ -37,7 +52,7 @@ struct user_table * addUser(struct user_table * UserTable, int id_client, char *
   new_user->n_socket = n_socket;
   strcpy(new_user->ip,ip);
   new_user->port = port;
-
+  strcpy(new_user->time, get_time());
   new_user->next_user = UserTable;
   return new_user;
 }
@@ -68,7 +83,18 @@ struct user_table * searchUser(struct user_table * UserTable, int id_client, int
 
 // ----------------------------------//
 
-
+int search_user_pseudo(struct user_table * UserTable, char * pseudo, int nb_clients, struct user_table * wanted_user){
+  int k=0;
+  wanted_user = UserTable;
+  while(k<nb_clients){
+    if(strcmp(wanted_user->pseudo,pseudo)==0){
+      return wanted_user->id_client;
+    }
+    k++;
+    wanted_user = wanted_user->next_user;
+  }
+  return 0;
+}
 
 // ------------------------ //
 

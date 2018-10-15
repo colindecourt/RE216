@@ -1,1 +1,1 @@
-/usr/bin/cc  -g   CMakeFiles/RE216_JALON03_CLIENT.dir/client.c.o CMakeFiles/RE216_JALON03_CLIENT.dir/include/common_tools.c.o CMakeFiles/RE216_JALON03_CLIENT.dir/include/client_tools.c.o  -o RE216_JALON03_CLIENT -rdynamic 
+/usr/bin/cc -g  -rdynamic CMakeFiles/RE216_JALON03_CLIENT.dir/client.c.o CMakeFiles/RE216_JALON03_CLIENT.dir/include/common_tools.c.o CMakeFiles/RE216_JALON03_CLIENT.dir/include/client_tools.c.o  -o RE216_JALON03_CLIENT 

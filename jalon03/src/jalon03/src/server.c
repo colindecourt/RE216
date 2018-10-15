@@ -8,6 +8,7 @@
 #include <poll.h>
 #include <error.h>
 #include <arpa/inet.h>
+#include <time.h>
 
 
 #include "include/server_tools.h"
@@ -40,7 +41,7 @@ int main(int argc, char** argv)
   //create message pointer
   void* msg = malloc(BUFF_LEN_MAX*sizeof(char));
   char * msg_connection ="server_client";
-  char *msg_who=malloc(PSEUDO_LEN_MAX*20);
+  
   //init the serv_add structure
   struct sockaddr_in serv_addr;
   init_serv_addr(port, &serv_addr);
@@ -91,6 +92,7 @@ int main(int argc, char** argv)
         fds[i].fd = s_client;
         fds[i].events = POLLIN;
         do_recv(s_client, ip);
+        
         UserTable = addUser(UserTable,i, "", fds[i].fd,ip,atoi(port));
         break;
 
@@ -127,22 +129,35 @@ int main(int argc, char** argv)
           printf("Welcome on the chat %s\n", pseudo);
         }
 
-        else if(strncmp(msg_cli, "/who",4)==0){
-
-          struct user_table * curUser = NULL;
-          curUser = searchUser(UserTable, nb_clients, nb_clients, curUser);
-
+        else if(strncmp(msg_cli, "/who",4)==0  && strncmp(msg_cli, "/whois",6)!=0){
+          char msg_who[PSEUDO_LEN_MAX*20];
           strcpy(msg_who, " ");
-
-          while(curUser->next_user != NULL){
-            //printf("%s\n", curUser->pseudo);
-            strcat(msg_who, "- ");
+          for(int k=1; k<=nb_clients; k++){
+            struct user_table * curUser = NULL;
+            curUser = searchUser(UserTable, k, nb_clients, curUser);
+            strcat(msg_who, "-");
             strcat(msg_who, curUser->pseudo);
             strcat(msg_who, "\n");
-            curUser = curUser->next_user;
           }
-          strcat(msg_who,curUser->pseudo);
-          int send = do_send(fds[i].fd,msg_who,strlen(msg_who));
+          printf("sock %i\n",fds[i].fd);
+          do_send(fds[i].fd,msg_who,strlen(msg_who));
+        }
+
+        else if(strncmp(msg_cli, "/whois",6)==0 && strncmp(msg_cli, "/who",4)==0){
+          struct user_table * pseudo_user = NULL;
+          struct user_table * curUser = NULL;
+          char * whois = msg_cli + strlen("/whois ");
+          char msg_whois [5000];
+          int cur_id = search_user_pseudo(UserTable,whois,nb_clients,pseudo_user);
+          curUser = searchUser(UserTable,cur_id,nb_clients,curUser);
+          strcat(msg_whois,curUser->pseudo);
+          strcat(msg_whois," connected since ");
+          strcat(msg_whois,curUser->time);
+          strcat(msg_whois," with IP adress ");
+          strcat(msg_whois,curUser->ip);
+          strcat(msg_whois," and port number ");
+          strcat(msg_whois,port);
+          do_send(fds[i].fd,msg_whois,strlen(msg_whois));  
         }
       }
     }

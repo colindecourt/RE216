@@ -15,13 +15,13 @@
 
 #define BUFF_LEN_MAX 1000
 #define BACKLOG 21
+#define PSEUDO_LEN_MAX 100
 // ----------- MAIN ------------- //
 
 int main(int argc,char** argv){
 
   char* msg_cli = malloc(BUFF_LEN_MAX*sizeof(char));
   char* msg = malloc(BUFF_LEN_MAX*sizeof(char));
-  char*msg_who = malloc(1000*sizeof(char));
   char* death_msg = "_kill_";
 
   memset(msg_cli,0,sizeof(msg_cli));
@@ -62,7 +62,6 @@ int main(int argc,char** argv){
     printf("Connection with server ok \n");
     printf("[SERVER] : Please login with /nick <your pseudo> \n");
     for(;;){
-
       handle_client_message(s,msg_cli,port);
       do_send(s,msg_cli,strlen(msg_cli));
       do_recv(s,msg);
@@ -72,19 +71,26 @@ int main(int argc,char** argv){
         break;
       }
 
-      if(strncmp(msg_cli,"/who",4)==0){
-
-        printf("%s\n", "coucou");
-        int ret = do_recv(s,msg_who);
-        printf("%s\n", "coucou1");
+      else if(strncmp(msg_cli,"/who",4)==0  && strncmp(msg_cli, "/whois",6)!=0){
+        char msg_who[PSEUDO_LEN_MAX*20];
+        do_recv(s,msg_who);
         printf("[SERVER : ] Online users are : %s\n",msg_who);
-        printf("%d\n", ret);
+        fflush(stdout);
+        memset(msg_who,'\0',BUFF_LEN_MAX*sizeof(char));
+      }
+
+      else if(strncmp(msg_cli, "/whois",6)==0 && strncmp(msg_cli, "/who",4)==0){
+        char msg_whois[5000];
+        do_recv(s,msg_whois);
+        printf("[SERVER : ] %s\n",msg_whois);
+        fflush(stdout);
+        memset(msg_whois,'\0',2000*sizeof(char));
       }
 
       //Memory libeation
       memset(msg_cli,'\0',BUFF_LEN_MAX*sizeof(char));
       memset(msg,'\0',BUFF_LEN_MAX*sizeof(char));
-      memset(msg_who,'\0',BUFF_LEN_MAX*sizeof(char));
+      
     }
     //close Connection
     printf("Close connection\n");
