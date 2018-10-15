@@ -128,42 +128,26 @@ int main(int argc, char** argv)
         }
 
         else if(strncmp(msg_cli, "/who",4)==0){
-          /*
-          char *msg_who=malloc(PSEUDO_LEN_MAX*nb_clients);
-
-          for (int k=1; k<=nb_clients; k++){
-          struct user_table * curUser = NULL;
-          curUser = searchUser(UserTable,k,nb_clients,curUser);
-          strcat(msg_who+strlen(curUser->pseudo), curUser->pseudo);
-          printf("%s\n", msg_who);
-          //  do_send(fds[i].fd, curUser->pseudo,strlen(curUser->pseudo));
-          //  printf("- %s\n", curUser->pseudo);
-        }
-
-        do_send(fds[i].fd,msg_who,strlen(msg_who));
-      }*/
-
 
           struct user_table * curUser = NULL;
           curUser = searchUser(UserTable, nb_clients, nb_clients, curUser);
 
-          strcpy(msg_who, "\n");
+          strcpy(msg_who, " ");
 
-          do {
+          while(curUser->next_user != NULL){
             //printf("%s\n", curUser->pseudo);
             strcat(msg_who, "- ");
             strcat(msg_who, curUser->pseudo);
             strcat(msg_who, "\n");
             curUser = curUser->next_user;
-          } while(curUser->next_user != NULL);
+          }
           strcat(msg_who,curUser->pseudo);
           int send = do_send(fds[i].fd,msg_who,strlen(msg_who));
-
-          }
         }
       }
     }
   }
+}
 
 
 //clean up server socket
