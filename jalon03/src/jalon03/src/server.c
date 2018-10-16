@@ -92,7 +92,7 @@ int main(int argc, char** argv)
         fds[i].fd = s_client;
         fds[i].events = POLLIN;
         do_recv(s_client, ip);
-        
+       
         UserTable = addUser(UserTable,i, "", fds[i].fd,ip,atoi(port));
         break;
 
@@ -110,14 +110,15 @@ int main(int argc, char** argv)
         do_send(fds[i].fd, msg_cli, strlen(msg_cli));
 
         if(strncmp(msg_cli,"/quit",5) == 0){
-          struct user_table * curUser=NULL;
-          curUser = searchUser(UserTable,i,nb_clients,curUser);
+          struct user_table * to_delete=NULL;
+          struct user_table * temp = NULL;
+          to_delete = searchUser(UserTable,i,nb_clients,to_delete);
           close(fds[i].fd);
           nb_clients--;
           fds[i].fd = -1;
           fds[i].events = -1;
           printf("Client n°%i close connection\n", i);
-          deleteUser(curUser);
+          deleteUser(UserTable,temp,to_delete);
           break;
         }
 

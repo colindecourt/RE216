@@ -16,7 +16,7 @@
 #define PSEUDO_LEN_MAX 100
 struct user_table {
   int id_client;
-  char pseudo[PSEUDO_LEN_MAX];
+  char * pseudo;
   int n_socket;
   char ip[20];
   int port;
@@ -27,7 +27,7 @@ struct user_table {
 char * get_time();
 struct user_table * UserInit();
 struct user_table * addUser(struct user_table * UserTable, int id_client, char* pseudo, int n_socket, char * ip, int port);
-void deleteUser(struct user_table * UserTable);
+void deleteUser(struct user_table * UserTable,struct user_table * temp, struct user_table * to_delete);
 struct user_table * searchUser(struct user_table * UserTable, int id_client, int nb_clients, struct user_table * wanted_user);
 int search_user_pseudo(struct user_table * UserTable, char * pseudo, int nb_clients, struct user_table * wanted_user);
 void init_serv_addr(const char* port, struct sockaddr_in* serv_addr);
