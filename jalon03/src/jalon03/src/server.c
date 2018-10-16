@@ -13,6 +13,7 @@
 
 #include "include/server_tools.h"
 #include "include/common_tools.h"
+#include "include/lines.h"
 
 #define BUFF_LEN_MAX 1000
 #define PSEUDO_LEN_MAX 100
@@ -25,7 +26,7 @@
 int main(int argc, char** argv)
 {
   struct user_table * UserTable = UserInit();
-
+  int n;
   if (argc != 2)
   {
     fprintf(stderr, "usage: RE216_SERVER port\n");
@@ -41,6 +42,7 @@ int main(int argc, char** argv)
   //create message pointer
   void* msg = malloc(BUFF_LEN_MAX*sizeof(char));
   char * msg_connection ="server_client";
+  char buffer[MSG_SIZE];
   
   //init the serv_add structure
   struct sockaddr_in serv_addr;
@@ -104,12 +106,26 @@ int main(int argc, char** argv)
       if(fds[i].revents == POLLIN){
 
         char* msg_cli = malloc(BUFF_LEN_MAX*sizeof(char));
-        do_recv(fds[i].fd, msg);
+        //do_recv(fds[i].fd, msg);
         msg_cli = (char*)msg;
         //accept connection from client
-        do_send(fds[i].fd, msg_cli, strlen(msg_cli));
+        //do_send(fds[i].fd, msg_cli, strlen(msg_cli));
 
-        if(strncmp(msg_cli,"/quit",5) == 0){
+        memset(buffer,0,MSG_SIZE);
+        n = read_line(fds[i].fd, buffer,MSG_SIZE);
+        if(n<0){
+          perror("ERROR reading from socket");
+          break;
+        }
+
+        n = send_line(fds[i].fd, buffer,n);
+
+        if( n<0){
+          perror("ERROR writting to socket");
+          break;
+        }
+
+        if(strcmp(buffer,"/quit\n") == 0){
           struct user_table * to_delete=NULL;
           struct user_table * temp = NULL;
           to_delete = searchUser(UserTable,i,nb_clients,to_delete);
@@ -122,32 +138,19 @@ int main(int argc, char** argv)
           break;
         }
 
-        else if(strncmp(msg_cli,"/nick",5)==0){
-          char * pseudo = msg_cli+strlen("/nick ");
+        else if(strncmp(buffer,"/nick",5)==0){
+          char * pseudo = buffer+strlen("/nick ");
           struct user_table * curUser=NULL;
           curUser = searchUser(UserTable,i,nb_clients,curUser);
           strcpy(curUser->pseudo, pseudo);
           printf("Welcome on the chat %s\n", pseudo);
         }
 
-        else if(strncmp(msg_cli, "/who",4)==0  && strncmp(msg_cli, "/whois",6)!=0){
-          char msg_who[PSEUDO_LEN_MAX*20];
-          strcpy(msg_who, " ");
-          for(int k=1; k<=nb_clients; k++){
-            struct user_table * curUser = NULL;
-            curUser = searchUser(UserTable, k, nb_clients, curUser);
-            strcat(msg_who, "-");
-            strcat(msg_who, curUser->pseudo);
-            strcat(msg_who, "\n");
-          }
-          printf("sock %i\n",fds[i].fd);
-          do_send(fds[i].fd,msg_who,strlen(msg_who));
-        }
-
-        else if(strncmp(msg_cli, "/whois",6)==0 && strncmp(msg_cli, "/who",4)==0){
+        else if(strncmp(buffer,"/whois",6)==0 && strncmp(buffer,"/who",4)==0){
+          
           struct user_table * pseudo_user = NULL;
           struct user_table * curUser = NULL;
-          char * whois = msg_cli + strlen("/whois ");
+          char * whois = buffer + strlen("/whois ");
           char msg_whois [5000];
           int cur_id = search_user_pseudo(UserTable,whois,nb_clients,pseudo_user);
           curUser = searchUser(UserTable,cur_id,nb_clients,curUser);
@@ -158,7 +161,25 @@ int main(int argc, char** argv)
           strcat(msg_whois,curUser->ip);
           strcat(msg_whois," and port number ");
           strcat(msg_whois,port);
+          printf("%s\n",msg_whois);
+          memset(buffer, '\0', MSG_SIZE);
           do_send(fds[i].fd,msg_whois,strlen(msg_whois));  
+          memset(msg_whois,'\0',strlen(msg_whois));
+        }
+
+        else if(strcmp(buffer,"/who\n")==0){
+          char msg_who[PSEUDO_LEN_MAX*20];
+          strcpy(msg_who, "\n");
+          for(int k=1; k<=nb_clients; k++){
+            struct user_table * curUser = NULL;
+            curUser = searchUser(UserTable, k, nb_clients, curUser);
+            strcat(msg_who, "-");
+            strcat(msg_who, curUser->pseudo);
+            strcat(msg_who, "\n");
+          }
+          printf("sock %i\n",fds[i].fd);
+          do_send(fds[i].fd,msg_who,strlen(msg_who));
+          memset(msg_who,'\0',strlen(msg_who));
         }
       }
     }

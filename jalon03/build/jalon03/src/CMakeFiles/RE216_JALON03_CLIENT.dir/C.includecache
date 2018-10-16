@@ -33,6 +33,8 @@ include/client_tools.h
 /home/cdecourt/Documents/RE216/jalon03/src/jalon03/src/include/client_tools.h
 include/common_tools.h
 /home/cdecourt/Documents/RE216/jalon03/src/jalon03/src/include/common_tools.h
+include/lines.h
+/home/cdecourt/Documents/RE216/jalon03/src/jalon03/src/include/lines.h
 
 /home/cdecourt/Documents/RE216/jalon03/src/jalon03/src/include/client_tools.c
 stdlib.h
@@ -132,5 +134,17 @@ poll.h
 netinet/in.h
 -
 arpa/inet.h
+-
+
+/home/cdecourt/Documents/RE216/jalon03/src/jalon03/src/include/lines.c
+lines.h
+/home/cdecourt/Documents/RE216/jalon03/src/jalon03/src/include/lines.h
+
+/home/cdecourt/Documents/RE216/jalon03/src/jalon03/src/include/lines.h
+unistd.h
+-
+stdio.h
+-
+errno.h
 -
 

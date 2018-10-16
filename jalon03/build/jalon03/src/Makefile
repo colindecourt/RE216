@@ -224,6 +224,36 @@ include/common_tools.c.s:
 	cd /home/cdecourt/Documents/RE216/jalon03/build && $(MAKE) -f jalon03/src/CMakeFiles/RE216_JALON03_SERVER.dir/build.make jalon03/src/CMakeFiles/RE216_JALON03_SERVER.dir/include/common_tools.c.s
 .PHONY : include/common_tools.c.s
 
+include/lines.o: include/lines.c.o
+
+.PHONY : include/lines.o
+
+# target to build an object file
+include/lines.c.o:
+	cd /home/cdecourt/Documents/RE216/jalon03/build && $(MAKE) -f jalon03/src/CMakeFiles/RE216_JALON03_CLIENT.dir/build.make jalon03/src/CMakeFiles/RE216_JALON03_CLIENT.dir/include/lines.c.o
+	cd /home/cdecourt/Documents/RE216/jalon03/build && $(MAKE) -f jalon03/src/CMakeFiles/RE216_JALON03_SERVER.dir/build.make jalon03/src/CMakeFiles/RE216_JALON03_SERVER.dir/include/lines.c.o
+.PHONY : include/lines.c.o
+
+include/lines.i: include/lines.c.i
+
+.PHONY : include/lines.i
+
+# target to preprocess a source file
+include/lines.c.i:
+	cd /home/cdecourt/Documents/RE216/jalon03/build && $(MAKE) -f jalon03/src/CMakeFiles/RE216_JALON03_CLIENT.dir/build.make jalon03/src/CMakeFiles/RE216_JALON03_CLIENT.dir/include/lines.c.i
+	cd /home/cdecourt/Documents/RE216/jalon03/build && $(MAKE) -f jalon03/src/CMakeFiles/RE216_JALON03_SERVER.dir/build.make jalon03/src/CMakeFiles/RE216_JALON03_SERVER.dir/include/lines.c.i
+.PHONY : include/lines.c.i
+
+include/lines.s: include/lines.c.s
+
+.PHONY : include/lines.s
+
+# target to generate assembly for a file
+include/lines.c.s:
+	cd /home/cdecourt/Documents/RE216/jalon03/build && $(MAKE) -f jalon03/src/CMakeFiles/RE216_JALON03_CLIENT.dir/build.make jalon03/src/CMakeFiles/RE216_JALON03_CLIENT.dir/include/lines.c.s
+	cd /home/cdecourt/Documents/RE216/jalon03/build && $(MAKE) -f jalon03/src/CMakeFiles/RE216_JALON03_SERVER.dir/build.make jalon03/src/CMakeFiles/RE216_JALON03_SERVER.dir/include/lines.c.s
+.PHONY : include/lines.c.s
+
 include/server_tools.o: include/server_tools.c.o
 
 .PHONY : include/server_tools.o
@@ -297,6 +327,9 @@ help:
 	@echo "... include/common_tools.o"
 	@echo "... include/common_tools.i"
 	@echo "... include/common_tools.s"
+	@echo "... include/lines.o"
+	@echo "... include/lines.i"
+	@echo "... include/lines.s"
 	@echo "... include/server_tools.o"
 	@echo "... include/server_tools.i"
 	@echo "... include/server_tools.s"

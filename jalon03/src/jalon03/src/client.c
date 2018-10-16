@@ -12,6 +12,7 @@
 
 #include "include/client_tools.h"
 #include "include/common_tools.h"
+#include "include/lines.h"
 
 #define BUFF_LEN_MAX 1000
 #define BACKLOG 21
@@ -20,11 +21,13 @@
 
 int main(int argc,char** argv){
 
-  char* msg_cli = malloc(BUFF_LEN_MAX*sizeof(char));
-  char* msg = malloc(BUFF_LEN_MAX*sizeof(char));
   char* death_msg = "_kill_";
 
-  memset(msg_cli,0,sizeof(msg_cli));
+  char server_input[MSG_SIZE];
+  char user_input[MSG_SIZE];
+  memset(server_input, 0, MSG_SIZE);
+  memset(user_input, 0, MSG_SIZE);
+
 
   char * ip = argv[1];
   int port = atoi(argv[2]);
@@ -49,8 +52,8 @@ int main(int argc,char** argv){
   char*msg_connection = malloc(100*sizeof(char));
 
   int connect = do_connect(s, serv_addr);
-  do_recv(s,msg_connection);
 
+  do_recv(s,msg_connection);
 
   if(strncmp(msg_connection,death_msg,7)==0){
     printf("Too many connection. Server close connection \n");
@@ -62,41 +65,54 @@ int main(int argc,char** argv){
     printf("Connection with server ok \n");
     printf("[SERVER] : Please login with /nick <your pseudo> \n");
     for(;;){
-      handle_client_message(s,msg_cli,port);
-      do_send(s,msg_cli,strlen(msg_cli));
-      do_recv(s,msg);
-      printf("[ SERVER ] :%s\n", msg);
+      
+  
+      printf("\nPlease enter your line: ");
+      fflush(stdout);
 
-      if(strncmp(msg_cli,"/quit",5)==0){
+      read_line(STDIN_FILENO, user_input, MSG_SIZE);
+
+      send_line(s,user_input, strlen(user_input));
+
+      memset(server_input, '\0', MSG_SIZE);
+      read_line(s,server_input,MSG_SIZE);
+
+      fprintf(stdout,"[SERVER] : ");
+      fflush(stdout);
+      display_line(server_input,strlen(server_input));
+    
+      if(strcmp(user_input,"/quit\n")==0){
         break;
       }
 
-      else if(strncmp(msg_cli,"/who",4)==0  && strncmp(msg_cli, "/whois",6)!=0){
-        char msg_who[PSEUDO_LEN_MAX*20];
-        do_recv(s,msg_who);
-        printf("[SERVER : ] Online users are : %s\n",msg_who);
-        fflush(stdout);
-        memset(msg_who,'\0',BUFF_LEN_MAX*sizeof(char));
-      }
+      else if(strncmp(user_input, "/whois",6)==0 && strncmp(user_input,"/who",4)==0){
 
-      else if(strncmp(msg_cli, "/whois",6)==0 && strncmp(msg_cli, "/who",4)==0){
+        memset(server_input, '\0', MSG_SIZE);
+        memset(user_input, '\0', MSG_SIZE);
         char msg_whois[5000];
         do_recv(s,msg_whois);
-        printf("[SERVER : ] %s\n",msg_whois);
+        printf("%s \n",msg_whois);
         fflush(stdout);
         memset(msg_whois,'\0',2000*sizeof(char));
+        
+      }  
+
+      else if(strcmp(user_input,"/who\n")==0){
+        memset(server_input, '\0', MSG_SIZE);
+        memset(user_input, '\0', MSG_SIZE);
+        char msg_who[PSEUDO_LEN_MAX*20];
+        do_recv(s,msg_who);
+        printf("Online users are : %s\n",msg_who);
+        fflush(stdout);
+        memset(msg_who,'\0',BUFF_LEN_MAX*sizeof(char));
+        
       }
-
-      //Memory libeation
-      memset(msg_cli,'\0',BUFF_LEN_MAX*sizeof(char));
-      memset(msg,'\0',BUFF_LEN_MAX*sizeof(char));
-      
     }
-    //close Connection
-    printf("Close connection\n");
-    close(s);
+    
   }
-
+  //close Connection
+  printf("Close connection\n");
+  close(s);
   return 0;
 
 
