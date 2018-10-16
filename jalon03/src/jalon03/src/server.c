@@ -172,10 +172,12 @@ int main(int argc, char** argv)
           strcpy(msg_who, "\n");
           for(int k=1; k<=nb_clients; k++){
             struct user_table * curUser = NULL;
-            curUser = searchUser(UserTable, k, nb_clients, curUser);
-            strcat(msg_who, "-");
-            strcat(msg_who, curUser->pseudo);
-            strcat(msg_who, "\n");
+            curUser = searchUser(UserTable, k, nb_clients, curUser);    //renvoie 0 après un quit pour tous les k...
+            if (curUser != 0){
+              strcat(msg_who, "-");
+              strcat(msg_who, curUser->pseudo);
+              strcat(msg_who, "\n");
+            }
           }
           printf("sock %i\n",fds[i].fd);
           do_send(fds[i].fd,msg_who,strlen(msg_who));

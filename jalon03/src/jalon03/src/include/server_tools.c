@@ -61,7 +61,7 @@ struct user_table * addUser(struct user_table * UserTable, int id_client, char *
 // --------------------------------------------------- //
 
 void deleteUser(struct user_table * UserTable,struct user_table * temp, struct user_table * to_delete){
-  temp = UserTable;
+
   /*if(temp->next_user != to_delete){
     temp = temp->next_user;
   }
@@ -71,7 +71,8 @@ void deleteUser(struct user_table * UserTable,struct user_table * temp, struct u
   else{
     temp->next_user = to_delete->next_user;
   }*/
-  if (temp == to_delete){
+  /*if (temp == to_delete){
+    UserTable = UserTable->next_user;
     free(to_delete);
   }
   else {
@@ -80,7 +81,27 @@ void deleteUser(struct user_table * UserTable,struct user_table * temp, struct u
     }
     temp->next_user = to_delete->next_user;
     free(to_delete);
-  }
+  }*/
+
+
+  temp = UserTable;
+  int id_delete;
+  id_delete = to_delete->id_client;
+  //printf("%s\n", UserTable->pseudo);               //ok
+  //printf("%s\n", UserTable->next_user->pseudo);    //ok
+
+
+  while (temp->next_user != NULL && temp->next_user->id_client != id_delete){
+		temp = temp->next_user;
+
+	}
+
+  struct user_table * temp2;
+  temp2 = malloc(sizeof(struct user_table));
+	temp2 = temp->next_user;
+
+
+	free(temp2);
 }
 
 // -------------------------------------------------------------- //
