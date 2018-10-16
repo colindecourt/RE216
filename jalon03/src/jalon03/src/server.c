@@ -43,7 +43,7 @@ int main(int argc, char** argv)
   void* msg = malloc(BUFF_LEN_MAX*sizeof(char));
   char * msg_connection ="server_client";
   char buffer[MSG_SIZE];
-  
+
   //init the serv_add structure
   struct sockaddr_in serv_addr;
   init_serv_addr(port, &serv_addr);
@@ -94,7 +94,7 @@ int main(int argc, char** argv)
         fds[i].fd = s_client;
         fds[i].events = POLLIN;
         do_recv(s_client, ip);
-       
+
         UserTable = addUser(UserTable,i, "", fds[i].fd,ip,atoi(port));
         break;
 
@@ -147,7 +147,7 @@ int main(int argc, char** argv)
         }
 
         else if(strncmp(buffer,"/whois",6)==0 && strncmp(buffer,"/who",4)==0){
-          
+
           struct user_table * pseudo_user = NULL;
           struct user_table * curUser = NULL;
           char * whois = buffer + strlen("/whois ");
@@ -163,11 +163,11 @@ int main(int argc, char** argv)
           strcat(msg_whois,port);
           printf("%s\n",msg_whois);
           memset(buffer, '\0', MSG_SIZE);
-          do_send(fds[i].fd,msg_whois,strlen(msg_whois));  
+          do_send(fds[i].fd,msg_whois,strlen(msg_whois));
           memset(msg_whois,'\0',strlen(msg_whois));
         }
 
-        else if(strcmp(buffer,"/who\n")==0){
+        else if(strncmp(buffer,"/who\n",4)==0){
           char msg_who[PSEUDO_LEN_MAX*20];
           strcpy(msg_who, "\n");
           for(int k=1; k<=nb_clients; k++){

@@ -45,11 +45,11 @@ struct user_table * UserInit(){
 // -------------------------------------------------------------- //
 
 struct user_table * addUser(struct user_table * UserTable, int id_client, char *pseudo, int n_socket, char * ip, int port){
-  struct user_table * new_user; //ajout à gauche 
+  struct user_table * new_user; //ajout à gauche
   new_user = malloc(sizeof(struct user_table));
   new_user->id_client = id_client;
   new_user->pseudo = malloc(sizeof(char)*PSEUDO_LEN_MAX);
-  strcpy(new_user->pseudo, pseudo);  
+  strcpy(new_user->pseudo, pseudo);
   new_user->n_socket = n_socket;
   strcpy(new_user->ip,ip);
   new_user->port = port;
@@ -62,7 +62,7 @@ struct user_table * addUser(struct user_table * UserTable, int id_client, char *
 
 void deleteUser(struct user_table * UserTable,struct user_table * temp, struct user_table * to_delete){
   temp = UserTable;
-  if(temp->next_user != to_delete){
+  /*if(temp->next_user != to_delete){
     temp = temp->next_user;
   }
   else if(to_delete->next_user == NULL){
@@ -70,10 +70,20 @@ void deleteUser(struct user_table * UserTable,struct user_table * temp, struct u
     }
   else{
     temp->next_user = to_delete->next_user;
+  }*/
+  if (temp == to_delete){
+    free(to_delete);
+  }
+  else {
+    while(temp->next_user != to_delete){
+      temp = temp->next_user;
+    }
+    temp->next_user = to_delete->next_user;
+    free(to_delete);
   }
 }
 
-// -------------------------------------------------------------- // 
+// -------------------------------------------------------------- //
 
 struct user_table * searchUser(struct user_table * UserTable, int id_client, int nb_clients, struct user_table * wanted_user){
   int k=0;
@@ -151,4 +161,3 @@ int do_accept(int sock, struct sockaddr_in adr,int id_client){
 
   return connection;
 }
-
