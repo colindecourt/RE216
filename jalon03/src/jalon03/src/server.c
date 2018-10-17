@@ -172,7 +172,7 @@ int main(int argc, char** argv)
           strcpy(msg_who, "\n");
           for(int k=1; k<=nb_clients; k++){
             struct user_table * curUser = NULL;
-            curUser = searchUser(UserTable, k, nb_clients, curUser);    //renvoie 0 après un quit pour tous les k...
+            curUser = searchUser(UserTable, k, nb_clients, curUser);    
             if (curUser != 0){
               strcat(msg_who, "-");
               strcat(msg_who, curUser->pseudo);
