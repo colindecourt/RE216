@@ -66,9 +66,22 @@ int main(int argc,char** argv){
     printf("[SERVER] : Please login with /nick <your pseudo> \n");
     for(;;){
 
+      struct pollfd fds[BACKLOG+1];
+
+      memset(fds,-1,sizeof(fds));
+      fds[0].fd = s;
+      fds[0].events = POLLIN;
 
       printf("\nPlease enter your line: ");
       fflush(stdout);
+
+
+      int rs = poll(fds,BACKLOG+1,-1);
+      if(rs<0){
+        printf("Error, poll failed \n");
+      }
+
+
 
       read_line(STDIN_FILENO, user_input, MSG_SIZE);
 
@@ -108,6 +121,7 @@ int main(int argc,char** argv){
 
       }
 
+      
       /*else if(strncmp(user_input,"/msg_client",11)==0){
         printf("il y a un message all \n");
         memset(server_input, '\0', MSG_SIZE);
