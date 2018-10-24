@@ -65,8 +65,8 @@ int main(int argc,char** argv){
     printf("Connection with server ok \n");
     printf("[SERVER] : Please login with /nick <your pseudo> \n");
     for(;;){
-      
-  
+
+
       printf("\nPlease enter your line: ");
       fflush(stdout);
 
@@ -80,7 +80,7 @@ int main(int argc,char** argv){
       fprintf(stdout,"[SERVER] : ");
       fflush(stdout);
       display_line(server_input,strlen(server_input));
-    
+
       if(strcmp(user_input,"/quit\n")==0){
         break;
       }
@@ -94,8 +94,8 @@ int main(int argc,char** argv){
         printf("%s \n",msg_whois);
         fflush(stdout);
         memset(msg_whois,'\0',2000*sizeof(char));
-        
-      }  
+
+      }
 
       else if(strcmp(user_input,"/who\n")==0){
         memset(server_input, '\0', MSG_SIZE);
@@ -104,11 +104,23 @@ int main(int argc,char** argv){
         do_recv(s,msg_who);
         printf("Online users are : %s\n",msg_who);
         fflush(stdout);
-        memset(msg_who,'\0',BUFF_LEN_MAX*sizeof(char));
-        
+        memset(msg_who,'\0',PSEUDO_LEN_MAX*20);
+
       }
+
+      /*else if(strncmp(user_input,"/msg_client",11)==0){
+        printf("il y a un message all \n");
+        memset(server_input, '\0', MSG_SIZE);
+        memset(user_input, '\0', MSG_SIZE);
+        char msg_all[BUFF_LEN_MAX+20];
+        do_recv(s,msg_all);
+        printf("Msg all : %s\n",msg_all);
+        fflush(stdout);
+        memset(msg_all,'\0',BUFF_LEN_MAX*sizeof(char)+20);
+
+      }*/
     }
-    
+
   }
   //close Connection
   printf("Close connection\n");
