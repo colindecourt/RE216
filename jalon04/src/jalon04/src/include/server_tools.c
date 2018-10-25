@@ -14,44 +14,44 @@
 //specify the socket to be a server socket and listen for at most 20 concurrent client
 #define BACKLOG 21 //Maximum clients = 20
 
-
-
-
-
 // ---------- FUNCTIONS ------------- //
 
-char * get_time(){
-  char date [40];
+char *get_time()
+{
+  char date[40];
   char buff[20];
   char buff1[20];
   time_t t = time(NULL);
   struct tm *tm = localtime(&t);
   strftime(buff, 20, "%F", tm);
-  strftime(buff1,20,"%T",tm);
-  strcat(date,buff);
-  strcat(date," @ ");
-  strcat(date,buff1);
+  strftime(buff1, 20, "%T", tm);
+  strcat(date, buff);
+  strcat(date, " @ ");
+  strcat(date, buff1);
 }
 
 // ----------------------------------- //
 
-struct user_table * UserInit(){
-  struct user_table* user = malloc(sizeof(struct user_table));
-  if(!user) exit(EXIT_FAILURE);
+struct user_table *UserInit()
+{
+  struct user_table *user = malloc(sizeof(struct user_table));
+  if (!user)
+    exit(EXIT_FAILURE);
   user->next_user = NULL;
   return user;
 }
 
 // -------------------------------------------------------------- //
 
-struct user_table * addUser(struct user_table * UserTable, int id_client, char *pseudo, int n_socket, char * ip, int port){
-  struct user_table * new_user; //ajout à gauche
+struct user_table *addUser(struct user_table *UserTable, int id_client, char *pseudo, int n_socket, char *ip, int port)
+{
+  struct user_table *new_user; //ajout à gauche
   new_user = malloc(sizeof(struct user_table));
   new_user->id_client = id_client;
-  new_user->pseudo = malloc(sizeof(char)*PSEUDO_LEN_MAX);
+  new_user->pseudo = malloc(sizeof(char) * PSEUDO_LEN_MAX);
   strcpy(new_user->pseudo, pseudo);
   new_user->n_socket = n_socket;
-  strcpy(new_user->ip,ip);
+  strcpy(new_user->ip, ip);
   new_user->port = port;
   strcpy(new_user->time, get_time());
   new_user->next_user = UserTable;
@@ -60,33 +60,34 @@ struct user_table * addUser(struct user_table * UserTable, int id_client, char *
 
 // --------------------------------------------------- //
 
-void deleteUser(struct user_table * UserTable,struct user_table * temp, struct user_table * to_delete){
+void deleteUser(struct user_table *UserTable, struct user_table *temp, struct user_table *to_delete)
+{
 
   temp = UserTable;
   int id_delete;
   id_delete = to_delete->id_client;
 
+  while (temp->next_user != NULL && temp->next_user->id_client != id_delete)
+  {
+    temp = temp->next_user;
+  }
 
-  while (temp->next_user != NULL && temp->next_user->id_client != id_delete){
-		temp = temp->next_user;
-
-	}
-
-  struct user_table * temp2;
+  struct user_table *temp2;
   temp2 = malloc(sizeof(struct user_table));
-	temp2 = temp->next_user;
+  temp2 = temp->next_user;
 
-
-	free(temp2);
+  free(temp2);
 }
 
 // -------------------------------------------------------------- //
 
-struct user_table * searchUser(struct user_table * UserTable, int id_client, int nb_clients, struct user_table * wanted_user){
-  int k=0;
+struct user_table *searchUser(struct user_table *UserTable, int id_client, int nb_clients, struct user_table *wanted_user)
+{
+  int k = 0;
   wanted_user = UserTable;
-  while(k<nb_clients){
-    if(wanted_user->id_client == id_client)
+  while (k < nb_clients)
+  {
+    if (wanted_user->id_client == id_client)
       return wanted_user;
     k++;
     wanted_user = wanted_user->next_user;
@@ -96,11 +97,14 @@ struct user_table * searchUser(struct user_table * UserTable, int id_client, int
 
 // ----------------------------------//
 
-int search_user_pseudo(struct user_table * UserTable, char * pseudo, int nb_clients, struct user_table * wanted_user){
-  int k=0;
+int search_user_pseudo(struct user_table *UserTable, char *pseudo, int nb_clients, struct user_table *wanted_user)
+{
+  int k = 0;
   wanted_user = UserTable;
-  while(k<nb_clients){
-    if(strcmp(wanted_user->pseudo,pseudo)==0){
+  while (k < nb_clients)
+  {
+    if (strcmp(wanted_user->pseudo, pseudo) == 0)
+    {
       return wanted_user->id_client;
     }
     k++;
@@ -111,12 +115,13 @@ int search_user_pseudo(struct user_table * UserTable, char * pseudo, int nb_clie
 
 // ------------------------ //
 
-void init_serv_addr(const char* port, struct sockaddr_in* serv_addr) {
+void init_serv_addr(const char *port, struct sockaddr_in *serv_addr)
+{
 
   int portno;
 
   //clean the serv_add structure
-  memset( serv_addr, '\0', sizeof(struct sockaddr_in));
+  memset(serv_addr, '\0', sizeof(struct sockaddr_in));
 
   //cast the port from a string to an int
   portno = atoi(port);
@@ -129,18 +134,19 @@ void init_serv_addr(const char* port, struct sockaddr_in* serv_addr) {
 
   //we bind on the tcp port specified
   serv_addr->sin_port = htons(portno);
-
 }
 
 // ----------------------- //
 
-void do_bind(int sock, struct sockaddr_in adr){
+void do_bind(int sock, struct sockaddr_in adr)
+{
 
   int retbind; //retour de la fonction bind()
 
-  retbind = bind (sock, (struct sockaddr *) &adr, sizeof(struct sockaddr_in));
+  retbind = bind(sock, (struct sockaddr *)&adr, sizeof(struct sockaddr_in));
 
-  if (retbind == -1){
+  if (retbind == -1)
+  {
     perror("error bind : ");
     exit(EXIT_FAILURE);
   }
@@ -148,13 +154,14 @@ void do_bind(int sock, struct sockaddr_in adr){
 
 // ------- Accept the connection ------- //
 
-int do_accept(int sock, struct sockaddr_in adr,int id_client){
+int do_accept(int sock, struct sockaddr_in adr, int id_client)
+{
   int adr_len = sizeof(adr);
-  int connection = accept(sock,(struct sockaddr *)&adr,(socklen_t*)&adr_len);
+  int connection = accept(sock, (struct sockaddr *)&adr, (socklen_t *)&adr_len);
   if (connection == -1)
-  perror("accept ERROR\n");
-  else if (connection >0)
-  printf("Connection ok with client n°%i\n",id_client );
+    perror("accept ERROR\n");
+  else if (connection > 0)
+    printf("Connection ok with client n°%i\n", id_client);
 
   return connection;
 }

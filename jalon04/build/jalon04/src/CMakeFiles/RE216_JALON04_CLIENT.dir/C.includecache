@@ -1,4 +1,4 @@
-#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
 
 #IncludeRegexScan: ^.*$
 
@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/home/elsa/Documents/RE216/jalon04/src/jalon04/src/client.c
+/home/cdecourt/Documents/RE216/jalon04/src/jalon04/src/client.c
 stdlib.h
 -
 unistd.h
@@ -30,13 +30,13 @@ netinet/in.h
 arpa/inet.h
 -
 include/client_tools.h
-/home/elsa/Documents/RE216/jalon04/src/jalon04/src/include/client_tools.h
+/home/cdecourt/Documents/RE216/jalon04/src/jalon04/src/include/client_tools.h
 include/common_tools.h
-/home/elsa/Documents/RE216/jalon04/src/jalon04/src/include/common_tools.h
+/home/cdecourt/Documents/RE216/jalon04/src/jalon04/src/include/common_tools.h
 include/lines.h
-/home/elsa/Documents/RE216/jalon04/src/jalon04/src/include/lines.h
+/home/cdecourt/Documents/RE216/jalon04/src/jalon04/src/include/lines.h
 
-/home/elsa/Documents/RE216/jalon04/src/jalon04/src/include/client_tools.c
+/home/cdecourt/Documents/RE216/jalon04/src/jalon04/src/include/client_tools.c
 stdlib.h
 -
 unistd.h
@@ -60,9 +60,9 @@ netinet/in.h
 arpa/inet.h
 -
 client_tools.h
-/home/elsa/Documents/RE216/jalon04/src/jalon04/src/include/client_tools.h
+/home/cdecourt/Documents/RE216/jalon04/src/jalon04/src/include/client_tools.h
 
-/home/elsa/Documents/RE216/jalon04/src/jalon04/src/include/client_tools.h
+/home/cdecourt/Documents/RE216/jalon04/src/jalon04/src/include/client_tools.h
 stdlib.h
 -
 unistd.h
@@ -86,7 +86,7 @@ netinet/in.h
 arpa/inet.h
 -
 
-/home/elsa/Documents/RE216/jalon04/src/jalon04/src/include/common_tools.c
+/home/cdecourt/Documents/RE216/jalon04/src/jalon04/src/include/common_tools.c
 stdlib.h
 -
 unistd.h
@@ -110,9 +110,9 @@ netinet/in.h
 arpa/inet.h
 -
 common_tools.h
-/home/elsa/Documents/RE216/jalon04/src/jalon04/src/include/common_tools.h
+/home/cdecourt/Documents/RE216/jalon04/src/jalon04/src/include/common_tools.h
 
-/home/elsa/Documents/RE216/jalon04/src/jalon04/src/include/common_tools.h
+/home/cdecourt/Documents/RE216/jalon04/src/jalon04/src/include/common_tools.h
 stdlib.h
 -
 unistd.h
@@ -136,11 +136,11 @@ netinet/in.h
 arpa/inet.h
 -
 
-/home/elsa/Documents/RE216/jalon04/src/jalon04/src/include/lines.c
+/home/cdecourt/Documents/RE216/jalon04/src/jalon04/src/include/lines.c
 lines.h
-/home/elsa/Documents/RE216/jalon04/src/jalon04/src/include/lines.h
+/home/cdecourt/Documents/RE216/jalon04/src/jalon04/src/include/lines.h
 
-/home/elsa/Documents/RE216/jalon04/src/jalon04/src/include/lines.h
+/home/cdecourt/Documents/RE216/jalon04/src/jalon04/src/include/lines.h
 unistd.h
 -
 stdio.h
