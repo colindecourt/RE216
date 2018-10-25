@@ -139,7 +139,7 @@ int main(int argc,char** argv){
           printf("il y a un message all \n");
           memset(server_input, '\0', MSG_SIZE);
           memset(user_input, '\0', MSG_SIZE);
-          printf("Msg all : %s\n",broadcast);
+          printf("%s\n",broadcast);
           fflush(stdout);
           memset(msg_all,'\0',BUFF_LEN_MAX*sizeof(char));
 
