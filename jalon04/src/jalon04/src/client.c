@@ -64,6 +64,8 @@ int main(int argc,char** argv){
 
     printf("Connection with server ok \n");
     printf("[SERVER] : Please login with /nick <your pseudo> \n");
+
+
     for(;;){
 
       struct pollfd fds[BACKLOG+1];
@@ -71,6 +73,8 @@ int main(int argc,char** argv){
       memset(fds,-1,sizeof(fds));
       fds[0].fd = s;
       fds[0].events = POLLIN;
+      fds[1].fd = STDIN_FILENO;
+      fds[1].events = POLLIN;
 
       printf("\nPlease enter your line: ");
       fflush(stdout);
@@ -82,64 +86,78 @@ int main(int argc,char** argv){
       }
 
 
+      if(fds[1].revents == POLLIN) {
 
-      read_line(STDIN_FILENO, user_input, MSG_SIZE);
 
-      send_line(s,user_input, strlen(user_input));
+        read_line(STDIN_FILENO, user_input, MSG_SIZE);
 
-      memset(server_input, '\0', MSG_SIZE);
-      read_line(s,server_input,MSG_SIZE);
-
-      fprintf(stdout,"[SERVER] : ");
-      fflush(stdout);
-      display_line(server_input,strlen(server_input));
-
-      if(strcmp(user_input,"/quit\n")==0){
-        break;
-      }
-
-      else if(strncmp(user_input, "/whois",6)==0 && strncmp(user_input,"/who",4)==0){
+        send_line(s,user_input, strlen(user_input));
 
         memset(server_input, '\0', MSG_SIZE);
-        memset(user_input, '\0', MSG_SIZE);
-        char msg_whois[5000];
-        do_recv(s,msg_whois);
-        printf("%s \n",msg_whois);
+        read_line(s,server_input,MSG_SIZE);
+
+        fprintf(stdout,"[SERVER] : ");
         fflush(stdout);
-        memset(msg_whois,'\0',2000*sizeof(char));
+        display_line(server_input,strlen(server_input));
+
+        if(strcmp(user_input,"/quit\n")==0){
+          break;
+        }
+
+        else if(strncmp(user_input, "/whois",6)==0 && strncmp(user_input,"/who",4)==0){
+
+          memset(server_input, '\0', MSG_SIZE);
+          memset(user_input, '\0', MSG_SIZE);
+          char msg_whois[5000];
+          do_recv(s,msg_whois);
+          printf("%s \n",msg_whois);
+          fflush(stdout);
+          memset(msg_whois,'\0',2000*sizeof(char));
+
+        }
+
+        else if(strcmp(user_input,"/who\n")==0){
+          memset(server_input, '\0', MSG_SIZE);
+          memset(user_input, '\0', MSG_SIZE);
+          char msg_who[PSEUDO_LEN_MAX*20];
+          do_recv(s,msg_who);
+          printf("Online users are : %s\n",msg_who);
+          fflush(stdout);
+          memset(msg_who,'\0',PSEUDO_LEN_MAX*20);
+
+        }
 
       }
 
-      else if(strcmp(user_input,"/who\n")==0){
-        memset(server_input, '\0', MSG_SIZE);
-        memset(user_input, '\0', MSG_SIZE);
-        char msg_who[PSEUDO_LEN_MAX*20];
-        do_recv(s,msg_who);
-        printf("Online users are : %s\n",msg_who);
-        fflush(stdout);
-        memset(msg_who,'\0',PSEUDO_LEN_MAX*20);
+      else if(fds[0].revents == POLLIN) {
 
-      }
-
-      
-      /*else if(strncmp(user_input,"/msg_client",11)==0){
-        printf("il y a un message all \n");
-        memset(server_input, '\0', MSG_SIZE);
-        memset(user_input, '\0', MSG_SIZE);
-        char msg_all[BUFF_LEN_MAX+20];
+        char msg_all[BUFF_LEN_MAX];
         do_recv(s,msg_all);
-        printf("Msg all : %s\n",msg_all);
-        fflush(stdout);
-        memset(msg_all,'\0',BUFF_LEN_MAX*sizeof(char)+20);
 
-      }*/
+        if(strncmp(msg_all,"/msgall",7)==0){
+          char * broadcast = msg_all+strlen("/msgall ");
+          printf("il y a un message all \n");
+          memset(server_input, '\0', MSG_SIZE);
+          memset(user_input, '\0', MSG_SIZE);
+          printf("Msg all : %s\n",broadcast);
+          fflush(stdout);
+          memset(msg_all,'\0',BUFF_LEN_MAX*sizeof(char));
+
+      }
     }
 
+    else{
+      printf("je ne suis pas rentré dans ta condition \n");
+      break;
+    }
   }
-  //close Connection
-  printf("Close connection\n");
-  close(s);
-  return 0;
+
+}
+
+//close Connection
+printf("Close connection\n");
+close(s);
+return 0;
 
 
 }

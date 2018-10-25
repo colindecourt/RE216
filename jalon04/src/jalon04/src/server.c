@@ -185,17 +185,22 @@ int main(int argc, char** argv)
           memset(msg_who,'\0',strlen(msg_who));
         }
 
-        else if(strncmp(buffer,"/msgall\n",7)==0){
-          char msg_all[20+BUFF_LEN_MAX];
-          strcpy(msg_all, "");
+        else if(strncmp(buffer,"/msgall",7)==0){
+          char msg_all[BUFF_LEN_MAX];
+          strcpy(msg_all, "/msgall ");
+          struct user_table * curUser = NULL;
+          curUser = searchUser(UserTable, i, nb_clients, curUser);
+          strcat(msg_all, "[");
+          strncat(msg_all, curUser->pseudo, strlen(curUser->pseudo)-strlen("\n"));
+          strcat(msg_all, "] ");
 
           for (int k=1 ; k<=nb_clients; k++){
             if (k != i){
-              strcat(msg_all, "/msg_client ");
+              strcpy(buffer, buffer+8);
               strcat(msg_all, buffer);
-              do_send(fds[k].fd,msg_all,BUFF_LEN_MAX+20);
+              do_send(fds[k].fd,msg_all,BUFF_LEN_MAX);
               printf("%s\n", msg_all);
-              memset(msg_all,'\0',BUFF_LEN_MAX+20);
+              memset(msg_all,'\0',BUFF_LEN_MAX);
             }
           }
         }
