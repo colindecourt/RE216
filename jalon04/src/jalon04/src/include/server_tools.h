@@ -14,6 +14,8 @@
 
 // -------------- STRUCTURE --------------//
 #define PSEUDO_LEN_MAX 100
+#define CAPACITY_CHANNEL 10
+
 struct user_table {
   int id_client;
   char * pseudo;
@@ -24,6 +26,20 @@ struct user_table {
   struct user_table * next_user;
 };
 
+struct channel {
+  int id_channel;
+  char * channel_name;
+  int actual_number;
+  char * connected_people[CAPACITY_CHANNEL];
+  struct channel * next_channel;
+};
+
+
+
+struct channel * channel_init();
+struct channel *create_channel(struct channel * channel_table, int id_channel,char * channel_name);
+void join_channel(struct channel *channel_table, char *pseudo, int actual_number);
+struct channel *search_channel(struct channel *channel_table, char*channel_name, struct channel *wanted_channel);
 char * get_time();
 struct user_table * UserInit();
 struct user_table * addUser(struct user_table * UserTable, int id_client, char* pseudo, int n_socket, char * ip, int port);

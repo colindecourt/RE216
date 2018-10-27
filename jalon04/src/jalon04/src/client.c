@@ -17,6 +17,7 @@
 #define BUFF_LEN_MAX 1000
 #define BACKLOG 21
 #define PSEUDO_LEN_MAX 100
+
 // ----------- MAIN ------------- //
 
 int main(int argc, char **argv)
@@ -70,7 +71,6 @@ int main(int argc, char **argv)
     {
 
       struct pollfd fds[BACKLOG + 1];
-
       memset(fds, -1, sizeof(fds));
       fds[0].fd = s;
       fds[0].events = POLLIN;
@@ -94,7 +94,6 @@ int main(int argc, char **argv)
         send_line(s, user_input, strlen(user_input));
 
         memset(server_input, '\0', MSG_SIZE);
-        
 
         if (strcmp(user_input, "/quit\n") == 0)
         {
@@ -123,6 +122,14 @@ int main(int argc, char **argv)
           fflush(stdout);
           memset(msg_who, '\0', PSEUDO_LEN_MAX * 20);
         }
+
+        else if (strncmp(user_input, "/channel", 7) == 0)
+        {
+          char * channel_name = malloc(sizeof(char)*PSEUDO_LEN_MAX);
+          memset(channel_name,'\0',sizeof(channel_name));
+          do_recv(s,channel_name);
+          printf("You have created channel %s \n", channel_name);
+        }
       }
 
       else if (fds[0].revents == POLLIN)
@@ -142,9 +149,10 @@ int main(int argc, char **argv)
           memset(msg_all, '\0', BUFF_LEN_MAX * sizeof(char));
         }
 
-        else if (strncmp(msg_all,"_$$_",4)==0){
-          char * unicast = msg_all + strlen("_$$_");
-          printf("%s\n",unicast);
+        else if (strncmp(msg_all, "_$$_", 4) == 0)
+        {
+          char *unicast = msg_all + strlen("_$$_");
+          printf("%s\n", unicast);
         }
       }
     }

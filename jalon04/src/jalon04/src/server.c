@@ -9,7 +9,7 @@
 #include <error.h>
 #include <arpa/inet.h>
 #include <time.h>
-
+#include <signal.h>
 #include "include/server_tools.h"
 #include "include/common_tools.h"
 #include "include/lines.h"
@@ -24,6 +24,8 @@
 int main(int argc, char **argv)
 {
   struct user_table *UserTable = UserInit();
+  struct channel * channel_table = channel_init();
+  int id_channel = 1; //for the first channel
   int n;
   if (argc != 2)
   {
@@ -62,6 +64,7 @@ int main(int argc, char **argv)
 
   for (;;)
   {
+    
 
     printf("Waiting on poll...\n");
     int rs = poll(fds, BACKLOG + 1, -1);
@@ -127,12 +130,13 @@ int main(int argc, char **argv)
             struct user_table *to_delete = NULL;
             struct user_table *temp = NULL;
             to_delete = searchUser(UserTable, i, nb_clients, to_delete);
+            printf("i = %i",nb_clients);
             close(fds[i].fd);
-            nb_clients--;
             fds[i].fd = -1;
             fds[i].events = -1;
             printf("Client n°%i close connection\n", i);
-            deleteUser(UserTable, temp, to_delete);
+            //deleteUser(UserTable, temp, to_delete);
+            nb_clients--;
             break;
           }
 
@@ -167,21 +171,21 @@ int main(int argc, char **argv)
             memset(msg_whois, '\0', strlen(msg_whois));
           }
 
-          else if (strncmp(buffer, "/who\n", 4) == 0)
+          else if (strcmp(buffer, "/who\n") == 0)
           {
             char msg_who[PSEUDO_LEN_MAX * 20];
             strcpy(msg_who, "\n");
 
             for (int k = 1; k <= nb_clients; k++)
             {
-              struct user_table *curUser = NULL;
+              struct user_table *curUser = malloc(sizeof(struct user_table));
               curUser = searchUser(UserTable, k, nb_clients, curUser);
-              if (curUser != 0)
-              {
+              //if (curUser != 0)
+              //{
                 strcat(msg_who, "-");
                 strcat(msg_who, curUser->pseudo);
                 strcat(msg_who, "\n");
-              }
+              //}
             }
             printf("sock %i\n", fds[i].fd);
             do_send(fds[i].fd, msg_who, strlen(msg_who));
@@ -192,7 +196,7 @@ int main(int argc, char **argv)
           {
             char msg_all[BUFF_LEN_MAX];
             strcpy(msg_all, "/msgall ");
-            struct user_table *curUser = NULL;
+            struct user_table *curUser = malloc(sizeof(struct user_table));
             curUser = searchUser(UserTable, i, nb_clients, curUser);
             strcat(msg_all, "[");
             strncat(msg_all, curUser->pseudo, strlen(curUser->pseudo) - strlen("\n"));
@@ -217,9 +221,9 @@ int main(int argc, char **argv)
             char *unicast = malloc(sizeof(char) * BUFF_LEN_MAX);
             char *pseudo = malloc(sizeof(char) * PSEUDO_LEN_MAX);
             memset(pseudo, '\0', sizeof(pseudo));
-            struct user_table *pseudo_user = NULL;
-            struct user_table *user_to_send = NULL;
-            struct user_table *cur_user = NULL;
+            struct user_table *pseudo_user = malloc(sizeof(struct user_table));
+            struct user_table *user_to_send = malloc(sizeof(struct user_table));
+            struct user_table *cur_user = malloc(sizeof(struct user_table));
             cur_user = searchUser(UserTable, i, nb_clients, cur_user);
             printf("%s\n",cur_user->pseudo);
             while (buffer[j] != ' ')
@@ -242,6 +246,30 @@ int main(int argc, char **argv)
             strcat(unicast, buffer + j + 1);
             printf("%s\n",unicast);
             do_send(user_to_send->n_socket, unicast, BUFF_LEN_MAX);
+          }
+
+          else if (strncmp(buffer,"/create",7)==0){
+            char * channel_name = malloc(sizeof(char)*PSEUDO_LEN_MAX);
+            memset(channel_name,'\0',sizeof(channel_name));
+            channel_name = buffer + strlen("/create  ");
+            printf("%s\n", channel_name);
+            channel_table = create_channel(channel_table,id_channel,channel_name);
+            do_send(fds[i].fd,channel_name,strlen(channel_name));
+            printf("%i\n", channel_table->actual_number);
+            printf("%i\n", channel_table->id_channel);
+            printf("%s\n", channel_table->channel_name);
+            id_channel++;
+          }
+
+          else if(strncmp(buffer,"/join",5)==0){
+            struct user_table *curUser = malloc(sizeof(struct user_table));
+            curUser = searchUser(UserTable, i, nb_clients, curUser);
+            struct channel * to_join = malloc(sizeof(struct channel));
+            char * channel_name = malloc(sizeof(char)*PSEUDO_LEN_MAX);
+            memset(channel_name,'\0',sizeof(channel_name));
+            channel_name = buffer + strlen("/join  ");
+            to_join = search_channel(channel_table,channel_name,to_join);
+            join_channel(to_join,curUser->pseudo,to_join->actual_number);
           }
         }
       }

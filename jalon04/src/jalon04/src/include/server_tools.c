@@ -11,6 +11,7 @@
 
 #define BUFF_LEN_MAX 1000
 #define PSEUDO_LEN_MAX 100
+#define CHANNEL_LEN_MAX 100
 //specify the socket to be a server socket and listen for at most 20 concurrent client
 #define BACKLOG 21 //Maximum clients = 20
 
@@ -31,6 +32,50 @@ char *get_time()
 }
 
 // ----------------------------------- //
+
+struct channel *channel_init()
+{
+  struct channel *channel = malloc(sizeof(struct channel));
+  if (!channel)
+    exit(EXIT_FAILURE);
+  channel->next_channel = NULL;
+  return channel;
+}
+
+// -------------------------------------------------------------------- //
+
+struct channel *create_channel(struct channel *channel_table, int id_channel, char *channel_name)
+{
+  struct channel *new_channel; //ajout à gauche
+  new_channel = malloc(sizeof(struct channel));
+  new_channel->id_channel = id_channel;
+  new_channel->channel_name = malloc(sizeof(char) * CHANNEL_LEN_MAX);
+  strcpy(new_channel->channel_name, channel_name);
+  new_channel->actual_number = 0;
+  new_channel->next_channel = channel_table;
+  return new_channel;
+}
+
+void join_channel(struct channel *channel_table, char *pseudo, int actual_number)
+{
+  strcpy(channel_table->connected_people[actual_number],pseudo);
+  channel_table->actual_number++;
+}
+
+struct channel *search_channel(struct channel *channel_table, char * channel_name, struct channel *wanted_channel)
+{
+  wanted_channel = channel_table;
+  if (strcmp(wanted_channel->channel_name,channel_name)==0)
+  {
+    return wanted_channel;
+  }
+  else 
+  {
+    wanted_channel = wanted_channel->next_channel;
+  }
+  return wanted_channel;
+}
+// ------------------------------------------------------------------------ //
 
 struct user_table *UserInit()
 {
@@ -64,19 +109,30 @@ void deleteUser(struct user_table *UserTable, struct user_table *temp, struct us
 {
 
   temp = UserTable;
-  int id_delete;
-  id_delete = to_delete->id_client;
 
-  while (temp->next_user != NULL && temp->next_user->id_client != id_delete)
+  if (temp->id_client == to_delete->id_client)
   {
-    temp = temp->next_user;
+    if (temp->next_user->next_user == NULL)
+    {
+      temp->next_user = NULL;
+      free(temp);
+    }
+    else
+    {
+      temp->next_user = to_delete->next_user;
+      free(to_delete);
+    }
   }
 
-  struct user_table *temp2;
-  temp2 = malloc(sizeof(struct user_table));
-  temp2 = temp->next_user;
-
-  free(temp2);
+  else
+  {
+    while (temp->next_user->id_client != to_delete->id_client)
+    {
+      temp = temp->next_user;
+    }
+    temp->next_user = to_delete->next_user;
+    free(to_delete);
+  }
 }
 
 // -------------------------------------------------------------- //
@@ -92,7 +148,7 @@ struct user_table *searchUser(struct user_table *UserTable, int id_client, int n
     k++;
     wanted_user = wanted_user->next_user;
   }
-  return 0;
+  return wanted_user;
 }
 
 // ----------------------------------//
