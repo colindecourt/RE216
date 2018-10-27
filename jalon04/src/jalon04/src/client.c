@@ -144,7 +144,7 @@ int main(int argc, char **argv)
 
         else if (strncmp(msg_all,"_$$_",4)==0){
           char * unicast = msg_all + strlen("_$$_");
-          printf("Someone say %s\n",unicast);
+          printf("%s\n",unicast);
         }
       }
     }

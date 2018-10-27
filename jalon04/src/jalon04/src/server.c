@@ -227,6 +227,7 @@ int main(int argc, char **argv)
               strncat(pseudo, buffer + j, 1);
               j++;
             }
+            strcat(pseudo,"\n");
             int id_to_send = search_user_pseudo(UserTable, pseudo, nb_clients, pseudo_user);
             user_to_send = searchUser(UserTable, id_to_send, nb_clients, user_to_send);
             char * temp_pseudo = malloc(sizeof(char)*PSEUDO_LEN_MAX);
