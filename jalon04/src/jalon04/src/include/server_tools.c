@@ -58,9 +58,20 @@ struct channel *create_channel(struct channel *channel_table, int id_channel, ch
 
 void join_channel(struct channel *channel_table, char *pseudo, int actual_number)
 {
+  channel_table->connected_people[actual_number] = malloc(sizeof(strlen(pseudo)));
   strcpy(channel_table->connected_people[actual_number],pseudo);
   channel_table->actual_number++;
 }
+
+void quit_channel(struct channel *channel_table, char *pseudo){
+  for(int i = 0; i<CAPACITY_CHANNEL; i++){
+    if (strncmp(channel_table->connected_people[i], pseudo, strlen(pseudo)) ==0){
+      free(channel_table->connected_people[i]);
+      channel_table->actual_number++;
+    }
+  }
+}
+
 
 struct channel *search_channel(struct channel *channel_table, char * channel_name, struct channel *wanted_channel)
 {
@@ -69,12 +80,13 @@ struct channel *search_channel(struct channel *channel_table, char * channel_nam
   {
     return wanted_channel;
   }
-  else 
+  else
   {
     wanted_channel = wanted_channel->next_channel;
   }
   return wanted_channel;
 }
+
 // ------------------------------------------------------------------------ //
 
 struct user_table *UserInit()

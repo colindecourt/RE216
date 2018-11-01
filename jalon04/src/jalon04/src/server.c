@@ -64,7 +64,7 @@ int main(int argc, char **argv)
 
   for (;;)
   {
-    
+
 
     printf("Waiting on poll...\n");
     int rs = poll(fds, BACKLOG + 1, -1);
@@ -251,25 +251,38 @@ int main(int argc, char **argv)
           else if (strncmp(buffer,"/create",7)==0){
             char * channel_name = malloc(sizeof(char)*PSEUDO_LEN_MAX);
             memset(channel_name,'\0',sizeof(channel_name));
-            channel_name = buffer + strlen("/create  ");
+            channel_name = buffer + strlen("/create ");
             printf("%s\n", channel_name);
             channel_table = create_channel(channel_table,id_channel,channel_name);
             do_send(fds[i].fd,channel_name,strlen(channel_name));
-            printf("%i\n", channel_table->actual_number);
-            printf("%i\n", channel_table->id_channel);
-            printf("%s\n", channel_table->channel_name);
+            printf("actual number : %i\n", channel_table->actual_number);
+            printf("id channel : %i\n", channel_table->id_channel);
+            printf("channel name : %s\n", channel_table->channel_name);
             id_channel++;
           }
 
           else if(strncmp(buffer,"/join",5)==0){
             struct user_table *curUser = malloc(sizeof(struct user_table));
             curUser = searchUser(UserTable, i, nb_clients, curUser);
+            //printf("%s\n", curUser->pseudo);
             struct channel * to_join = malloc(sizeof(struct channel));
             char * channel_name = malloc(sizeof(char)*PSEUDO_LEN_MAX);
             memset(channel_name,'\0',sizeof(channel_name));
-            channel_name = buffer + strlen("/join  ");
+            channel_name = buffer + strlen("/join ");
             to_join = search_channel(channel_table,channel_name,to_join);
             join_channel(to_join,curUser->pseudo,to_join->actual_number);
+            printf("%d\n", to_join->actual_number);
+          }
+
+          else if(strncmp(buffer,"/leave",5)==0){
+            struct user_table *curUser = malloc(sizeof(struct user_table));
+            curUser = searchUser(UserTable, i, nb_clients, curUser);
+            char * channel_name = malloc(sizeof(char)*PSEUDO_LEN_MAX);
+            memset(channel_name,'\0',sizeof(channel_name));
+            channel_name = buffer + strlen("/leave ");
+            struct channel * to_quit = malloc(sizeof(struct channel));
+            to_quit = search_channel(channel_table,channel_name,to_quit);
+            quit_channel(to_quit, curUser->pseudo);
           }
         }
       }
