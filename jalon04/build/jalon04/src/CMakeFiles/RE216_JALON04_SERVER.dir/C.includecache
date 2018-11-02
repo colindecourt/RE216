@@ -1,4 +1,4 @@
-#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
 
 #IncludeRegexScan: ^.*$
 
@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/home/elsa/Documents/RE216/jalon04/src/jalon04/src/include/common_tools.c
+/home/cdecourt/Documents/RE216/jalon04/src/jalon04/src/include/common_tools.c
 stdlib.h
 -
 unistd.h
@@ -32,9 +32,9 @@ signal.h
 arpa/inet.h
 -
 common_tools.h
-/home/elsa/Documents/RE216/jalon04/src/jalon04/src/include/common_tools.h
+/home/cdecourt/Documents/RE216/jalon04/src/jalon04/src/include/common_tools.h
 
-/home/elsa/Documents/RE216/jalon04/src/jalon04/src/include/common_tools.h
+/home/cdecourt/Documents/RE216/jalon04/src/jalon04/src/include/common_tools.h
 stdlib.h
 -
 unistd.h
@@ -58,11 +58,11 @@ netinet/in.h
 arpa/inet.h
 -
 
-/home/elsa/Documents/RE216/jalon04/src/jalon04/src/include/lines.c
+/home/cdecourt/Documents/RE216/jalon04/src/jalon04/src/include/lines.c
 lines.h
-/home/elsa/Documents/RE216/jalon04/src/jalon04/src/include/lines.h
+/home/cdecourt/Documents/RE216/jalon04/src/jalon04/src/include/lines.h
 
-/home/elsa/Documents/RE216/jalon04/src/jalon04/src/include/lines.h
+/home/cdecourt/Documents/RE216/jalon04/src/jalon04/src/include/lines.h
 unistd.h
 -
 stdio.h
@@ -70,7 +70,7 @@ stdio.h
 errno.h
 -
 
-/home/elsa/Documents/RE216/jalon04/src/jalon04/src/include/server_tools.c
+/home/cdecourt/Documents/RE216/jalon04/src/jalon04/src/include/server_tools.c
 stdio.h
 -
 stdlib.h
@@ -90,9 +90,9 @@ poll.h
 arpa/inet.h
 -
 server_tools.h
-/home/elsa/Documents/RE216/jalon04/src/jalon04/src/include/server_tools.h
+/home/cdecourt/Documents/RE216/jalon04/src/jalon04/src/include/server_tools.h
 
-/home/elsa/Documents/RE216/jalon04/src/jalon04/src/include/server_tools.h
+/home/cdecourt/Documents/RE216/jalon04/src/jalon04/src/include/server_tools.h
 stdio.h
 -
 stdlib.h
@@ -114,7 +114,7 @@ arpa/inet.h
 time.h
 -
 
-/home/elsa/Documents/RE216/jalon04/src/jalon04/src/server.c
+/home/cdecourt/Documents/RE216/jalon04/src/jalon04/src/server.c
 stdio.h
 -
 stdlib.h
@@ -140,9 +140,9 @@ time.h
 signal.h
 -
 include/server_tools.h
-/home/elsa/Documents/RE216/jalon04/src/jalon04/src/include/server_tools.h
+/home/cdecourt/Documents/RE216/jalon04/src/jalon04/src/include/server_tools.h
 include/common_tools.h
-/home/elsa/Documents/RE216/jalon04/src/jalon04/src/include/common_tools.h
+/home/cdecourt/Documents/RE216/jalon04/src/jalon04/src/include/common_tools.h
 include/lines.h
-/home/elsa/Documents/RE216/jalon04/src/jalon04/src/include/lines.h
+/home/cdecourt/Documents/RE216/jalon04/src/jalon04/src/include/lines.h
 

@@ -52,23 +52,38 @@ struct channel *create_channel(struct channel *channel_table, int id_channel, ch
   new_channel->channel_name = malloc(sizeof(char) * CHANNEL_LEN_MAX);
   strcpy(new_channel->channel_name, channel_name);
   new_channel->actual_number = 0;
+  for(int i = 0; i < CAPACITY_CHANNEL; i++){
+    new_channel->connected_people[i] = ""; 
+  }
   new_channel->next_channel = channel_table;
   return new_channel;
 }
+
+// ----------------------------------------------------------------------------------- //
 
 void join_channel(struct channel *channel_table, char *pseudo, int actual_number)
 {
   channel_table->connected_people[actual_number] = malloc(sizeof(strlen(pseudo)));
   strcpy(channel_table->connected_people[actual_number],pseudo);
   channel_table->actual_number++;
+  printf("Nouveau client : %s\n",channel_table->connected_people[actual_number]);
 }
 
+// ----------------------------------------------------------------------------------- //
+
 void quit_channel(struct channel *channel_table, char *pseudo){
-  for(int i = 0; i<CAPACITY_CHANNEL; i++){
-    if (strncmp(channel_table->connected_people[i], pseudo, strlen(pseudo)) ==0){
+  int i = 0;
+  while(strcmp(channel_table->connected_people[i],"") != 0){
+    /*if (strcmp(channel_table->connected_people[i], pseudo) ==0){
       free(channel_table->connected_people[i]);
-      channel_table->actual_number++;
+      channel_table->actual_number--;
+    }*/
+    if(strcmp(channel_table->connected_people[i],pseudo)==0){
+      strcpy(channel_table->connected_people[i], "\0");
+      channel_table->actual_number--;
     }
+    printf("People on channel %s\n", channel_table->connected_people[i]);
+    i++;
   }
 }
 

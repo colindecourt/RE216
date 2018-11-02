@@ -39,6 +39,7 @@ struct channel {
 struct channel * channel_init();
 struct channel *create_channel(struct channel * channel_table, int id_channel,char * channel_name);
 void join_channel(struct channel *channel_table, char *pseudo, int actual_number);
+void quit_channel(struct channel *channel_table, char *pseudo);
 struct channel *search_channel(struct channel *channel_table, char*channel_name, struct channel *wanted_channel);
 char * get_time();
 struct user_table * UserInit();

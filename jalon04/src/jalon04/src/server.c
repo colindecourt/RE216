@@ -282,6 +282,7 @@ int main(int argc, char **argv)
             channel_name = buffer + strlen("/leave ");
             struct channel * to_quit = malloc(sizeof(struct channel));
             to_quit = search_channel(channel_table,channel_name,to_quit);
+            printf("channel:%s",to_quit->channel_name);
             quit_channel(to_quit, curUser->pseudo);
           }
         }
