@@ -46,14 +46,31 @@ struct channel *channel_init()
 
 struct channel *create_channel(struct channel *channel_table, int id_channel, char *channel_name)
 {
+  struct channel *temp_channel = NULL;
+  temp_channel = channel_table;
+  printf("%s\n", temp_channel->channel_name);
+  printf("%s\n", channel_name);
+  if (channel_table->next_channel != NULL)
+  {
+    while (strcmp(temp_channel->channel_name, channel_name) != 0)
+    {
+      temp_channel = temp_channel->next_channel;
+    }
+    if (strcmp(temp_channel->channel_name, channel_name) == 0)
+    {
+      printf("Can't create this channel : this channel already exist");
+      exit(EXIT_FAILURE);
+    }
+  }
   struct channel *new_channel; //ajout à gauche
   new_channel = malloc(sizeof(struct channel));
   new_channel->id_channel = id_channel;
   new_channel->channel_name = malloc(sizeof(char) * CHANNEL_LEN_MAX);
   strcpy(new_channel->channel_name, channel_name);
   new_channel->actual_number = 0;
-  for(int i = 0; i < CAPACITY_CHANNEL; i++){
-    new_channel->connected_people[i] = ""; 
+  for (int i = 0; i < CAPACITY_CHANNEL; i++)
+  {
+    new_channel->connected_people[i] = "";
   }
   new_channel->next_channel = channel_table;
   return new_channel;
@@ -64,21 +81,24 @@ struct channel *create_channel(struct channel *channel_table, int id_channel, ch
 void join_channel(struct channel *channel_table, char *pseudo, int actual_number)
 {
   channel_table->connected_people[actual_number] = malloc(sizeof(strlen(pseudo)));
-  strcpy(channel_table->connected_people[actual_number],pseudo);
+  strcpy(channel_table->connected_people[actual_number], pseudo);
   channel_table->actual_number++;
-  printf("Nouveau client : %s\n",channel_table->connected_people[actual_number]);
+  printf("Nouveau client : %s\n", channel_table->connected_people[actual_number]);
 }
 
 // ----------------------------------------------------------------------------------- //
 
-void quit_channel(struct channel *channel_table, char *pseudo){
+void quit_channel(struct channel *channel_table, char *pseudo)
+{
   int i = 0;
-  while(strcmp(channel_table->connected_people[i],"") != 0){
+  while (strcmp(channel_table->connected_people[i], "") != 0)
+  {
     /*if (strcmp(channel_table->connected_people[i], pseudo) ==0){
       free(channel_table->connected_people[i]);
       channel_table->actual_number--;
     }*/
-    if(strcmp(channel_table->connected_people[i],pseudo)==0){
+    if (strcmp(channel_table->connected_people[i], pseudo) == 0)
+    {
       strcpy(channel_table->connected_people[i], "\0");
       channel_table->actual_number--;
     }
@@ -87,11 +107,12 @@ void quit_channel(struct channel *channel_table, char *pseudo){
   }
 }
 
+// --------------------------------------------------------------------------------------- //
 
-struct channel *search_channel(struct channel *channel_table, char * channel_name, struct channel *wanted_channel)
+struct channel *search_channel(struct channel *channel_table, char *channel_name, struct channel *wanted_channel)
 {
   wanted_channel = channel_table;
-  if (strcmp(wanted_channel->channel_name,channel_name)==0)
+  if (strcmp(wanted_channel->channel_name, channel_name) == 0)
   {
     return wanted_channel;
   }
