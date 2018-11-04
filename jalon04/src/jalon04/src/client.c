@@ -130,6 +130,28 @@ int main(int argc, char **argv)
           do_recv(s,channel_name);
           printf("You have created channel %s \n", channel_name);
         }
+
+         else if (strncmp(user_input,"/create",7)==0)
+         {
+          char * msg = malloc(sizeof(char)*PSEUDO_LEN_MAX);
+          memset(msg,'\0',sizeof(msg));
+          do_recv(s,msg);
+          printf("%s\n",msg);
+         }
+
+         else if(strncmp(user_input,"/leave",5)==0){
+          char * msg = malloc(sizeof(char)*PSEUDO_LEN_MAX);
+          memset(msg,'\0',sizeof(msg));
+          do_recv(s,msg);
+          printf("%s\n",msg);
+         }
+
+         else if(strncmp(user_input,"/join",5)==0){
+          char * msg = malloc(sizeof(char)*PSEUDO_LEN_MAX);
+          memset(msg,'\0',sizeof(msg));
+          do_recv(s,msg);
+          printf("%s\n",msg);
+         }
       }
 
       else if (fds[0].revents == POLLIN)

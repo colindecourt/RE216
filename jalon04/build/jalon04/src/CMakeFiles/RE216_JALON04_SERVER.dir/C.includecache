@@ -91,6 +91,8 @@ arpa/inet.h
 -
 server_tools.h
 /home/cdecourt/Documents/RE216/jalon04/src/jalon04/src/include/server_tools.h
+common_tools.h
+/home/cdecourt/Documents/RE216/jalon04/src/jalon04/src/include/common_tools.h
 
 /home/cdecourt/Documents/RE216/jalon04/src/jalon04/src/include/server_tools.h
 stdio.h

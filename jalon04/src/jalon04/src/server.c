@@ -251,14 +251,29 @@ int main(int argc, char **argv)
           else if (strncmp(buffer,"/create",7)==0){
             char * channel_name = malloc(sizeof(char)*PSEUDO_LEN_MAX);
             memset(channel_name,'\0',sizeof(channel_name));
+            struct channel *temp_channel = NULL;
+            temp_channel = channel_table;
             channel_name = buffer + strlen("/create ");
-            printf("%s\n", channel_name);
-            channel_table = create_channel(channel_table,id_channel,channel_name);
-            do_send(fds[i].fd,channel_name,strlen(channel_name));
-            printf("actual number : %i\n", channel_table->actual_number);
-            printf("id channel : %i\n", channel_table->id_channel);
-            printf("channel name : %s\n", channel_table->channel_name);
-            id_channel++;
+            if (temp_channel->next_channel != NULL)
+            {
+              while (strcmp(temp_channel->channel_name, channel_name) != 0)
+              {
+                temp_channel = temp_channel->next_channel;
+              }
+              if (strcmp(temp_channel->channel_name, channel_name) == 0)
+              {
+                do_send(fds[i].fd, "Can't create this channel : this channel already exist\n",strlen("Can't create this channel : this channel already exist\n"));
+              }
+            }
+            else
+            {
+              channel_table = create_channel(channel_table,id_channel,channel_name);
+              do_send(fds[i].fd,channel_name,strlen(channel_name));
+              printf("actual number : %i\n", channel_table->actual_number);
+              printf("id channel : %i\n", channel_table->id_channel);
+              printf("channel name : %s\n", channel_table->channel_name);
+              id_channel++;
+            }
           }
 
           else if(strncmp(buffer,"/join",5)==0){
@@ -270,7 +285,7 @@ int main(int argc, char **argv)
             memset(channel_name,'\0',sizeof(channel_name));
             channel_name = buffer + strlen("/join ");
             to_join = search_channel(channel_table,channel_name,to_join);
-            join_channel(to_join,curUser->pseudo,to_join->actual_number);
+            join_channel(to_join,curUser->pseudo,to_join->actual_number, channel_name, fds[i].fd);
             printf("%d\n", to_join->actual_number);
           }
 
@@ -283,7 +298,7 @@ int main(int argc, char **argv)
             struct channel * to_quit = malloc(sizeof(struct channel));
             to_quit = search_channel(channel_table,channel_name,to_quit);
             printf("channel:%s",to_quit->channel_name);
-            quit_channel(to_quit, curUser->pseudo);
+            quit_channel(to_quit, curUser->pseudo,fds[i].fd);
           }
         }
       }

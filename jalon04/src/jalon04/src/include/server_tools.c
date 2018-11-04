@@ -8,6 +8,7 @@
 #include <poll.h>
 #include <arpa/inet.h>
 #include "server_tools.h"
+#include "common_tools.h"
 
 #define BUFF_LEN_MAX 1000
 #define PSEUDO_LEN_MAX 100
@@ -46,22 +47,6 @@ struct channel *channel_init()
 
 struct channel *create_channel(struct channel *channel_table, int id_channel, char *channel_name)
 {
-  struct channel *temp_channel = NULL;
-  temp_channel = channel_table;
-  printf("%s\n", temp_channel->channel_name);
-  printf("%s\n", channel_name);
-  if (channel_table->next_channel != NULL)
-  {
-    while (strcmp(temp_channel->channel_name, channel_name) != 0)
-    {
-      temp_channel = temp_channel->next_channel;
-    }
-    if (strcmp(temp_channel->channel_name, channel_name) == 0)
-    {
-      printf("Can't create this channel : this channel already exist");
-      exit(EXIT_FAILURE);
-    }
-  }
   struct channel *new_channel; //ajout à gauche
   new_channel = malloc(sizeof(struct channel));
   new_channel->id_channel = id_channel;
@@ -78,25 +63,51 @@ struct channel *create_channel(struct channel *channel_table, int id_channel, ch
 
 // ----------------------------------------------------------------------------------- //
 
-void join_channel(struct channel *channel_table, char *pseudo, int actual_number)
+int join_channel(struct channel *channel_table, char *pseudo, int actual_number,char * channel_name, int socket)
 {
   channel_table->connected_people[actual_number] = malloc(sizeof(strlen(pseudo)));
+  struct channel * temp = NULL;
+  temp = channel_table;
+  if(channel_table->next_channel==NULL)
+  {
+    do_send(socket,"This channel doesn't exist\n", strlen("This channel doesn't exist\n"));
+    return 0;
+  }
+  else
+  {
+    while(strcmp(temp->channel_name,channel_name)!=0)
+    {
+      if(temp->next_channel == NULL){
+        do_send(socket,"This channel doesn't exist\n", strlen("This channel doesn't exist\n"));
+        return 0;
+      }
+      else
+      {
+        temp = temp->next_channel;
+      }
+    }
+  }
+  for(int i = 0; i<CAPACITY_CHANNEL; i++)
+  {
+    if(strcmp(pseudo, channel_table->connected_people[i])==0){
+      do_send(socket,"You already joined this channel\n",strlen("You already joined this channel\n"));
+      return 0;
+    }
+  }
   strcpy(channel_table->connected_people[actual_number], pseudo);
   channel_table->actual_number++;
   printf("Nouveau client : %s\n", channel_table->connected_people[actual_number]);
+  do_send(socket,"You join a channel\n",strlen("You join a channel\n"));
+  return 0;
 }
 
 // ----------------------------------------------------------------------------------- //
 
-void quit_channel(struct channel *channel_table, char *pseudo)
+void quit_channel(struct channel *channel_table, char *pseudo, int socket)
 {
   int i = 0;
   while (strcmp(channel_table->connected_people[i], "") != 0)
   {
-    /*if (strcmp(channel_table->connected_people[i], pseudo) ==0){
-      free(channel_table->connected_people[i]);
-      channel_table->actual_number--;
-    }*/
     if (strcmp(channel_table->connected_people[i], pseudo) == 0)
     {
       strcpy(channel_table->connected_people[i], "\0");
@@ -104,6 +115,11 @@ void quit_channel(struct channel *channel_table, char *pseudo)
     }
     printf("People on channel %s\n", channel_table->connected_people[i]);
     i++;
+  }
+  if (channel_table->actual_number == 0)
+  {
+    do_send(socket,"Empty channel, channel will be destroy\n", strlen("Empty channel, channel will be destroy\n"));
+    strcpy(channel_table->channel_name, "//");
   }
 }
 
