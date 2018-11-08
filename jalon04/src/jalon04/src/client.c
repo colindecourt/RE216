@@ -125,33 +125,71 @@ int main(int argc, char **argv)
 
         else if (strncmp(user_input, "/channel", 7) == 0)
         {
-          char * channel_name = malloc(sizeof(char)*PSEUDO_LEN_MAX);
-          memset(channel_name,'\0',sizeof(channel_name));
-          do_recv(s,channel_name);
+          char *channel_name = malloc(sizeof(char) * PSEUDO_LEN_MAX);
+          memset(channel_name, '\0', sizeof(channel_name));
+          do_recv(s, channel_name);
           printf("You have created channel %s \n", channel_name);
         }
 
-         else if (strncmp(user_input,"/create",7)==0)
-         {
-          char * msg = malloc(sizeof(char)*PSEUDO_LEN_MAX);
-          memset(msg,'\0',sizeof(msg));
-          do_recv(s,msg);
-          printf("%s\n",msg);
-         }
+        else if (strncmp(user_input, "/create", 7) == 0)
+        {
+          char *msg = malloc(sizeof(char) * PSEUDO_LEN_MAX);
+          memset(msg, '\0', sizeof(msg));
+          do_recv(s, msg);
+          printf("%s\n", msg);
+        }
 
-         else if(strncmp(user_input,"/leave",5)==0){
-          char * msg = malloc(sizeof(char)*PSEUDO_LEN_MAX);
-          memset(msg,'\0',sizeof(msg));
-          do_recv(s,msg);
-          printf("%s\n",msg);
-         }
+        else if (strncmp(user_input, "/leave", 5) == 0)
+        {
+          char *msg = malloc(sizeof(char) * PSEUDO_LEN_MAX);
+          memset(msg, '\0', sizeof(msg));
+          do_recv(s, msg);
+          printf("%s\n", msg);
+        }
 
-         else if(strncmp(user_input,"/join",5)==0){
-          char * msg = malloc(sizeof(char)*PSEUDO_LEN_MAX);
-          memset(msg,'\0',sizeof(msg));
-          do_recv(s,msg);
-          printf("%s\n",msg);
-         }
+        else if (strncmp(user_input, "/join", 5) == 0)
+        {
+          char *msg = malloc(sizeof(char) * PSEUDO_LEN_MAX);
+          memset(msg, '\0', sizeof(msg));
+          char *channel_name = malloc(sizeof(char) * PSEUDO_LEN_MAX);
+          memset(channel_name, '\0', sizeof(channel_name));
+          do_recv(s, msg);
+          strcpy(channel_name, "");
+          strncat(channel_name, msg, strlen(msg) - strlen("\n"));
+          printf("You join the channel %s\n", channel_name);
+          printf("Write something to send to other users. To leave the channel please write '/leave %s'\n", channel_name);
+
+          while (1)
+          {
+            printf("[%s] : ", channel_name);
+            fflush(stdout);
+            read_line(STDIN_FILENO, user_input, MSG_SIZE);
+            send_line(s, user_input, strlen(user_input));
+
+            if (fds[1].revents == POLLIN)
+            {
+              
+              if (strncmp(user_input, "/leave", 6) == 0)
+              {
+                char *msg = malloc(sizeof(char) * PSEUDO_LEN_MAX);
+                memset(msg, '\0', sizeof(msg));
+                do_recv(s, msg);
+                printf("%s\n", msg);
+                break;
+              }
+              else if (fds[0].revents == POLLIN)
+              {
+                printf("la\n");
+                char msg_multi[BUFF_LEN_MAX];
+                do_recv(s, msg_multi);
+                printf("%s\n", msg_multi);
+              }
+              else {
+                do_send(s, msg, strlen(msg));
+              }
+            }
+          }
+        }
       }
 
       else if (fds[0].revents == POLLIN)
