@@ -158,17 +158,27 @@ int main(int argc, char **argv)
           strncat(channel_name, msg, strlen(msg) - strlen("\n"));
           printf("You join the channel %s\n", channel_name);
           printf("Write something to send to other users. To leave the channel please write '/leave %s'\n", channel_name);
+          struct pollfd fds2[BACKLOG + 1];
+          memset(fds2, -1, sizeof(fds2));
+          fds2[0].fd = s;
+          fds2[0].events = POLLIN;
+          fds2[1].fd = STDIN_FILENO;
+          fds2[1].events = POLLIN;
+          printf("[%s] : ", channel_name);
+          fflush(stdout);
+          poll(fds2, 3, -1);
 
           while (1)
           {
+
             printf("[%s] : ", channel_name);
             fflush(stdout);
             read_line(STDIN_FILENO, user_input, MSG_SIZE);
             send_line(s, user_input, strlen(user_input));
 
-            if (fds[1].revents == POLLIN)
+            if (fds2[1].revents == POLLIN)
             {
-              
+              do_send(s, msg, strlen(msg));
               if (strncmp(user_input, "/leave", 6) == 0)
               {
                 char *msg = malloc(sizeof(char) * PSEUDO_LEN_MAX);
@@ -177,49 +187,46 @@ int main(int argc, char **argv)
                 printf("%s\n", msg);
                 break;
               }
-              else if (fds[0].revents == POLLIN)
-              {
-                printf("la\n");
-                char msg_multi[BUFF_LEN_MAX];
-                do_recv(s, msg_multi);
-                printf("%s\n", msg_multi);
-              }
-              else {
-                do_send(s, msg, strlen(msg));
-              }
+            }
+            else if (fds2[0].revents == POLLIN)
+            {
+              printf("la\n");
+              char msg_multi[BUFF_LEN_MAX];
+              do_recv(s, msg_multi);
+              printf("%s\n", msg_multi);
             }
           }
         }
-      }
 
-      else if (fds[0].revents == POLLIN)
-      {
-
-        char msg_all[BUFF_LEN_MAX];
-        do_recv(s, msg_all);
-
-        if (strncmp(msg_all, "/msgall", 7) == 0)
+        else if (fds[0].revents == POLLIN)
         {
-          char *broadcast = msg_all + strlen("/msgall ");
-          printf("il y a un message all \n");
-          memset(server_input, '\0', MSG_SIZE);
-          memset(user_input, '\0', MSG_SIZE);
-          printf("%s\n", broadcast);
-          fflush(stdout);
-          memset(msg_all, '\0', BUFF_LEN_MAX * sizeof(char));
-        }
 
-        else if (strncmp(msg_all, "_$$_", 4) == 0)
-        {
-          char *unicast = msg_all + strlen("_$$_");
-          printf("%s\n", unicast);
+          char msg_all[BUFF_LEN_MAX];
+          do_recv(s, msg_all);
+
+          if (strncmp(msg_all, "/msgall", 7) == 0)
+          {
+            char *broadcast = msg_all + strlen("/msgall ");
+            printf("il y a un message all \n");
+            memset(server_input, '\0', MSG_SIZE);
+            memset(user_input, '\0', MSG_SIZE);
+            printf("%s\n", broadcast);
+            fflush(stdout);
+            memset(msg_all, '\0', BUFF_LEN_MAX * sizeof(char));
+          }
+
+          else if (strncmp(msg_all, "_$$_", 4) == 0)
+          {
+            char *unicast = msg_all + strlen("_$$_");
+            printf("%s\n", unicast);
+          }
         }
       }
     }
-  }
 
-  //close Connection
-  printf("Close connection\n");
-  close(s);
-  return 0;
+    //close Connection
+    printf("Close connection\n");
+    close(s);
+    return 0;
+  }
 }
