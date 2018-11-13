@@ -302,7 +302,7 @@ int main(int argc, char **argv)
               do_send(fds[i].fd, channel_name, strlen(channel_name));
             }
             else{
-              do_send(fds[i].fd, "Channel doesn't exist", strlen("Channel doesn't exist"));
+              do_send(fds[i].fd, "/join Channel doesn't exist", strlen("/join Channel doesn't exist"));
             }
           }
 

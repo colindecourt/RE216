@@ -75,7 +75,7 @@ int join_channel(struct channel *channel_table, char *pseudo, int actual_number,
   }
   else
   {
-    while(strcmp(temp->channel_name,channel_name)!=0)
+    while(strncmp(temp->channel_name,channel_name, strlen(channel_name))!=0)
     {
       if(temp->next_channel == NULL){
         do_send(socket,"This channel doesn't exist\n", strlen("This channel doesn't exist\n"));
@@ -89,7 +89,7 @@ int join_channel(struct channel *channel_table, char *pseudo, int actual_number,
   }
   for(int i = 0; i<CAPACITY_CHANNEL; i++)
   {
-    if(strcmp(pseudo, channel_table->connected_people[i])==0){
+    if(strncmp(pseudo, channel_table->connected_people[i], strlen(channel_table->connected_people))==0){
       do_send(socket,"You already joined this channel\n",strlen("You already joined this channel\n"));
       return 0;
     }
