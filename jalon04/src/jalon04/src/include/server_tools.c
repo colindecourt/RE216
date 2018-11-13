@@ -94,7 +94,7 @@ int join_channel(struct channel *channel_table, char *pseudo, int actual_number,
       return 0;
     }
   }
-  strcpy(channel_table->connected_people[actual_number], pseudo);
+  strncpy(channel_table->connected_people[actual_number], pseudo, strlen(pseudo));
   channel_table->actual_number++;
   cur_user->channel = channel_table->id_channel;
   printf("Nouveau client : %s\n", channel_table->connected_people[actual_number]);
@@ -110,12 +110,13 @@ void quit_channel(struct channel *channel_table, char *pseudo, int socket)
   memset(msg_quit,'\0',sizeof(msg_quit));
   strcpy(msg_quit,"You leave the channel ");
   int i = 0;
-  while (strcmp(channel_table->connected_people[i], "") != 0)
+  int number = channel_table->actual_number;
+  while (i < number)
   {
-    if (strcmp(channel_table->connected_people[i], pseudo) == 0)
+    if (strncmp(channel_table->connected_people[i], pseudo, strlen(pseudo)) == 0)
     {
-      strcat(msg_quit,channel_table->channel_name);
-      strcpy(channel_table->connected_people[i], "");
+      strncat(msg_quit,channel_table->channel_name, strlen(channel_table->channel_name));
+      strncpy(channel_table->connected_people[i], "", strlen(""));
       do_send(socket, msg_quit,strlen(msg_quit));
       memset(msg_quit,'\0',sizeof(msg_quit));
       channel_table->actual_number--;
@@ -126,16 +127,20 @@ void quit_channel(struct channel *channel_table, char *pseudo, int socket)
   if (channel_table->actual_number == 0)
   {
     do_send(socket,"Empty channel, channel will be destroy\n", strlen("Empty channel, channel will be destroy\n"));
-    strcpy(channel_table->channel_name, "//");
+    strncpy(channel_table->channel_name, "//", strlen("//"));
   }
 }
 
 // --------------------------------------------------------------------------------------- //
 
-struct channel *search_channel(struct channel *channel_table, char *channel_name, struct channel *wanted_channel)
+struct channel *search_channel(struct channel *channel_table, char *channel_name, struct channel *wanted_channel, int exist_channel)
 {
+  if (channel_table = channel_init()){
+    exist_channel = 0;
+    return(channel_table);
+  }
   wanted_channel = channel_table;
-  if (strcmp(wanted_channel->channel_name, channel_name) == 0)
+  if (strncmp(wanted_channel->channel_name, channel_name, strlen(channel_name)) == 0)
   {
     return wanted_channel;
   }

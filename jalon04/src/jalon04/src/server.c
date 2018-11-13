@@ -103,7 +103,7 @@ int main(int argc, char **argv)
           memset(pseudo,'\0',sizeof(pseudo));
           strcpy(pseudo,"user");
           char *s = malloc(sizeof(int));
-          sprintf(s, "%d",i); 
+          sprintf(s, "%d",i);
           strcat(pseudo,s);
           UserTable = addUser(UserTable, i, pseudo, fds[i].fd, ip, atoi(port));
           do_send(fds[i].fd,pseudo,strlen(pseudo));
@@ -285,17 +285,25 @@ int main(int argc, char **argv)
 
           else if (strncmp(buffer, "/join", 5) == 0)
           {
+            int exist_channel = 1;
             struct user_table *curUser = malloc(sizeof(struct user_table));
             curUser = searchUser(UserTable, i, nb_clients, curUser);
-            //printf("%s\n", curUser->pseudo);
             struct channel *to_join = malloc(sizeof(struct channel));
             char *channel_name = malloc(sizeof(char) * PSEUDO_LEN_MAX);
             memset(channel_name, '\0', sizeof(channel_name));
             channel_name = buffer + strlen("/join ");
-            to_join = search_channel(channel_table, channel_name, to_join);
-            join_channel(to_join, curUser->pseudo, to_join->actual_number, channel_name, fds[i].fd, curUser);
-            printf("%d\n", to_join->actual_number);
-            do_send(fds[i].fd, channel_name, strlen(channel_name));
+            to_join = search_channel(channel_table, channel_name, to_join, exist_channel);
+            if (exist_channel == 1){
+              printf("curuser : %s\n", curUser->pseudo);
+              printf("%d\n", to_join->actual_number);
+              printf("%s\n", channel_name);
+              join_channel(to_join, curUser->pseudo, to_join->actual_number, channel_name, fds[i].fd, curUser);
+              printf("%d\n", to_join->actual_number);
+              do_send(fds[i].fd, channel_name, strlen(channel_name));
+            }
+            else{
+              do_send(fds[i].fd, "Channel doesn't exist", strlen("Channel doesn't exist"));
+            }
           }
 
           else if (strncmp(buffer, "/leave", 6) == 0)
@@ -306,8 +314,9 @@ int main(int argc, char **argv)
             memset(channel_name, '\0', sizeof(channel_name));
             channel_name = buffer + strlen("/leave ");
             struct channel *to_quit = malloc(sizeof(struct channel));
-            to_quit = search_channel(channel_table, channel_name, to_quit);
+            to_quit = search_channel(channel_table, channel_name, to_quit, search_channel);
             printf("channel:%s", to_quit->channel_name);
+            printf("channel:%s", curUser->pseudo);
             quit_channel(to_quit, curUser->pseudo, fds[i].fd);
           }
 
