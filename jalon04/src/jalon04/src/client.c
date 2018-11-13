@@ -62,11 +62,19 @@ int main(int argc, char **argv)
   }
   else if (strncmp(msg_connection, "server_client", 14) == 0)
   {
+    char *user_name = malloc(sizeof(char) * PSEUDO_LEN_MAX);
+    memset(user_name, '\0', sizeof(user_name));
+
     do_send(s, ip, strlen(ip));
-
+    do_recv(s,user_name);
     printf("Connection with server ok \n");
-    printf("[SERVER] : Please login with /nick <your pseudo> \n");
+    printf(">> %s : Please login with /nick <your pseudo> \n",user_name);
+    int display = 0; 
+    char *channel_name = malloc(sizeof(char) * PSEUDO_LEN_MAX);
+    memset(channel_name, '\0', sizeof(channel_name));
+    strcpy(channel_name,"");
 
+    
     for (;;)
     {
 
@@ -77,8 +85,8 @@ int main(int argc, char **argv)
       fds[1].fd = STDIN_FILENO;
       fds[1].events = POLLIN;
 
-      printf("\nPlease enter your line: ");
-      fflush(stdout);
+ 
+      to_display(display,channel_name, user_name);
 
       int rs = poll(fds, BACKLOG + 1, -1);
       if (rs < 0)
@@ -93,11 +101,23 @@ int main(int argc, char **argv)
 
         send_line(s, user_input, strlen(user_input));
 
+        printf("User input : %s\n",user_input);
+
         memset(server_input, '\0', MSG_SIZE);
 
         if (strcmp(user_input, "/quit\n") == 0)
         {
           break;
+        }
+
+        else if (strncmp(user_input,"/nick",5)==0)
+        {
+          display = 0;
+          char * pseudo = malloc(sizeof(char)*PSEUDO_LEN_MAX);
+          memset(pseudo,'\0',sizeof(pseudo));
+          do_recv(s,pseudo);
+          memset(user_name,'\0',sizeof(user_name));
+          strncpy(user_name,pseudo,strlen(pseudo)-strlen("\n"));
         }
 
         else if (strncmp(user_input, "/whois", 6) == 0 && strncmp(user_input, "/who", 4) == 0)
@@ -139,94 +159,63 @@ int main(int argc, char **argv)
           printf("%s\n", msg);
         }
 
-        else if (strncmp(user_input, "/leave", 5) == 0)
+        else if (strncmp(user_input, "/leave", 6) == 0)
         {
+          
           char *msg = malloc(sizeof(char) * PSEUDO_LEN_MAX);
           memset(msg, '\0', sizeof(msg));
           do_recv(s, msg);
           printf("%s\n", msg);
+          display = 0;
         }
 
         else if (strncmp(user_input, "/join", 5) == 0)
         {
+         
           char *msg = malloc(sizeof(char) * PSEUDO_LEN_MAX);
           memset(msg, '\0', sizeof(msg));
-          char *channel_name = malloc(sizeof(char) * PSEUDO_LEN_MAX);
-          memset(channel_name, '\0', sizeof(channel_name));
           do_recv(s, msg);
-          strcpy(channel_name, "");
           strncat(channel_name, msg, strlen(msg) - strlen("\n"));
           printf("You join the channel %s\n", channel_name);
           printf("Write something to send to other users. To leave the channel please write '/leave %s'\n", channel_name);
-          struct pollfd fds2[BACKLOG + 1];
-          memset(fds2, -1, sizeof(fds2));
-          fds2[0].fd = s;
-          fds2[0].events = POLLIN;
-          fds2[1].fd = STDIN_FILENO;
-          fds2[1].events = POLLIN;
-          printf("[%s] : ", channel_name);
+          display = 1;
+        }
+        else {
+          do_send(s,user_input,strlen(user_input));
+        }
+      }
+
+      else if (fds[0].revents == POLLIN)
+      {
+
+        char msg_all[BUFF_LEN_MAX];
+        do_recv(s, msg_all);
+
+        if (strncmp(msg_all, "/msgall", 7) == 0)
+        {
+          char *broadcast = msg_all + strlen("/msgall ");
+          printf("il y a un message all \n");
+          memset(server_input, '\0', MSG_SIZE);
+          memset(user_input, '\0', MSG_SIZE);
+          printf("%s\n", broadcast);
           fflush(stdout);
-          poll(fds2, 3, -1);
-
-          while (1)
-          {
-
-            printf("[%s] : ", channel_name);
-            fflush(stdout);
-            read_line(STDIN_FILENO, user_input, MSG_SIZE);
-            send_line(s, user_input, strlen(user_input));
-
-            if (fds2[1].revents == POLLIN)
-            {
-              do_send(s, msg, strlen(msg));
-              if (strncmp(user_input, "/leave", 6) == 0)
-              {
-                char *msg = malloc(sizeof(char) * PSEUDO_LEN_MAX);
-                memset(msg, '\0', sizeof(msg));
-                do_recv(s, msg);
-                printf("%s\n", msg);
-                break;
-              }
-            }
-            else if (fds2[0].revents == POLLIN)
-            {
-              printf("la\n");
-              char msg_multi[BUFF_LEN_MAX];
-              do_recv(s, msg_multi);
-              printf("%s\n", msg_multi);
-            }
-          }
+          memset(msg_all, '\0', BUFF_LEN_MAX * sizeof(char));
         }
 
-        else if (fds[0].revents == POLLIN)
+        else if (strncmp(msg_all, "_$$_", 4) == 0)
         {
-
-          char msg_all[BUFF_LEN_MAX];
-          do_recv(s, msg_all);
-
-          if (strncmp(msg_all, "/msgall", 7) == 0)
-          {
-            char *broadcast = msg_all + strlen("/msgall ");
-            printf("il y a un message all \n");
-            memset(server_input, '\0', MSG_SIZE);
-            memset(user_input, '\0', MSG_SIZE);
-            printf("%s\n", broadcast);
-            fflush(stdout);
-            memset(msg_all, '\0', BUFF_LEN_MAX * sizeof(char));
-          }
-
-          else if (strncmp(msg_all, "_$$_", 4) == 0)
-          {
-            char *unicast = msg_all + strlen("_$$_");
-            printf("%s\n", unicast);
-          }
+          char *unicast = msg_all + strlen("_$$_");
+          printf("%s\n", unicast);
+        }
+        else{
+          printf("%s\n",msg_all);
         }
       }
     }
-
-    //close Connection
-    printf("Close connection\n");
-    close(s);
-    return 0;
   }
+
+  //close Connection
+  printf("Close connection\n");
+  close(s);
+  return 0;
 }

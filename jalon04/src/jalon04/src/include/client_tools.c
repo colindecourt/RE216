@@ -64,4 +64,21 @@ char* handle_client_message(int sockfd, char*buffer, int port){
   return buffer;
 }
 
+// -------------------------------------------------------- //
+
+int to_display(int display, char * channel_name, char*pseudo)
+{
+  if(display == 0)
+  {
+    printf(">> %s :",pseudo);
+    fflush(stdout);
+  }
+
+  else if (display == 1)
+  {
+    printf("[ %s ] ",channel_name);
+    fflush(stdout);
+  }
+}
+
 

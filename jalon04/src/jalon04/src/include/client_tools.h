@@ -19,5 +19,6 @@
 struct sockaddr_in get_addr_info(const char* port, struct sockaddr_in* serv_addr1, char* ip);
 int do_connect(int sockfd, const struct sockaddr_in addr);
 char * handle_client_message(int sockfd, char*buffer, int port);
+int to_display(int display, char * channel_name, char * pseudo);
 
 #endif /* CLIENT_TOOLS_H */

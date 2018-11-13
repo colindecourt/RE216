@@ -99,8 +99,14 @@ int main(int argc, char **argv)
           fds[i].fd = s_client;
           fds[i].events = POLLIN;
           do_recv(s_client, ip);
-
-          UserTable = addUser(UserTable, i, "", fds[i].fd, ip, atoi(port));
+          char * pseudo = malloc(sizeof(char)*PSEUDO_LEN_MAX);
+          memset(pseudo,'\0',sizeof(pseudo));
+          strcpy(pseudo,"user");
+          char *s = malloc(sizeof(int));
+          sprintf(s, "%d",i); 
+          strcat(pseudo,s);
+          UserTable = addUser(UserTable, i, pseudo, fds[i].fd, ip, atoi(port));
+          do_send(fds[i].fd,pseudo,strlen(pseudo));
           break;
         }
       }
@@ -146,6 +152,7 @@ int main(int argc, char **argv)
             curUser = searchUser(UserTable, i, nb_clients, curUser);
             strcpy(curUser->pseudo, pseudo);
             printf("Welcome on the chat %s\n", pseudo);
+            send_line(fds[i].fd,pseudo,PSEUDO_LEN_MAX);
           }
 
           else if (strncmp(buffer, "/whois", 6) == 0 && strncmp(buffer, "/who", 4) == 0)
@@ -286,7 +293,7 @@ int main(int argc, char **argv)
             memset(channel_name, '\0', sizeof(channel_name));
             channel_name = buffer + strlen("/join ");
             to_join = search_channel(channel_table, channel_name, to_join);
-            join_channel(to_join, curUser->pseudo, to_join->actual_number, channel_name, fds[i].fd);
+            join_channel(to_join, curUser->pseudo, to_join->actual_number, channel_name, fds[i].fd, curUser);
             printf("%d\n", to_join->actual_number);
             do_send(fds[i].fd, channel_name, strlen(channel_name));
           }
@@ -306,35 +313,26 @@ int main(int argc, char **argv)
 
           else
           {
-            char *name = malloc(sizeof(char) * PSEUDO_LEN_MAX);
-            memset(name, '\0', sizeof(name));
-            do_recv(fds[i].fd, name);
-            printf("%s\n", name);
-
             char msg_all[BUFF_LEN_MAX];
-            strcpy(msg_all, "");
+            do_recv(fds[i].fd,msg_all);
+            printf("Message reçu : %s\n",msg_all);
             struct user_table *cur_user = malloc(sizeof(struct user_table));
             cur_user = searchUser(UserTable, i, nb_clients, cur_user);
             struct channel *to_send = malloc(sizeof(struct channel));
-            to_send = search_channel(channel_table, name, to_send);
+            to_send = search_channel_id(channel_table, cur_user, to_send);
 
-            for (int k = 0; k < CAPACITY_CHANNEL; k++)
+            for (int k = 1; k <= nb_clients; k++)
             {
-              if (strcmp(to_send->connected_people[k], "")==0)
-              {
-                break;
-              }  
-              else
+              if (UserTable->channel == to_send->id_channel)
               {
                 if (k != i)
                 {
-                  printf("fds %d\n",fds[i].fd);
-                  struct user_table *pseudo_user = NULL;
-                  int socket = pseudo_to_socket(UserTable, to_send->connected_people[k], nb_clients, pseudo_user);
-                  printf("%s\n",buffer);
-                  do_send(socket,buffer,strlen(buffer));
-                  printf("%i\n",socket);
+                  do_send(fds[k].fd, msg_all, BUFF_LEN_MAX);
+                  //memset(msg_all, '\0', BUFF_LEN_MAX);
                 }
+              }
+              else{
+                UserTable = UserTable->next_user;
               }
             }
           }

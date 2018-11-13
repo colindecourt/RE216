@@ -63,7 +63,7 @@ struct channel *create_channel(struct channel *channel_table, int id_channel, ch
 
 // ----------------------------------------------------------------------------------- //
 
-int join_channel(struct channel *channel_table, char *pseudo, int actual_number,char * channel_name, int socket)
+int join_channel(struct channel *channel_table, char *pseudo, int actual_number,char * channel_name, int socket, struct user_table * cur_user)
 {
   channel_table->connected_people[actual_number] = malloc(sizeof(strlen(pseudo)));
   struct channel * temp = NULL;
@@ -96,6 +96,7 @@ int join_channel(struct channel *channel_table, char *pseudo, int actual_number,
   }
   strcpy(channel_table->connected_people[actual_number], pseudo);
   channel_table->actual_number++;
+  cur_user->channel = channel_table->id_channel;
   printf("Nouveau client : %s\n", channel_table->connected_people[actual_number]);
   //do_send(socket,"You join a channel\n",strlen("You join a channel\n"));
   return 0;
@@ -105,12 +106,18 @@ int join_channel(struct channel *channel_table, char *pseudo, int actual_number,
 
 void quit_channel(struct channel *channel_table, char *pseudo, int socket)
 {
+  char * msg_quit = malloc(sizeof(BUFF_LEN_MAX));
+  memset(msg_quit,'\0',sizeof(msg_quit));
+  strcpy(msg_quit,"You leave the channel ");
   int i = 0;
   while (strcmp(channel_table->connected_people[i], "") != 0)
   {
     if (strcmp(channel_table->connected_people[i], pseudo) == 0)
     {
+      strcat(msg_quit,channel_table->channel_name);
       strcpy(channel_table->connected_people[i], "");
+      do_send(socket, msg_quit,strlen(msg_quit));
+      memset(msg_quit,'\0',sizeof(msg_quit));
       channel_table->actual_number--;
     }
     printf("People on channel %s\n", channel_table->connected_people[i]);
@@ -129,6 +136,23 @@ struct channel *search_channel(struct channel *channel_table, char *channel_name
 {
   wanted_channel = channel_table;
   if (strcmp(wanted_channel->channel_name, channel_name) == 0)
+  {
+    return wanted_channel;
+  }
+  else
+  {
+    wanted_channel = wanted_channel->next_channel;
+  }
+  return wanted_channel;
+}
+
+// ------------------------------------------------------------------------ //
+
+
+struct channel *search_channel_id(struct channel *channel_table, struct user_table* cur_user, struct channel *wanted_channel)
+{
+  wanted_channel = channel_table;
+  if (wanted_channel->id_channel == cur_user->channel)
   {
     return wanted_channel;
   }
@@ -163,6 +187,7 @@ struct user_table *addUser(struct user_table *UserTable, int id_client, char *ps
   strcpy(new_user->ip, ip);
   new_user->port = port;
   strcpy(new_user->time, get_time());
+  new_user->channel=0;
   new_user->next_user = UserTable;
   return new_user;
 }
@@ -205,7 +230,6 @@ struct user_table *searchUser(struct user_table *UserTable, int id_client, int n
 {
   int k = 0;
   wanted_user = UserTable;
-  printf("%d\n",wanted_user);
   while (k < nb_clients)
   {
     if (wanted_user->id_client == id_client)
