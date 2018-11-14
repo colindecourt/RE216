@@ -41,7 +41,7 @@ struct channel * channel_init();
 struct channel *create_channel(struct channel * channel_table, int id_channel,char * channel_name);
 int join_channel(struct channel *channel_table, char *pseudo, int actual_number, char * channel_name, int socket, struct user_table * cur_user);
 void quit_channel(struct channel *channel_table, char *pseudo, int socket);
-struct channel *search_channel(struct channel *channel_table, char* channel_name, struct channel *wanted_channel, int exist_channel);
+struct channel *search_channel(struct channel *channel_table, char* channel_name, struct channel *wanted_channel);
 struct channel *search_channel_id(struct channel *channel_table, struct user_table* cur_user, struct channel *wanted_channel);
 char * get_time();
 struct user_table * UserInit();

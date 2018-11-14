@@ -89,7 +89,7 @@ int join_channel(struct channel *channel_table, char *pseudo, int actual_number,
   }
   for(int i = 0; i<CAPACITY_CHANNEL; i++)
   {
-    if(strncmp(pseudo, channel_table->connected_people[i], strlen(channel_table->connected_people))==0){
+    if(strcmp(pseudo, channel_table->connected_people[i])==0){
       do_send(socket,"You already joined this channel\n",strlen("You already joined this channel\n"));
       return 0;
     }
@@ -138,21 +138,20 @@ void quit_channel(struct channel *channel_table, char *pseudo, int socket)
 
 // --------------------------------------------------------------------------------------- //
 
-struct channel *search_channel(struct channel *channel_table, char *channel_name, struct channel *wanted_channel, int exist_channel)
+struct channel *search_channel(struct channel *channel_table, char *channel_name, struct channel *wanted_channel)
 {
-  if (channel_table = channel_init()){
-    return(channel_table);
-  }
   wanted_channel = channel_table;
-  if (strncmp(wanted_channel->channel_name, channel_name, strlen(channel_name)) == 0)
-  {
-    exist_channel = 1;
-    return wanted_channel;
+  while (wanted_channel->next_channel != NULL){
+    if (strncmp(wanted_channel->channel_name, channel_name, strlen(channel_name)) == 0)
+    {
+      return wanted_channel;
+    }
+    else
+    {
+      wanted_channel = wanted_channel->next_channel;
+    }
   }
-  else
-  {
-    wanted_channel = wanted_channel->next_channel;
-  }
+  wanted_channel->id_channel = -1;
   return wanted_channel;
 }
 

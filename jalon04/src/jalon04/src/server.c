@@ -288,15 +288,15 @@ int main(int argc, char **argv)
 
           else if (strncmp(buffer, "/join", 5) == 0)
           {
-            int exist_channel = 0;
             struct user_table *curUser = malloc(sizeof(struct user_table));
             curUser = searchUser(UserTable, i, nb_clients, curUser);
             struct channel *to_join = malloc(sizeof(struct channel));
             char *channel_name = malloc(sizeof(char) * PSEUDO_LEN_MAX);
             memset(channel_name, '\0', sizeof(channel_name));
             channel_name = buffer + strlen("/join ");
-            to_join = search_channel(channel_table, channel_name, to_join, exist_channel);
-            if (exist_channel == 1){
+            to_join = search_channel(channel_table, channel_name, to_join);
+
+            if (to_join->id_channel != -1){
               printf("curuser : %s\n", curUser->pseudo);
               printf("%d\n", to_join->actual_number);
               printf("%s\n", channel_name);
@@ -304,8 +304,8 @@ int main(int argc, char **argv)
               printf("%d\n", to_join->actual_number);
               do_send(fds[i].fd, channel_name, strlen(channel_name));
             }
-            else if (exist_channel == 0){
-              do_send(fds[i].fd, "/join Channel doesn't exist", strlen("/join Channel doesn't exist"));
+            else{
+              do_send(fds[i].fd, "server : Channel doesn't exist", strlen("server : Channel doesn't exist"));
             }
           }
 
@@ -317,7 +317,7 @@ int main(int argc, char **argv)
             memset(channel_name, '\0', sizeof(channel_name));
             channel_name = buffer + strlen("/leave ");
             struct channel *to_quit = malloc(sizeof(struct channel));
-            to_quit = search_channel(channel_table, channel_name, to_quit, search_channel);
+            to_quit = search_channel(channel_table, channel_name, to_quit);
             printf("channel:%s", to_quit->channel_name);
             printf("channel:%s", curUser->pseudo);
             quit_channel(to_quit, curUser->pseudo, fds[i].fd);
