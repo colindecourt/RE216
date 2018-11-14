@@ -263,8 +263,6 @@ int main(int argc, char **argv)
             channel_name = buffer + strlen("/create ");
             int possible_create = 0;
 
-            printf("temp name : %s", temp_channel->channel_name);
-            printf("temp name : %s", channel_name);
             while (temp_channel->next_channel != NULL)
             {
               if (strncmp(temp_channel->channel_name, channel_name, strlen(channel_name)) == 0){
@@ -273,9 +271,7 @@ int main(int argc, char **argv)
                 break;
               }
               else {
-                printf("temp name1 : %s", temp_channel->channel_name);
                 temp_channel = temp_channel->next_channel;
-                printf("temp name2 : %s", temp_channel->channel_name);
               }
             }
 
@@ -292,7 +288,7 @@ int main(int argc, char **argv)
 
           else if (strncmp(buffer, "/join", 5) == 0)
           {
-            int exist_channel = 1;
+            int exist_channel = 0;
             struct user_table *curUser = malloc(sizeof(struct user_table));
             curUser = searchUser(UserTable, i, nb_clients, curUser);
             struct channel *to_join = malloc(sizeof(struct channel));
@@ -308,7 +304,7 @@ int main(int argc, char **argv)
               printf("%d\n", to_join->actual_number);
               do_send(fds[i].fd, channel_name, strlen(channel_name));
             }
-            else{
+            else if (exist_channel == 0){
               do_send(fds[i].fd, "/join Channel doesn't exist", strlen("/join Channel doesn't exist"));
             }
           }

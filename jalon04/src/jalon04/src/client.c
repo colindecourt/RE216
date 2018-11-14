@@ -181,6 +181,9 @@ int main(int argc, char **argv)
           else if (strncmp(msg, "You already joined this channel\n", strlen("You already joined this channel\n")) == 0){
             printf("You already joined this channel\n");
           }
+          else if (strncmp(msg, "/join Channel doesn't exist\n", strlen("/join Channel doesn't exist\n"))){
+            printf("/join Channel doesn't exist\n");
+          }
           else {
             strncat(channel_name, msg, strlen(msg) - strlen("\n"));
             printf("You join the channel %s\n", channel_name);

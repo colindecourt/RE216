@@ -106,6 +106,7 @@ int join_channel(struct channel *channel_table, char *pseudo, int actual_number,
 
 void quit_channel(struct channel *channel_table, char *pseudo, int socket)
 {
+  int exist_channel = 0;
   char * msg_quit = malloc(sizeof(BUFF_LEN_MAX));
   memset(msg_quit,'\0',sizeof(msg_quit));
   strcpy(msg_quit,"You leave the channel ");
@@ -120,11 +121,15 @@ void quit_channel(struct channel *channel_table, char *pseudo, int socket)
       do_send(socket, msg_quit,strlen(msg_quit));
       memset(msg_quit,'\0',sizeof(msg_quit));
       channel_table->actual_number--;
+      exist_channel = 1;
     }
     printf("People on channel %s\n", channel_table->connected_people[i]);
     i++;
   }
-  if (channel_table->actual_number == 0)
+  if ( exist_channel == 0 ){
+    do_send(socket,"Not an existing channel\n", strlen("Not an existing channel\n"));
+  }
+  else if (channel_table->actual_number == 0)
   {
     do_send(socket,"Empty channel, channel will be destroy\n", strlen("Empty channel, channel will be destroy\n"));
     strncpy(channel_table->channel_name, "//", strlen("//"));
@@ -136,12 +141,12 @@ void quit_channel(struct channel *channel_table, char *pseudo, int socket)
 struct channel *search_channel(struct channel *channel_table, char *channel_name, struct channel *wanted_channel, int exist_channel)
 {
   if (channel_table = channel_init()){
-    exist_channel = 0;
     return(channel_table);
   }
   wanted_channel = channel_table;
   if (strncmp(wanted_channel->channel_name, channel_name, strlen(channel_name)) == 0)
   {
+    exist_channel = 1;
     return wanted_channel;
   }
   else
