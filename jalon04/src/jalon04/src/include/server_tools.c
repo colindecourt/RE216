@@ -89,7 +89,7 @@ int join_channel(struct channel *channel_table, char *pseudo, int actual_number,
   }
   for(int i = 0; i<CAPACITY_CHANNEL; i++)
   {
-    if(strcmp(pseudo, channel_table->connected_people[i])==0){
+    if(strncmp(pseudo, channel_table->connected_people[i], strlen(pseudo))==0){
       do_send(socket,"You already joined this channel\n",strlen("You already joined this channel\n"));
       return 0;
     }
@@ -239,7 +239,7 @@ struct user_table *searchUser(struct user_table *UserTable, int id_client, int n
 {
   int k = 0;
   wanted_user = UserTable;
-  while ((k < nb_clients) && (wanted_user->next_user != NULL)) 
+  while (k < nb_clients)
   {
     if (wanted_user->id_client == id_client)
       return wanted_user;

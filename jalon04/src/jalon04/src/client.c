@@ -192,6 +192,7 @@ int main(int argc, char **argv)
           }
           fflush(stdout);
         }
+
         else {
           do_send(s,user_input,strlen(user_input));
         }
@@ -220,7 +221,9 @@ int main(int argc, char **argv)
           printf("%s\n", unicast);
         }
         else{
-          printf("%s\n",msg_all);
+          if (display == 1){
+            printf("%s\n",msg_all);
+          }
         }
       }
     }
