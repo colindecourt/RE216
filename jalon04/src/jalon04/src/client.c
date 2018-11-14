@@ -69,12 +69,12 @@ int main(int argc, char **argv)
     do_recv(s,user_name);
     printf("Connection with server ok \n");
     printf(">> %s : Please login with /nick <your pseudo> \n",user_name);
-    int display = 0; 
+    int display = 0;
     char *channel_name = malloc(sizeof(char) * PSEUDO_LEN_MAX);
     memset(channel_name, '\0', sizeof(channel_name));
     strcpy(channel_name,"");
 
-    
+
     for (;;)
     {
 
@@ -85,7 +85,7 @@ int main(int argc, char **argv)
       fds[1].fd = STDIN_FILENO;
       fds[1].events = POLLIN;
 
- 
+
       to_display(display,channel_name, user_name);
 
       int rs = poll(fds, BACKLOG + 1, -1);
@@ -161,7 +161,7 @@ int main(int argc, char **argv)
 
         else if (strncmp(user_input, "/leave", 6) == 0)
         {
-          
+
           char *msg = malloc(sizeof(char) * PSEUDO_LEN_MAX);
           memset(msg, '\0', sizeof(msg));
           do_recv(s, msg);
@@ -171,14 +171,22 @@ int main(int argc, char **argv)
 
         else if (strncmp(user_input, "/join", 5) == 0)
         {
-         
+
           char *msg = malloc(sizeof(char) * PSEUDO_LEN_MAX);
           memset(msg, '\0', sizeof(msg));
           do_recv(s, msg);
-          strncat(channel_name, msg, strlen(msg) - strlen("\n"));
-          printf("You join the channel %s\n", channel_name);
-          printf("Write something to send to other users. To leave the channel please write '/leave %s'\n", channel_name);
-          display = 1;
+          if (strncmp(msg, "This channel doesn't exist\n", strlen("This channel doesn't exist\n")) == 0){
+            printf("This channel doesn't exist\n");
+          }
+          else if (strncmp(msg, "You already joined this channel\n", strlen("You already joined this channel\n")) == 0){
+            printf("You already joined this channel\n");
+          }
+          else {
+            strncat(channel_name, msg, strlen(msg) - strlen("\n"));
+            printf("You join the channel %s\n", channel_name);
+            printf("Write something to send to other users. To leave the channel please write '/leave %s'\n", channel_name);
+            display = 1;
+          }
         }
         else {
           do_send(s,user_input,strlen(user_input));

@@ -130,7 +130,7 @@ int main(int argc, char **argv)
             break;
           }
 
-          if (strcmp(buffer, "/quit\n") == 0)
+          if (strncmp(buffer, "/quit", 5) == 0)
           {
             struct user_table *to_delete = NULL;
             struct user_table *temp = NULL;
@@ -177,7 +177,7 @@ int main(int argc, char **argv)
             memset(msg_whois, '\0', strlen(msg_whois));
           }
 
-          else if (strcmp(buffer, "/who\n") == 0)
+          else if (strncmp(buffer, "/who", 4) == 0)
           {
             char msg_who[PSEUDO_LEN_MAX * 20];
             strcpy(msg_who, "\n");
@@ -261,18 +261,25 @@ int main(int argc, char **argv)
             struct channel *temp_channel = NULL;
             temp_channel = channel_table;
             channel_name = buffer + strlen("/create ");
-            if (temp_channel->next_channel != NULL)
+            int possible_create = 0;
+
+            printf("temp name : %s", temp_channel->channel_name);
+            printf("temp name : %s", channel_name);
+            while (temp_channel->next_channel != NULL)
             {
-              while (strcmp(temp_channel->channel_name, channel_name) != 0)
-              {
-                temp_channel = temp_channel->next_channel;
-              }
-              if (strcmp(temp_channel->channel_name, channel_name) == 0)
-              {
+              if (strncmp(temp_channel->channel_name, channel_name, strlen(channel_name)) == 0){
                 do_send(fds[i].fd, "Can't create this channel : this channel already exist\n", strlen("Can't create this channel : this channel already exist\n"));
+                possible_create = 1;
+                break;
+              }
+              else {
+                printf("temp name1 : %s", temp_channel->channel_name);
+                temp_channel = temp_channel->next_channel;
+                printf("temp name2 : %s", temp_channel->channel_name);
               }
             }
-            else
+
+            if (possible_create == 0)
             {
               channel_table = create_channel(channel_table, id_channel, channel_name);
               do_send(fds[i].fd, channel_name, strlen(channel_name));
