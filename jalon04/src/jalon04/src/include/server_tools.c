@@ -239,7 +239,7 @@ struct user_table *searchUser(struct user_table *UserTable, int id_client, int n
 {
   int k = 0;
   wanted_user = UserTable;
-  while (k < nb_clients)
+  while ((k < nb_clients) && (wanted_user->next_user != NULL)) 
   {
     if (wanted_user->id_client == id_client)
       return wanted_user;
