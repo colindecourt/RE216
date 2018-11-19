@@ -327,6 +327,21 @@ int main(int argc, char **argv)
             quit_channel(to_quit, curUser->pseudo, fds[i].fd);
           }
 
+          else if(strncmp(buffer,"/send",4)==0)
+          { 
+
+            struct user_table *pseudo_user = NULL;
+            struct user_table *curUser = NULL;
+            char *whois = buffer + strlen("/send ");
+            
+            int cur_id = search_user_pseudo(UserTable, whois, nb_clients, pseudo_user);
+            curUser = searchUser(UserTable, cur_id, nb_clients, curUser);
+            printf("%s\n",curUser->pseudo);
+            char * char_fd = malloc(sizeof(char)*20);
+            sprintf(char_fd,"%i",curUser->n_socket);
+            do_send(fds[i].fd,char_fd,strlen(char_fd));            
+          }
+
           else
           {
             struct user_table *cur_user = malloc(sizeof(struct user_table));

@@ -12,9 +12,12 @@
 #include <poll.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <fcntl.h>
+#include <sys/stat.h>
 
 #define BUFF_LEN_MAX 1000
 #define BACKLOG 21
+#define PATH_NAME_MAX 2000
 
 struct sockaddr_in get_addr_info(const char* port, struct sockaddr_in* serv_addr1, char* ip);
 int do_connect(int sockfd, const struct sockaddr_in addr);

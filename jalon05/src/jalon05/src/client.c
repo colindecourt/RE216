@@ -66,14 +66,13 @@ int main(int argc, char **argv)
     memset(user_name, '\0', sizeof(user_name));
 
     do_send(s, ip, strlen(ip));
-    do_recv(s,user_name);
+    do_recv(s, user_name);
     printf("Connection with server ok \n");
-    printf(">> %s : Please login with /nick <your pseudo> \n",user_name);
+    printf(">> %s : Please login with /nick <your pseudo> \n", user_name);
     int display = 0;
     char *channel_name = malloc(sizeof(char) * PSEUDO_LEN_MAX);
     memset(channel_name, '\0', sizeof(channel_name));
-    strcpy(channel_name,"");
-
+    strcpy(channel_name, "");
 
     for (;;)
     {
@@ -85,8 +84,7 @@ int main(int argc, char **argv)
       fds[1].fd = STDIN_FILENO;
       fds[1].events = POLLIN;
 
-
-      to_display(display,channel_name, user_name);
+      to_display(display, channel_name, user_name);
 
       int rs = poll(fds, BACKLOG + 1, -1);
       if (rs < 0)
@@ -101,7 +99,7 @@ int main(int argc, char **argv)
 
         send_line(s, user_input, strlen(user_input));
 
-        printf("User input : %s\n",user_input);
+        printf("User input : %s\n", user_input);
 
         memset(server_input, '\0', MSG_SIZE);
 
@@ -110,14 +108,59 @@ int main(int argc, char **argv)
           break;
         }
 
-        else if (strncmp(user_input,"/nick",5)==0)
+        else if (strncmp(user_input, "/send", 4) == 0)
+        {
+          int k = 0;
+          /*char * file_name = malloc(sizeof(char)*PATH_NAME_MAX);
+          file_name = user_input + strlen("/send ");
+          strncat(file_name,file_name,strlen(file_name)-strlen("\n"));
+          printf("path : %s\n",file_name);*/
+          char *fd_to_send = malloc(sizeof(char) * PSEUDO_LEN_MAX);
+          memset(fd_to_send, '\0', sizeof(fd_to_send));
+          do_recv(s, fd_to_send);
+          printf("to send is : %s\n",fd_to_send);
+          char path[] = "/home/cdecourt/Documents/RE216/test.txt";
+          int fd_file = open("/home/cdecourt/Documents/RE216/test.txt", O_RDONLY);
+          if (fd_file == -1)
+          {
+            printf("Error, unable to open file");
+          }
+          else
+          {
+            int k=0;
+            printf("fd %i\n",fd_file);
+            int to_read = 0;
+            FILE * test_size = NULL;
+            test_size = fopen(path,"r");
+            while(fgetc(test_size) != EOF) to_read++;
+            printf("size %i\n",to_read);
+            
+            char * buffer = malloc(sizeof(char)*to_read);
+            strcpy(buffer,"");
+            int a= read(fd_file,(void*)buffer,to_read);
+            
+            if(a==-1){
+              printf("stop");
+              break;
+            }
+            else
+            {
+              /*int new = open("/home/cdecourt/Documents/RE216/new.txt", O_RDWR|O_CREAT, S_IRWXU);
+              int set = write(new,(void*)buffer,to_read);  */ 
+              do_send(atoi(fd_to_send),buffer,to_read);
+            }
+
+          }
+        }
+
+        else if (strncmp(user_input, "/nick", 5) == 0)
         {
           display = 0;
-          char * pseudo = malloc(sizeof(char)*PSEUDO_LEN_MAX);
-          memset(pseudo,'\0',sizeof(pseudo));
-          do_recv(s,pseudo);
-          memset(user_name,'\0',sizeof(user_name));
-          strncpy(user_name,pseudo,strlen(pseudo)-strlen("\n"));
+          char *pseudo = malloc(sizeof(char) * PSEUDO_LEN_MAX);
+          memset(pseudo, '\0', sizeof(pseudo));
+          do_recv(s, pseudo);
+          memset(user_name, '\0', sizeof(user_name));
+          strncpy(user_name, pseudo, strlen(pseudo) - strlen("\n"));
         }
 
         else if (strncmp(user_input, "/whois", 6) == 0 && strncmp(user_input, "/who", 4) == 0)
@@ -175,16 +218,20 @@ int main(int argc, char **argv)
           char *msg = malloc(sizeof(char) * PSEUDO_LEN_MAX);
           memset(msg, '\0', sizeof(msg));
           do_recv(s, msg);
-          if (strncmp(msg, "This channel doesn't exist", strlen("This channel doesn't exist")) == 0){
+          if (strncmp(msg, "This channel doesn't exist", strlen("This channel doesn't exist")) == 0)
+          {
             printf("%s\n", msg);
           }
-          else if (strncmp(msg, "You already joined this channel", strlen("You already joined this channel")) == 0){
+          else if (strncmp(msg, "You already joined this channel", strlen("You already joined this channel")) == 0)
+          {
             printf("%s\n", msg);
           }
-          else if (strncmp(msg, "server : Channel doesn't exist", strlen("server : Channel doesn't exist")) == 0){
+          else if (strncmp(msg, "server : Channel doesn't exist", strlen("server : Channel doesn't exist")) == 0)
+          {
             printf("%s\n", msg);
           }
-          else {
+          else
+          {
             strncat(channel_name, msg, strlen(msg) - strlen("\n"));
             printf("You join the channel %s\n", channel_name);
             printf("Write something to send to other users. To leave the channel please write '/leave %s'\n", channel_name);
@@ -193,9 +240,11 @@ int main(int argc, char **argv)
           fflush(stdout);
         }
 
-        else {
-          if(display ==1){
-            do_send(s,user_input,strlen(user_input));
+        else
+        {
+          if (display == 1)
+          {
+            do_send(s, user_input, strlen(user_input));
           }
         }
       }
@@ -222,9 +271,18 @@ int main(int argc, char **argv)
           char *unicast = msg_all + strlen("_$$_");
           printf("%s\n", unicast);
         }
-        else{
-          if (display == 1){
-            printf("%s\n",msg_all);
+        else
+        {
+          if (display == 1)
+          {
+            printf("%s\n", msg_all);
+          }
+          else{
+            char * buffer = malloc(sizeof(char)*20);
+            strcpy(buffer,"");
+            int new = open("/home/cdecourt/Documents/RE216/new.txt", O_RDWR|O_CREAT, S_IRWXU);
+            int set = write(new,(void*)buffer,20); 
+
           }
         }
       }

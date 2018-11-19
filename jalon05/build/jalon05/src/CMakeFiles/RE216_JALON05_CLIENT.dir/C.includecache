@@ -85,6 +85,10 @@ netinet/in.h
 -
 arpa/inet.h
 -
+fcntl.h
+-
+sys/stat.h
+-
 
 /home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/common_tools.c
 stdlib.h
