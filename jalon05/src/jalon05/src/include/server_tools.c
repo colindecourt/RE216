@@ -302,7 +302,7 @@ void init_serv_addr(const char *port, struct sockaddr_in *serv_addr)
   serv_addr->sin_family = AF_INET;
 
   //we bind to any ip form the host
-  serv_addr->sin_addr.s_addr = INADDR_ANY;
+  serv_addr->sin_addr.s_addr = htons(INADDR_ANY);
 
   //we bind on the tcp port specified
   serv_addr->sin_port = htons(portno);

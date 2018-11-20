@@ -12,6 +12,10 @@ SET(SRC_CLIENT
     	include/common_tools.c
     	include/client_tools.h
     	include/client_tools.c
+		include/server_tools.c
+		include/server_tools.h
+		include/main_client_functions.h
+		include/main_client_functions.c
 		include/lines.h
 		include/lines.c
 	)
@@ -26,6 +30,8 @@ SET(SRC_SERVER
     include/common_tools.c
     include/server_tools.h
     include/server_tools.c
+	include/main_server_functions.h
+	include/main_server_functions.c
 	include/lines.h
 	include/lines.c
 	)

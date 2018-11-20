@@ -7,12 +7,18 @@ jalon05/src/CMakeFiles/RE216_JALON05_SERVER.dir/include/common_tools.c.o: /home/
 jalon05/src/CMakeFiles/RE216_JALON05_SERVER.dir/include/lines.c.o: /home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/lines.c
 jalon05/src/CMakeFiles/RE216_JALON05_SERVER.dir/include/lines.c.o: /home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/lines.h
 
+jalon05/src/CMakeFiles/RE216_JALON05_SERVER.dir/include/main_server_functions.c.o: /home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/common_tools.h
+jalon05/src/CMakeFiles/RE216_JALON05_SERVER.dir/include/main_server_functions.c.o: /home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/lines.h
+jalon05/src/CMakeFiles/RE216_JALON05_SERVER.dir/include/main_server_functions.c.o: /home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/main_server_functions.c
+jalon05/src/CMakeFiles/RE216_JALON05_SERVER.dir/include/main_server_functions.c.o: /home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/server_tools.h
+
 jalon05/src/CMakeFiles/RE216_JALON05_SERVER.dir/include/server_tools.c.o: /home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/common_tools.h
 jalon05/src/CMakeFiles/RE216_JALON05_SERVER.dir/include/server_tools.c.o: /home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/server_tools.c
 jalon05/src/CMakeFiles/RE216_JALON05_SERVER.dir/include/server_tools.c.o: /home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/server_tools.h
 
 jalon05/src/CMakeFiles/RE216_JALON05_SERVER.dir/server.c.o: /home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/common_tools.h
 jalon05/src/CMakeFiles/RE216_JALON05_SERVER.dir/server.c.o: /home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/lines.h
+jalon05/src/CMakeFiles/RE216_JALON05_SERVER.dir/server.c.o: /home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/main_server_functions.h
 jalon05/src/CMakeFiles/RE216_JALON05_SERVER.dir/server.c.o: /home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/server_tools.h
 jalon05/src/CMakeFiles/RE216_JALON05_SERVER.dir/server.c.o: /home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/server.c
 

@@ -21,7 +21,7 @@ struct user_table {
   char * pseudo;
   int n_socket;
   char ip[20];
-  int port;
+  in_port_t port;
   char time[40];
   int channel; //0 if the main, else id of the channel
   struct user_table * next_user;

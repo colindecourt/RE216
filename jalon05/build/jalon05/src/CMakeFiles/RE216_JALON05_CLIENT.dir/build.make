@@ -129,9 +129,57 @@ jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/include/client_tools.c.o.provide
 jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/include/client_tools.c.o.provides.build: jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/include/client_tools.c.o
 
 
+jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/include/server_tools.c.o: jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/flags.make
+jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/include/server_tools.c.o: /home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/server_tools.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/cdecourt/Documents/RE216/jalon05/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/include/server_tools.c.o"
+	cd /home/cdecourt/Documents/RE216/jalon05/build/jalon05/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/RE216_JALON05_CLIENT.dir/include/server_tools.c.o   -c /home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/server_tools.c
+
+jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/include/server_tools.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/RE216_JALON05_CLIENT.dir/include/server_tools.c.i"
+	cd /home/cdecourt/Documents/RE216/jalon05/build/jalon05/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/server_tools.c > CMakeFiles/RE216_JALON05_CLIENT.dir/include/server_tools.c.i
+
+jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/include/server_tools.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/RE216_JALON05_CLIENT.dir/include/server_tools.c.s"
+	cd /home/cdecourt/Documents/RE216/jalon05/build/jalon05/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/server_tools.c -o CMakeFiles/RE216_JALON05_CLIENT.dir/include/server_tools.c.s
+
+jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/include/server_tools.c.o.requires:
+
+.PHONY : jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/include/server_tools.c.o.requires
+
+jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/include/server_tools.c.o.provides: jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/include/server_tools.c.o.requires
+	$(MAKE) -f jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/build.make jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/include/server_tools.c.o.provides.build
+.PHONY : jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/include/server_tools.c.o.provides
+
+jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/include/server_tools.c.o.provides.build: jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/include/server_tools.c.o
+
+
+jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/include/main_client_functions.c.o: jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/flags.make
+jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/include/main_client_functions.c.o: /home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/main_client_functions.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/cdecourt/Documents/RE216/jalon05/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building C object jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/include/main_client_functions.c.o"
+	cd /home/cdecourt/Documents/RE216/jalon05/build/jalon05/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/RE216_JALON05_CLIENT.dir/include/main_client_functions.c.o   -c /home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/main_client_functions.c
+
+jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/include/main_client_functions.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/RE216_JALON05_CLIENT.dir/include/main_client_functions.c.i"
+	cd /home/cdecourt/Documents/RE216/jalon05/build/jalon05/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/main_client_functions.c > CMakeFiles/RE216_JALON05_CLIENT.dir/include/main_client_functions.c.i
+
+jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/include/main_client_functions.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/RE216_JALON05_CLIENT.dir/include/main_client_functions.c.s"
+	cd /home/cdecourt/Documents/RE216/jalon05/build/jalon05/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/main_client_functions.c -o CMakeFiles/RE216_JALON05_CLIENT.dir/include/main_client_functions.c.s
+
+jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/include/main_client_functions.c.o.requires:
+
+.PHONY : jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/include/main_client_functions.c.o.requires
+
+jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/include/main_client_functions.c.o.provides: jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/include/main_client_functions.c.o.requires
+	$(MAKE) -f jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/build.make jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/include/main_client_functions.c.o.provides.build
+.PHONY : jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/include/main_client_functions.c.o.provides
+
+jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/include/main_client_functions.c.o.provides.build: jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/include/main_client_functions.c.o
+
+
 jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/include/lines.c.o: jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/flags.make
 jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/include/lines.c.o: /home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/lines.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/cdecourt/Documents/RE216/jalon05/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/include/lines.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/cdecourt/Documents/RE216/jalon05/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building C object jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/include/lines.c.o"
 	cd /home/cdecourt/Documents/RE216/jalon05/build/jalon05/src && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/RE216_JALON05_CLIENT.dir/include/lines.c.o   -c /home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/lines.c
 
 jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/include/lines.c.i: cmake_force
@@ -158,6 +206,8 @@ RE216_JALON05_CLIENT_OBJECTS = \
 "CMakeFiles/RE216_JALON05_CLIENT.dir/client.c.o" \
 "CMakeFiles/RE216_JALON05_CLIENT.dir/include/common_tools.c.o" \
 "CMakeFiles/RE216_JALON05_CLIENT.dir/include/client_tools.c.o" \
+"CMakeFiles/RE216_JALON05_CLIENT.dir/include/server_tools.c.o" \
+"CMakeFiles/RE216_JALON05_CLIENT.dir/include/main_client_functions.c.o" \
 "CMakeFiles/RE216_JALON05_CLIENT.dir/include/lines.c.o"
 
 # External object files for target RE216_JALON05_CLIENT
@@ -166,10 +216,12 @@ RE216_JALON05_CLIENT_EXTERNAL_OBJECTS =
 jalon05/src/RE216_JALON05_CLIENT: jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/client.c.o
 jalon05/src/RE216_JALON05_CLIENT: jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/include/common_tools.c.o
 jalon05/src/RE216_JALON05_CLIENT: jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/include/client_tools.c.o
+jalon05/src/RE216_JALON05_CLIENT: jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/include/server_tools.c.o
+jalon05/src/RE216_JALON05_CLIENT: jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/include/main_client_functions.c.o
 jalon05/src/RE216_JALON05_CLIENT: jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/include/lines.c.o
 jalon05/src/RE216_JALON05_CLIENT: jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/build.make
 jalon05/src/RE216_JALON05_CLIENT: jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/cdecourt/Documents/RE216/jalon05/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking C executable RE216_JALON05_CLIENT"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/cdecourt/Documents/RE216/jalon05/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking C executable RE216_JALON05_CLIENT"
 	cd /home/cdecourt/Documents/RE216/jalon05/build/jalon05/src && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/RE216_JALON05_CLIENT.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -180,6 +232,8 @@ jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/build: jalon05/src/RE216_JALON05
 jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/requires: jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/client.c.o.requires
 jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/requires: jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/include/common_tools.c.o.requires
 jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/requires: jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/include/client_tools.c.o.requires
+jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/requires: jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/include/server_tools.c.o.requires
+jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/requires: jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/include/main_client_functions.c.o.requires
 jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/requires: jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/include/lines.c.o.requires
 
 .PHONY : jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/requires

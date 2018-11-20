@@ -254,12 +254,67 @@ include/lines.c.s:
 	cd /home/cdecourt/Documents/RE216/jalon05/build && $(MAKE) -f jalon05/src/CMakeFiles/RE216_JALON05_SERVER.dir/build.make jalon05/src/CMakeFiles/RE216_JALON05_SERVER.dir/include/lines.c.s
 .PHONY : include/lines.c.s
 
+include/main_client_functions.o: include/main_client_functions.c.o
+
+.PHONY : include/main_client_functions.o
+
+# target to build an object file
+include/main_client_functions.c.o:
+	cd /home/cdecourt/Documents/RE216/jalon05/build && $(MAKE) -f jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/build.make jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/include/main_client_functions.c.o
+.PHONY : include/main_client_functions.c.o
+
+include/main_client_functions.i: include/main_client_functions.c.i
+
+.PHONY : include/main_client_functions.i
+
+# target to preprocess a source file
+include/main_client_functions.c.i:
+	cd /home/cdecourt/Documents/RE216/jalon05/build && $(MAKE) -f jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/build.make jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/include/main_client_functions.c.i
+.PHONY : include/main_client_functions.c.i
+
+include/main_client_functions.s: include/main_client_functions.c.s
+
+.PHONY : include/main_client_functions.s
+
+# target to generate assembly for a file
+include/main_client_functions.c.s:
+	cd /home/cdecourt/Documents/RE216/jalon05/build && $(MAKE) -f jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/build.make jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/include/main_client_functions.c.s
+.PHONY : include/main_client_functions.c.s
+
+include/main_server_functions.o: include/main_server_functions.c.o
+
+.PHONY : include/main_server_functions.o
+
+# target to build an object file
+include/main_server_functions.c.o:
+	cd /home/cdecourt/Documents/RE216/jalon05/build && $(MAKE) -f jalon05/src/CMakeFiles/RE216_JALON05_SERVER.dir/build.make jalon05/src/CMakeFiles/RE216_JALON05_SERVER.dir/include/main_server_functions.c.o
+.PHONY : include/main_server_functions.c.o
+
+include/main_server_functions.i: include/main_server_functions.c.i
+
+.PHONY : include/main_server_functions.i
+
+# target to preprocess a source file
+include/main_server_functions.c.i:
+	cd /home/cdecourt/Documents/RE216/jalon05/build && $(MAKE) -f jalon05/src/CMakeFiles/RE216_JALON05_SERVER.dir/build.make jalon05/src/CMakeFiles/RE216_JALON05_SERVER.dir/include/main_server_functions.c.i
+.PHONY : include/main_server_functions.c.i
+
+include/main_server_functions.s: include/main_server_functions.c.s
+
+.PHONY : include/main_server_functions.s
+
+# target to generate assembly for a file
+include/main_server_functions.c.s:
+	cd /home/cdecourt/Documents/RE216/jalon05/build && $(MAKE) -f jalon05/src/CMakeFiles/RE216_JALON05_SERVER.dir/build.make jalon05/src/CMakeFiles/RE216_JALON05_SERVER.dir/include/main_server_functions.c.s
+.PHONY : include/main_server_functions.c.s
+
 include/server_tools.o: include/server_tools.c.o
 
 .PHONY : include/server_tools.o
 
 # target to build an object file
 include/server_tools.c.o:
+	cd /home/cdecourt/Documents/RE216/jalon05/build && $(MAKE) -f jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/build.make jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/include/server_tools.c.o
 	cd /home/cdecourt/Documents/RE216/jalon05/build && $(MAKE) -f jalon05/src/CMakeFiles/RE216_JALON05_SERVER.dir/build.make jalon05/src/CMakeFiles/RE216_JALON05_SERVER.dir/include/server_tools.c.o
 .PHONY : include/server_tools.c.o
 
@@ -269,6 +324,7 @@ include/server_tools.i: include/server_tools.c.i
 
 # target to preprocess a source file
 include/server_tools.c.i:
+	cd /home/cdecourt/Documents/RE216/jalon05/build && $(MAKE) -f jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/build.make jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/include/server_tools.c.i
 	cd /home/cdecourt/Documents/RE216/jalon05/build && $(MAKE) -f jalon05/src/CMakeFiles/RE216_JALON05_SERVER.dir/build.make jalon05/src/CMakeFiles/RE216_JALON05_SERVER.dir/include/server_tools.c.i
 .PHONY : include/server_tools.c.i
 
@@ -278,6 +334,7 @@ include/server_tools.s: include/server_tools.c.s
 
 # target to generate assembly for a file
 include/server_tools.c.s:
+	cd /home/cdecourt/Documents/RE216/jalon05/build && $(MAKE) -f jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/build.make jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/include/server_tools.c.s
 	cd /home/cdecourt/Documents/RE216/jalon05/build && $(MAKE) -f jalon05/src/CMakeFiles/RE216_JALON05_SERVER.dir/build.make jalon05/src/CMakeFiles/RE216_JALON05_SERVER.dir/include/server_tools.c.s
 .PHONY : include/server_tools.c.s
 
@@ -330,6 +387,12 @@ help:
 	@echo "... include/lines.o"
 	@echo "... include/lines.i"
 	@echo "... include/lines.s"
+	@echo "... include/main_client_functions.o"
+	@echo "... include/main_client_functions.i"
+	@echo "... include/main_client_functions.s"
+	@echo "... include/main_server_functions.o"
+	@echo "... include/main_server_functions.i"
+	@echo "... include/main_server_functions.s"
 	@echo "... include/server_tools.o"
 	@echo "... include/server_tools.i"
 	@echo "... include/server_tools.s"

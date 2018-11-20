@@ -13,6 +13,8 @@
 #include "include/client_tools.h"
 #include "include/common_tools.h"
 #include "include/lines.h"
+#include "include/server_tools.h"
+#include "include/main_client_functions.h"
 
 #define BUFF_LEN_MAX 1000
 #define BACKLOG 21
@@ -40,10 +42,10 @@ int main(int argc, char **argv)
   }
 
   //get address info from the server
-  struct sockaddr_in serv_addr;
-  //serv_addr = malloc(sizeof(struct sockaddr_in));
+  struct sockaddr_in cli_addr;
+  //cli_addr = malloc(sizeof(struct sockaddr_in));
 
-  get_addr_info(argv[2], &serv_addr, ip);
+  get_addr_info(argv[2], &cli_addr, ip);
 
   //get the socket
   int s = do_socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
@@ -51,7 +53,7 @@ int main(int argc, char **argv)
   //connect to remote socket
   char *msg_connection = malloc(100 * sizeof(char));
 
-  int connect = do_connect(s, serv_addr);
+  int connect = do_connect(s, cli_addr);
 
   do_recv(s, msg_connection);
 
@@ -73,6 +75,7 @@ int main(int argc, char **argv)
     char *channel_name = malloc(sizeof(char) * PSEUDO_LEN_MAX);
     memset(channel_name, '\0', sizeof(channel_name));
     strcpy(channel_name, "");
+    printf("My port is :%i\n", cli_addr.sin_port);
 
     for (;;)
     {
@@ -108,108 +111,29 @@ int main(int argc, char **argv)
           break;
         }
 
-        else if (strncmp(user_input, "/send", 4) == 0)
-        {
-          int k = 0;
-          /*char * file_name = malloc(sizeof(char)*PATH_NAME_MAX);
-          file_name = user_input + strlen("/send ");
-          strncat(file_name,file_name,strlen(file_name)-strlen("\n"));
-          printf("path : %s\n",file_name);*/
-          char *fd_to_send = malloc(sizeof(char) * PSEUDO_LEN_MAX);
-          memset(fd_to_send, '\0', sizeof(fd_to_send));
-          do_recv(s, fd_to_send);
-          printf("to send is : %s\n",fd_to_send);
-          char path[] = "/home/cdecourt/Documents/RE216/test.txt";
-          int fd_file = open("/home/cdecourt/Documents/RE216/test.txt", O_RDONLY);
-          if (fd_file == -1)
-          {
-            printf("Error, unable to open file");
-          }
-          else
-          {
-            int k=0;
-            printf("fd %i\n",fd_file);
-            int to_read = 0;
-            FILE * test_size = NULL;
-            test_size = fopen(path,"r");
-            while(fgetc(test_size) != EOF) to_read++;
-            printf("size %i\n",to_read);
-            
-            char * buffer = malloc(sizeof(char)*to_read);
-            strcpy(buffer,"");
-            int a= read(fd_file,(void*)buffer,to_read);
-            
-            if(a==-1){
-              printf("stop");
-              break;
-            }
-            else
-            {
-              /*int new = open("/home/cdecourt/Documents/RE216/new.txt", O_RDWR|O_CREAT, S_IRWXU);
-              int set = write(new,(void*)buffer,to_read);  */ 
-              do_send(atoi(fd_to_send),buffer,to_read);
-            }
-
-          }
-        }
-
         else if (strncmp(user_input, "/nick", 5) == 0)
         {
-          display = 0;
-          char *pseudo = malloc(sizeof(char) * PSEUDO_LEN_MAX);
-          memset(pseudo, '\0', sizeof(pseudo));
-          do_recv(s, pseudo);
-          memset(user_name, '\0', sizeof(user_name));
-          strncpy(user_name, pseudo, strlen(pseudo) - strlen("\n"));
+          pseudo(display,user_name,s);
         }
 
         else if (strncmp(user_input, "/whois", 6) == 0 && strncmp(user_input, "/who", 4) == 0)
         {
-
-          memset(server_input, '\0', MSG_SIZE);
-          memset(user_input, '\0', MSG_SIZE);
-          char msg_whois[5000];
-          do_recv(s, msg_whois);
-          printf("%s \n", msg_whois);
-          fflush(stdout);
-          memset(msg_whois, '\0', 2000 * sizeof(char));
+         whois_client(server_input,user_input,s); 
         }
 
         else if (strcmp(user_input, "/who\n") == 0)
         {
-          memset(server_input, '\0', MSG_SIZE);
-          memset(user_input, '\0', MSG_SIZE);
-          char msg_who[PSEUDO_LEN_MAX * 20];
-          do_recv(s, msg_who);
-          printf("Online users are : %s\n", msg_who);
-          fflush(stdout);
-          memset(msg_who, '\0', PSEUDO_LEN_MAX * 20);
-        }
-
-        else if (strncmp(user_input, "/channel", 7) == 0)
-        {
-          char *channel_name = malloc(sizeof(char) * PSEUDO_LEN_MAX);
-          memset(channel_name, '\0', sizeof(channel_name));
-          do_recv(s, channel_name);
-          printf("You have created channel %s \n", channel_name);
+          who_client(user_input,server_input,s);
         }
 
         else if (strncmp(user_input, "/create", 7) == 0)
         {
-          char *msg = malloc(sizeof(char) * PSEUDO_LEN_MAX);
-          memset(msg, '\0', sizeof(msg));
-          do_recv(s, msg);
-          printf("%s\n", msg);
+          create_channel_client(user_input,server_input,s);
         }
 
         else if (strncmp(user_input, "/leave", 6) == 0)
         {
-
-          char *msg = malloc(sizeof(char) * PSEUDO_LEN_MAX);
-          memset(msg, '\0', sizeof(msg));
-          do_recv(s, msg);
-          printf("%s\n", msg);
-          display = 0;
+          leave_channel_client(s,display);
         }
 
         else if (strncmp(user_input, "/join", 5) == 0)
@@ -271,18 +195,17 @@ int main(int argc, char **argv)
           char *unicast = msg_all + strlen("_$$_");
           printf("%s\n", unicast);
         }
+        else if (strcmp(msg_all, "A user wants you to accept the transfer of the file") == 0)
+        {
+          do_bind(s, cli_addr);
+          listen(s, 1);
+          //int s2 = accept(s,(struct sockaddr *)&serv_addr, (socklen_t *)&serv_addr);
+        }
         else
         {
           if (display == 1)
           {
             printf("%s\n", msg_all);
-          }
-          else{
-            char * buffer = malloc(sizeof(char)*20);
-            strcpy(buffer,"");
-            int new = open("/home/cdecourt/Documents/RE216/new.txt", O_RDWR|O_CREAT, S_IRWXU);
-            int set = write(new,(void*)buffer,20); 
-
           }
         }
       }

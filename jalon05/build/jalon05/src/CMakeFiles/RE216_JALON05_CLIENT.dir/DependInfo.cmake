@@ -8,6 +8,8 @@ set(CMAKE_DEPENDS_CHECK_C
   "/home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/client_tools.c" "/home/cdecourt/Documents/RE216/jalon05/build/jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/include/client_tools.c.o"
   "/home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/common_tools.c" "/home/cdecourt/Documents/RE216/jalon05/build/jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/include/common_tools.c.o"
   "/home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/lines.c" "/home/cdecourt/Documents/RE216/jalon05/build/jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/include/lines.c.o"
+  "/home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/main_client_functions.c" "/home/cdecourt/Documents/RE216/jalon05/build/jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/include/main_client_functions.c.o"
+  "/home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/server_tools.c" "/home/cdecourt/Documents/RE216/jalon05/build/jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/include/server_tools.c.o"
   )
 set(CMAKE_C_COMPILER_ID "GNU")
 

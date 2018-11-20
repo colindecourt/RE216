@@ -162,6 +162,16 @@
 			<location>/home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/client_tools.c</location>
 		</link>
 		<link>
+			<name>[Targets]/[exe] RE216_JALON05_CLIENT/Source Files/server_tools.c</name>
+			<type>1</type>
+			<location>/home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/server_tools.c</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] RE216_JALON05_CLIENT/Source Files/main_client_functions.c</name>
+			<type>1</type>
+			<location>/home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/main_client_functions.c</location>
+		</link>
+		<link>
 			<name>[Targets]/[exe] RE216_JALON05_CLIENT/Source Files/lines.c</name>
 			<type>1</type>
 			<location>/home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/lines.c</location>
@@ -180,6 +190,16 @@
 			<name>[Targets]/[exe] RE216_JALON05_CLIENT/Header Files/client_tools.h</name>
 			<type>1</type>
 			<location>/home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/client_tools.h</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] RE216_JALON05_CLIENT/Header Files/server_tools.h</name>
+			<type>1</type>
+			<location>/home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/server_tools.h</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] RE216_JALON05_CLIENT/Header Files/main_client_functions.h</name>
+			<type>1</type>
+			<location>/home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/main_client_functions.h</location>
 		</link>
 		<link>
 			<name>[Targets]/[exe] RE216_JALON05_CLIENT/Header Files/lines.h</name>
@@ -237,6 +257,11 @@
 			<location>/home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/server_tools.c</location>
 		</link>
 		<link>
+			<name>[Targets]/[exe] RE216_JALON05_SERVER/Source Files/main_server_functions.c</name>
+			<type>1</type>
+			<location>/home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/main_server_functions.c</location>
+		</link>
+		<link>
 			<name>[Targets]/[exe] RE216_JALON05_SERVER/Source Files/lines.c</name>
 			<type>1</type>
 			<location>/home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/lines.c</location>
@@ -255,6 +280,11 @@
 			<name>[Targets]/[exe] RE216_JALON05_SERVER/Header Files/server_tools.h</name>
 			<type>1</type>
 			<location>/home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/server_tools.h</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] RE216_JALON05_SERVER/Header Files/main_server_functions.h</name>
+			<type>1</type>
+			<location>/home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/main_server_functions.h</location>
 		</link>
 		<link>
 			<name>[Targets]/[exe] RE216_JALON05_SERVER/Header Files/lines.h</name>

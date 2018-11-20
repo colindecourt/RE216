@@ -6,6 +6,8 @@ jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/client.c.o
  /home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/client_tools.h
  /home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/common_tools.h
  /home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/lines.h
+ /home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/main_client_functions.h
+ /home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/server_tools.h
 jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/include/client_tools.c.o
  /home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/client_tools.c
  /home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/client_tools.h
@@ -15,3 +17,12 @@ jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/include/common_tools.c.o
 jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/include/lines.c.o
  /home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/lines.c
  /home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/lines.h
+jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/include/main_client_functions.c.o
+ /home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/client_tools.h
+ /home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/common_tools.h
+ /home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/lines.h
+ /home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/main_client_functions.c
+jalon05/src/CMakeFiles/RE216_JALON05_CLIENT.dir/include/server_tools.c.o
+ /home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/common_tools.h
+ /home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/server_tools.c
+ /home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/server_tools.h

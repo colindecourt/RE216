@@ -24,7 +24,7 @@ struct sockaddr_in get_addr_info(const char* port, struct sockaddr_in* serv_addr
   int portno;
 
   //clean the serv_add structure
-  memset( serv_addr1, '\0', sizeof(struct sockaddr_in));
+  //memset( serv_addr1, '\0', sizeof(struct sockaddr_in));
 
   //cast the port from a string to an int
   portno   = atoi(port);
@@ -37,6 +37,7 @@ struct sockaddr_in get_addr_info(const char* port, struct sockaddr_in* serv_addr
 
   //we bind on the tcp port specified
   serv_addr1->sin_port = htons(portno);
+ 
 }
 
 
