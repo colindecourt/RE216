@@ -116,6 +116,15 @@ int main(int argc, char **argv)
           pseudo(display,user_name,s);
         }
 
+        else if(strncmp(user_input,"/send ",5)==0)
+        {
+          char * user_to_send = malloc(sizeof(char)*PSEUDO_LEN_MAX);
+          user_to_send = user_input + strlen("/send ");
+          char * alert_send = malloc(sizeof(char)*BUFF_LEN_MAX);
+          strcpy(alert_send,user_to_send);
+          do_send(s,alert_send,strlen(alert_send));
+        }
+
         else if (strncmp(user_input, "/whois", 6) == 0 && strncmp(user_input, "/who", 4) == 0)
         {
          whois_client(server_input,user_input,s); 
@@ -134,6 +143,14 @@ int main(int argc, char **argv)
         else if (strncmp(user_input, "/leave", 6) == 0)
         {
           leave_channel_client(s,display);
+        }
+
+        else if(strcmp(user_input,"Y\n")==0)
+        {
+          struct sockaddr_in sin_rcv;
+          int sock_rcv = do_socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+          int co = do_connect(sock_rcv,cli_addr);
+          printf("OK");
         }
 
         else if (strncmp(user_input, "/join", 5) == 0)
@@ -201,11 +218,30 @@ int main(int argc, char **argv)
           listen(s, 1);
           //int s2 = accept(s,(struct sockaddr *)&serv_addr, (socklen_t *)&serv_addr);
         }
+        else if(strncmp(msg_all,"____T",4)==0)
+        {
+          char * accepted = msg_all + strlen("____");
+          printf("%s",msg_all);
+          struct sockaddr_in sin_s;
+          int sock_send = do_socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+          do_bind(sock_send,cli_addr);
+          listen(sock_send,1);
+          int adr_len = sizeof(cli_addr);
+          int connection = accept(sock_send, (struct sockaddr *)&cli_addr, (socklen_t *)&cli_addr);
+          if (connection == -1)
+            perror("accept ERROR\n");
+
+        }
+        
         else
         {
           if (display == 1)
           {
             printf("%s\n", msg_all);
+          }
+          else
+          {
+            printf("%s",msg_all);
           }
         }
       }
