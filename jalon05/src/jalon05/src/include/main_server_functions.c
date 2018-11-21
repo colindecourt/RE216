@@ -50,7 +50,9 @@ void whois(char *buffer, struct user_table *UserTable, int nb_clients, struct po
     strcat(msg_whois, " with IP adress ");
     strcat(msg_whois, curUser->ip);
     strcat(msg_whois, " and port number ");
-    strcat(msg_whois, port_client);
+    char * port_char = malloc(sizeof(char)*20);
+    sprintf(port_char,"%d",curUser->port);
+    strcat(msg_whois, port_char);
     printf("%s\n", msg_whois);
     memset(buffer, '\0', MSG_SIZE);
     do_send(fds[i].fd, msg_whois, strlen(msg_whois));

@@ -1,4 +1,1 @@
-aaaaa
-dddd
-aaaa
-ccc
+e wants to send you a file. Accept ? Y/N :

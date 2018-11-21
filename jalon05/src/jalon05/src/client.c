@@ -42,10 +42,10 @@ int main(int argc, char **argv)
   }
 
   //get address info from the server
-  struct sockaddr_in cli_addr;
-  //cli_addr = malloc(sizeof(struct sockaddr_in));
+  struct sockaddr_in client_addr;
+  memset(&client_addr, 0, sizeof(client_addr));
 
-  get_addr_info(argv[2], &cli_addr, ip);
+  client_addr = init_client_addr(atoi(argv[2]));
 
   //get the socket
   int s = do_socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
@@ -53,7 +53,7 @@ int main(int argc, char **argv)
   //connect to remote socket
   char *msg_connection = malloc(100 * sizeof(char));
 
-  int connect = do_connect(s, cli_addr);
+  int connect = do_connect(s, client_addr);
 
   do_recv(s, msg_connection);
 
@@ -75,7 +75,8 @@ int main(int argc, char **argv)
     char *channel_name = malloc(sizeof(char) * PSEUDO_LEN_MAX);
     memset(channel_name, '\0', sizeof(channel_name));
     strcpy(channel_name, "");
-    printf("My port is :%i\n", cli_addr.sin_port);
+
+  
 
     for (;;)
     {
@@ -113,44 +114,27 @@ int main(int argc, char **argv)
 
         else if (strncmp(user_input, "/nick", 5) == 0)
         {
-          pseudo(display,user_name,s);
-        }
-
-        else if(strncmp(user_input,"/send ",5)==0)
-        {
-          char * user_to_send = malloc(sizeof(char)*PSEUDO_LEN_MAX);
-          user_to_send = user_input + strlen("/send ");
-          char * alert_send = malloc(sizeof(char)*BUFF_LEN_MAX);
-          strcpy(alert_send,user_to_send);
-          do_send(s,alert_send,strlen(alert_send));
+          pseudo(display, user_name, s);
         }
 
         else if (strncmp(user_input, "/whois", 6) == 0 && strncmp(user_input, "/who", 4) == 0)
         {
-         whois_client(server_input,user_input,s); 
+          whois_client(server_input, user_input, s);
         }
 
         else if (strcmp(user_input, "/who\n") == 0)
         {
-          who_client(user_input,server_input,s);
+          who_client(user_input, server_input, s);
         }
 
         else if (strncmp(user_input, "/create", 7) == 0)
         {
-          create_channel_client(user_input,server_input,s);
+          create_channel_client(user_input, server_input, s);
         }
 
         else if (strncmp(user_input, "/leave", 6) == 0)
         {
-          leave_channel_client(s,display);
-        }
-
-        else if(strcmp(user_input,"Y\n")==0)
-        {
-          struct sockaddr_in sin_rcv;
-          int sock_rcv = do_socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-          int co = do_connect(sock_rcv,cli_addr);
-          printf("OK");
+          leave_channel_client(s, display);
         }
 
         else if (strncmp(user_input, "/join", 5) == 0)
@@ -212,36 +196,12 @@ int main(int argc, char **argv)
           char *unicast = msg_all + strlen("_$$_");
           printf("%s\n", unicast);
         }
-        else if (strcmp(msg_all, "A user wants you to accept the transfer of the file") == 0)
-        {
-          do_bind(s, cli_addr);
-          listen(s, 1);
-          //int s2 = accept(s,(struct sockaddr *)&serv_addr, (socklen_t *)&serv_addr);
-        }
-        else if(strncmp(msg_all,"____T",4)==0)
-        {
-          char * accepted = msg_all + strlen("____");
-          printf("%s",msg_all);
-          struct sockaddr_in sin_s;
-          int sock_send = do_socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-          do_bind(sock_send,cli_addr);
-          listen(sock_send,1);
-          int adr_len = sizeof(cli_addr);
-          int connection = accept(sock_send, (struct sockaddr *)&cli_addr, (socklen_t *)&cli_addr);
-          if (connection == -1)
-            perror("accept ERROR\n");
 
-        }
-        
         else
         {
           if (display == 1)
           {
             printf("%s\n", msg_all);
-          }
-          else
-          {
-            printf("%s",msg_all);
           }
         }
       }

@@ -50,7 +50,7 @@ void deleteUser(struct user_table * UserTable,struct user_table * temp, struct u
 struct user_table * searchUser(struct user_table * UserTable, int id_client, int nb_clients, struct user_table * wanted_user);
 int search_user_pseudo(struct user_table * UserTable, char * pseudo, int nb_clients, struct user_table * wanted_user);
 int pseudo_to_socket(struct user_table *UserTable, char *pseudo, int nb_clients, struct user_table *wanted_user);
-void init_serv_addr(const char* port, struct sockaddr_in* serv_addr);
+struct sockaddr_in init_serv_addr(int port);
 void do_bind(int sock, struct sockaddr_in adr);
 int do_accept(int sock, struct sockaddr_in adr,int id_client);
 

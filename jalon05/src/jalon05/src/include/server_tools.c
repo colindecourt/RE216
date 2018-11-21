@@ -287,25 +287,13 @@ int pseudo_to_socket(struct user_table *UserTable, char *pseudo, int nb_clients,
 
 // ------------------------ //
 
-void init_serv_addr(const char *port, struct sockaddr_in *serv_addr)
+struct sockaddr_in init_serv_addr(int port)
 {
-
-  int portno;
-
-  //clean the serv_add structure
-  memset(serv_addr, '\0', sizeof(struct sockaddr_in));
-
-  //cast the port from a string to an int
-  portno = atoi(port);
-
-  //internet family protocol
-  serv_addr->sin_family = AF_INET;
-
-  //we bind to any ip form the host
-  serv_addr->sin_addr.s_addr = htons(INADDR_ANY);
-
-  //we bind on the tcp port specified
-  serv_addr->sin_port = htons(portno);
+    struct sockaddr_in serv_addr;
+    serv_addr.sin_family = AF_INET;
+    serv_addr.sin_addr.s_addr = htonl(INADDR_ANY);
+    serv_addr.sin_port = htons(port);
+    return serv_addr;
 }
 
 // ----------------------- //
@@ -328,8 +316,8 @@ void do_bind(int sock, struct sockaddr_in adr)
 
 int do_accept(int sock, struct sockaddr_in adr, int id_client)
 {
-  int adr_len = sizeof(adr);
-  int connection = accept(sock, (struct sockaddr *)&adr, (socklen_t *)&adr_len);
+  socklen_t adr_len = sizeof(adr);
+  int connection = accept(sock, (struct sockaddr *)&adr, &adr_len);
   if (connection == -1)
     perror("accept ERROR\n");
   else if (connection > 0)

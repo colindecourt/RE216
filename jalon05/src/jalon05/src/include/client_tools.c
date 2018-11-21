@@ -20,24 +20,14 @@
 //specify the socket to be a server socket and listen for at most 20 concurrent client
 #define BACKLOG 21 //Maximum clients = 20
 
-struct sockaddr_in get_addr_info(const char* port, struct sockaddr_in* serv_addr1, char* ip) {
-  int portno;
-
-  //clean the serv_add structure
-  //memset( serv_addr1, '\0', sizeof(struct sockaddr_in));
-
-  //cast the port from a string to an int
-  portno   = atoi(port);
-
-  //internet family protocol
-  serv_addr1->sin_family = AF_INET;
-
-  //we bind to any ip form the host
-  serv_addr1->sin_addr.s_addr = inet_addr(ip);
-
-  //we bind on the tcp port specified
-  serv_addr1->sin_port = htons(portno);
- 
+struct sockaddr_in init_client_addr(int port)
+{
+    struct sockaddr_in client_addr;
+    memset(&client_addr, '\0', sizeof(client_addr));
+    client_addr.sin_family = AF_INET;
+    client_addr.sin_port = htons(port);
+    inet_aton("127.0.0.1", &client_addr.sin_addr);
+    return client_addr;
 }
 
 

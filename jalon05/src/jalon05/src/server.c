@@ -29,8 +29,8 @@ int main(int argc, char **argv)
   struct channel *channel_table = channel_init();
   int id_channel = 1; //for the first channel
   int n;
-  int file_to_send = 0;
-  char * name_to_send = malloc(sizeof(char)*BUFF_LEN_MAX);
+
+  char *name_to_send = malloc(sizeof(char) * BUFF_LEN_MAX);
   if (argc != 2)
   {
     fprintf(stderr, "usage: RE216_SERVER port\n");
@@ -50,7 +50,8 @@ int main(int argc, char **argv)
 
   //init the serv_add structure
   struct sockaddr_in serv_addr;
-  init_serv_addr(port, &serv_addr);
+  memset(&serv_addr, 0, sizeof(serv_addr));
+  serv_addr = init_serv_addr(atoi(argv[1]));
 
   //perform the binding
   //we bind on the tcp port specified
@@ -87,10 +88,9 @@ int main(int argc, char **argv)
 
         if (fds[i].fd == -1)
         {
-          const struct sockaddr_in sin;
+          const struct sockaddr_in sin_a;
           char *ip = malloc(sizeof(char) * 20);
-          s_client = do_accept(s_server, sin, i);
-          printf("kaka %i\n", htons(sin.sin_port));
+          s_client = do_accept(s_server, sin_a, i);
           nb_clients++;
           if (nb_clients >= BACKLOG)
           {
@@ -111,8 +111,8 @@ int main(int argc, char **argv)
           sprintf(s, "%d", i);
           strcat(pseudo, s);
 
-          UserTable = addUser(UserTable, i, pseudo, fds[i].fd, ip, sin.sin_port);
-          printf("port%i\n", UserTable->port);
+          UserTable = addUser(UserTable, i, pseudo, fds[i].fd, ip, sin_a.sin_port);
+          printf("port%i\n", ntohs(UserTable->port));
           do_send(fds[i].fd, pseudo, strlen(pseudo));
           break;
         }
@@ -156,46 +156,6 @@ int main(int argc, char **argv)
           else if (strncmp(buffer, "/whois", 6) == 0 && strncmp(buffer, "/who", 4) == 0)
           {
             whois(buffer, UserTable, nb_clients, fds, i, serv_addr);
-          }
-
-          else if(strncmp(buffer,"/send ",5)==0){
-            char * alert_send = malloc(sizeof(char)*BUFF_LEN_MAX);
-            do_recv(fds[i].fd,alert_send);
-            char * name = malloc(sizeof(char)*PSEUDO_LEN_MAX);
-            strncpy(name,alert_send,strlen(alert_send)-strlen("\n"));
-            
-            printf("%s\n",alert_send);
-            struct user_table*cur_user = NULL;
-            struct user_table *pseudo_user = NULL;
-            struct user_table *user_send = NULL;
-            cur_user = searchUser(UserTable,i,nb_clients,cur_user);
-            int cur_id = search_user_pseudo(UserTable, alert_send, nb_clients, pseudo_user);
-            user_send = searchUser(UserTable, cur_id, nb_clients, user_send);
-            char*msg_send = malloc(sizeof(char)*BUFF_LEN_MAX);
-            strncpy(msg_send,cur_user->pseudo,strlen(cur_user->pseudo)-strlen("\n"));
-            strcat(msg_send," wants to send you a file. Accept ? Y/N :\n");
-            do_send(user_send->n_socket,msg_send,strlen(msg_send));
-
-            file_to_send=1;
-            strcpy(name_to_send,cur_user->pseudo);
-          }
-
-          else if(file_to_send ==1)
-          {
-            struct user_table *pseudo_user = NULL;
-            struct user_table *user_send = NULL;
-            int cur_id = search_user_pseudo(UserTable, name_to_send, nb_clients, pseudo_user);
-            user_send = searchUser(UserTable, cur_id, nb_clients, user_send);
-            if(strcmp(buffer,"Y\n")==0){
-              do_send(user_send->n_socket,"_____Transfer accepted",strlen("Transfer accepted"));
-              file_to_send =0;
-            }
-            else if(strcmp(buffer,"N\n")==0)
-            {
-              do_send(user_send->n_socket,"Transfer refused",strlen("Transfer refused"));
-              file_to_send=0;
-            }
-            strcpy(name_to_send,"");
           }
 
           else if (strncmp(buffer, "/who", 4) == 0)
@@ -246,17 +206,17 @@ int main(int argc, char **argv)
 
           else if (strncmp(buffer, "/join", 5) == 0)
           {
-            main_join_channel(UserTable,i,nb_clients,channel_table,buffer,fds);
+            main_join_channel(UserTable, i, nb_clients, channel_table, buffer, fds);
           }
 
           else if (strncmp(buffer, "/leave", 6) == 0)
           {
-            main_quit_channel(UserTable,i,nb_clients,channel_table,buffer,fds);
+            main_quit_channel(UserTable, i, nb_clients, channel_table, buffer, fds);
           }
 
           else
           {
-            send_canal_msg(UserTable,i,nb_clients,channel_table,buffer,fds);
+            send_canal_msg(UserTable, i, nb_clients, channel_table, buffer, fds);
           }
         }
       }
