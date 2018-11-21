@@ -23,7 +23,7 @@ struct user_table {
   char ip[20];
   in_port_t port;
   char time[40];
-  int channel; //0 if the main, else id of the channel
+  int channel; //0 if the main, else 1 of the channel
   struct user_table * next_user;
 };
 
@@ -50,9 +50,9 @@ void deleteUser(struct user_table * UserTable,struct user_table * temp, struct u
 struct user_table * searchUser(struct user_table * UserTable, int id_client, int nb_clients, struct user_table * wanted_user);
 int search_user_pseudo(struct user_table * UserTable, char * pseudo, int nb_clients, struct user_table * wanted_user);
 int pseudo_to_socket(struct user_table *UserTable, char *pseudo, int nb_clients, struct user_table *wanted_user);
-struct sockaddr_in init_serv_addr(int port);
-void do_bind(int sock, struct sockaddr_in adr);
-int do_accept(int sock, struct sockaddr_in adr,int id_client);
+struct sockaddr_in6 init_serv_addr(int port);
+void do_bind(int sock, struct sockaddr_in6 adr);
+int do_accept(int sock, struct sockaddr_in6 adr,int id_client);
 
 
 #endif /* SERVER_TOOLS_H*/

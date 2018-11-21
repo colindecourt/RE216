@@ -40,7 +40,7 @@ int main(int argc, char **argv)
   const char *port = argv[1];
 
   //create the socket, check for validity!
-  int s_server = do_socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+  int s_server = do_socket(AF_INET6, SOCK_STREAM, IPPROTO_TCP);
   int s_client;
 
   //create message pointer
@@ -49,7 +49,7 @@ int main(int argc, char **argv)
   char buffer[BUFF_LEN_MAX];
 
   //init the serv_add structure
-  struct sockaddr_in serv_addr;
+  struct sockaddr_in6 serv_addr;
   memset(&serv_addr, 0, sizeof(serv_addr));
   serv_addr = init_serv_addr(atoi(argv[1]));
 
@@ -88,7 +88,7 @@ int main(int argc, char **argv)
 
         if (fds[i].fd == -1)
         {
-          const struct sockaddr_in sin_a;
+          const struct sockaddr_in6 sin_a;
           char *ip = malloc(sizeof(char) * 20);
           s_client = do_accept(s_server, sin_a, i);
           nb_clients++;
@@ -111,8 +111,7 @@ int main(int argc, char **argv)
           sprintf(s, "%d", i);
           strcat(pseudo, s);
 
-          UserTable = addUser(UserTable, i, pseudo, fds[i].fd, ip, sin_a.sin_port);
-          printf("port%i\n", ntohs(UserTable->port));
+          UserTable = addUser(UserTable, i, pseudo, fds[i].fd, ip, sin_a.sin6_port);
           do_send(fds[i].fd, pseudo, strlen(pseudo));
           break;
         }
@@ -149,7 +148,7 @@ int main(int argc, char **argv)
             struct user_table *curUser = NULL;
             curUser = searchUser(UserTable, i, nb_clients, curUser);
             strcpy(curUser->pseudo, pseudo);
-            printf("Welcome on the chat %s\n", pseudo);
+            
             send_line(fds[i].fd, pseudo, PSEUDO_LEN_MAX);
           }
 
@@ -165,6 +164,7 @@ int main(int argc, char **argv)
 
           else if (strncmp(buffer, "/msgall", 7) == 0)
           {
+            printf("Nb cli %i\n",nb_clients);
             broadcast(buffer, UserTable, i, nb_clients, fds);
           }
 
@@ -211,7 +211,16 @@ int main(int argc, char **argv)
 
           else if (strncmp(buffer, "/leave", 6) == 0)
           {
-            main_quit_channel(UserTable, i, nb_clients, channel_table, buffer, fds);
+
+            struct user_table *curUser = malloc(sizeof(struct user_table));
+            curUser = searchUser(UserTable, i, nb_clients, curUser);
+            char *channel_name = malloc(sizeof(char) * PSEUDO_LEN_MAX);
+            memset(channel_name, '\0', sizeof(channel_name));
+            channel_name = buffer + strlen("/leave ");
+            struct channel *to_quit = malloc(sizeof(struct channel));
+            to_quit = search_channel(channel_table, channel_name, to_quit);
+            quit_channel(to_quit, curUser->pseudo, fds[i].fd);
+            curUser->channel=0;
           }
 
           else

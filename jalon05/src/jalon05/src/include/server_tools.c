@@ -123,7 +123,7 @@ void quit_channel(struct channel *channel_table, char *pseudo, int socket)
       channel_table->actual_number--;
       exist_channel = 1;
     }
-    printf("People on channel %s\n", channel_table->connected_people[i]);
+  
     i++;
   }
   if ( exist_channel == 0 ){
@@ -212,7 +212,7 @@ void deleteUser(struct user_table *UserTable, struct user_table *temp, struct us
   {
     if (temp->next_user->next_user == NULL)
     {
-      temp->next_user = NULL;
+      //temp->next_user = NULL;
       free(temp);
     }
     else
@@ -287,23 +287,23 @@ int pseudo_to_socket(struct user_table *UserTable, char *pseudo, int nb_clients,
 
 // ------------------------ //
 
-struct sockaddr_in init_serv_addr(int port)
+struct sockaddr_in6 init_serv_addr(int port)
 {
-    struct sockaddr_in serv_addr;
-    serv_addr.sin_family = AF_INET;
-    serv_addr.sin_addr.s_addr = htonl(INADDR_ANY);
-    serv_addr.sin_port = htons(port);
+    struct sockaddr_in6 serv_addr;
+    serv_addr.sin6_family = AF_INET6;
+    serv_addr.sin6_addr =in6addr_loopback;
+    serv_addr.sin6_port = htons(port);
     return serv_addr;
 }
 
 // ----------------------- //
 
-void do_bind(int sock, struct sockaddr_in adr)
+void do_bind(int sock, struct sockaddr_in6 adr)
 {
 
   int retbind; //retour de la fonction bind()
 
-  retbind = bind(sock, (struct sockaddr *)&adr, sizeof(struct sockaddr_in));
+  retbind = bind(sock, (struct sockaddr *)&adr, sizeof(struct sockaddr_in6));
 
   if (retbind == -1)
   {
@@ -314,7 +314,7 @@ void do_bind(int sock, struct sockaddr_in adr)
 
 // ------- Accept the connection ------- //
 
-int do_accept(int sock, struct sockaddr_in adr, int id_client)
+int do_accept(int sock, struct sockaddr_in6 adr, int id_client)
 {
   socklen_t adr_len = sizeof(adr);
   int connection = accept(sock, (struct sockaddr *)&adr, &adr_len);

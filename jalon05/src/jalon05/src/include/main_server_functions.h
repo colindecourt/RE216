@@ -20,7 +20,7 @@
 
 
 void leave_chat(struct user_table *UserTable, int nb_clients, struct pollfd fds[BACKLOG + 1],int i);
-void whois(char * buffer, struct user_table *UserTable, int nb_clients, struct pollfd fds[BACKLOG + 1], int i, struct sockaddr_in serv_addr);
+void whois(char * buffer, struct user_table *UserTable, int nb_clients, struct pollfd fds[BACKLOG + 1], int i, struct sockaddr_in6 serv_addr);
 void who(char *buffer, struct user_table *UserTable, int nb_clients, int i, struct pollfd fds[BACKLOG+1]);
 void broadcast(char *buffer, struct user_table *UserTable, int i, int nb_clients, struct pollfd fds[BACKLOG + 1]);
 void unicast(char *buffer, struct user_table *UserTable, int i, int nb_clients, struct pollfd fds[BACKLOG + 1]);

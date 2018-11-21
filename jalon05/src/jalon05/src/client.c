@@ -42,13 +42,13 @@ int main(int argc, char **argv)
   }
 
   //get address info from the server
-  struct sockaddr_in client_addr;
+  struct sockaddr_in6 client_addr;
   memset(&client_addr, 0, sizeof(client_addr));
 
   client_addr = init_client_addr(atoi(argv[2]));
 
   //get the socket
-  int s = do_socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+  int s = do_socket(AF_INET6, SOCK_STREAM, IPPROTO_TCP);
 
   //connect to remote socket
   char *msg_connection = malloc(100 * sizeof(char));
@@ -76,8 +76,6 @@ int main(int argc, char **argv)
     memset(channel_name, '\0', sizeof(channel_name));
     strcpy(channel_name, "");
 
-  
-
     for (;;)
     {
 
@@ -103,8 +101,6 @@ int main(int argc, char **argv)
 
         send_line(s, user_input, strlen(user_input));
 
-        printf("User input : %s\n", user_input);
-
         memset(server_input, '\0', MSG_SIZE);
 
         if (strcmp(user_input, "/quit\n") == 0)
@@ -115,6 +111,7 @@ int main(int argc, char **argv)
         else if (strncmp(user_input, "/nick", 5) == 0)
         {
           pseudo(display, user_name, s);
+          printf("Welcome on the chat %s\n", user_name);
         }
 
         else if (strncmp(user_input, "/whois", 6) == 0 && strncmp(user_input, "/who", 4) == 0)
@@ -134,7 +131,11 @@ int main(int argc, char **argv)
 
         else if (strncmp(user_input, "/leave", 6) == 0)
         {
-          leave_channel_client(s, display);
+          char *msg = malloc(sizeof(char) * PSEUDO_LEN_MAX);
+          memset(msg, '\0', sizeof(msg));
+          do_recv(s, msg);
+          printf("%s\n", msg);
+          display = 0;
         }
 
         else if (strncmp(user_input, "/join", 5) == 0)

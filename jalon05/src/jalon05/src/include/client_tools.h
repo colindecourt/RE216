@@ -19,8 +19,8 @@
 #define BACKLOG 21
 #define PATH_NAME_MAX 2000
 
-struct sockaddr_in init_client_addr(int port);
-int do_connect(int sockfd, const struct sockaddr_in addr);
+struct sockaddr_in6 init_client_addr(int port);
+int do_connect(int sockfd, const struct sockaddr_in6 addr);
 char * handle_client_message(int sockfd, char*buffer, int port);
 int to_display(int display, char * channel_name, char * pseudo);
 

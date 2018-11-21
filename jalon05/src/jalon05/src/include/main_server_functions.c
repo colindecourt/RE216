@@ -25,7 +25,7 @@ void leave_chat(struct user_table *UserTable, int nb_clients, struct pollfd fds[
     struct user_table *to_delete = NULL;
     struct user_table *temp = NULL;
     to_delete = searchUser(UserTable, i, nb_clients, to_delete);
-    printf("i = %i", nb_clients);
+   
     close(fds[i].fd);
     fds[i].fd = -1;
     fds[i].events = -1;
@@ -34,16 +34,18 @@ void leave_chat(struct user_table *UserTable, int nb_clients, struct pollfd fds[
     nb_clients--;
 }
 
-void whois(char *buffer, struct user_table *UserTable, int nb_clients, struct pollfd fds[BACKLOG + 1], int i, struct sockaddr_in serv_addr)
+void whois(char *buffer, struct user_table *UserTable, int nb_clients, struct pollfd fds[BACKLOG + 1], int i, struct sockaddr_in6 serv_addr)
 {
     struct user_table *pseudo_user = NULL;
     struct user_table *curUser = NULL;
     char *whois = buffer + strlen("/whois ");
     char msg_whois[5000];
     int cur_id = search_user_pseudo(UserTable, whois, nb_clients, pseudo_user);
+    if (cur_id !=0)
+    {    
     curUser = searchUser(UserTable, cur_id, nb_clients, curUser);
     char *port_client = malloc(sizeof(char) * 10);
-    sprintf(port_client, "%i", serv_addr.sin_port);
+    sprintf(port_client, "%i", serv_addr.sin6_port);
     strcat(msg_whois, curUser->pseudo);
     strcat(msg_whois, " connected since ");
     strcat(msg_whois, curUser->time);
@@ -53,10 +55,15 @@ void whois(char *buffer, struct user_table *UserTable, int nb_clients, struct po
     char * port_char = malloc(sizeof(char)*20);
     sprintf(port_char,"%d",curUser->port);
     strcat(msg_whois, port_char);
-    printf("%s\n", msg_whois);
+    
     memset(buffer, '\0', MSG_SIZE);
     do_send(fds[i].fd, msg_whois, strlen(msg_whois));
     memset(msg_whois, '\0', strlen(msg_whois));
+    }
+    else
+    {
+        do_send(fds[i].fd,"This user doesn't exist\n",strlen("This user doesn't exist\n"));
+    }
 }
 
 void who(char *buffer, struct user_table *UserTable, int nb_clients, int i, struct pollfd fds[BACKLOG + 1])
@@ -75,7 +82,7 @@ void who(char *buffer, struct user_table *UserTable, int nb_clients, int i, stru
         strcat(msg_who, "\n");
         //}
     }
-    printf("sock %i\n", fds[i].fd);
+  
     do_send(fds[i].fd, msg_who, strlen(msg_who));
     memset(msg_who, '\0', strlen(msg_who));
 }
@@ -97,9 +104,10 @@ void broadcast(char *buffer, struct user_table *UserTable, int i, int nb_clients
             strcpy(buffer, buffer + 8);
             strcat(msg_all, buffer);
             do_send(fds[k].fd, msg_all, BUFF_LEN_MAX);
-            memset(msg_all, '\0', BUFF_LEN_MAX);
+            
         }
     }
+    memset(msg_all, '\0', BUFF_LEN_MAX);
 }
 
 void unicast(char *buffer, struct user_table *UserTable, int i, int nb_clients, struct pollfd fds[BACKLOG + 1])
@@ -113,7 +121,7 @@ void unicast(char *buffer, struct user_table *UserTable, int i, int nb_clients, 
     struct user_table *user_to_send = malloc(sizeof(struct user_table));
     struct user_table *cur_user = malloc(sizeof(struct user_table));
     cur_user = searchUser(UserTable, i, nb_clients, cur_user);
-    printf("%s\n", cur_user->pseudo);
+    
     while (buffer[j] != ' ')
     {
         strncat(pseudo, buffer + j, 1);
@@ -125,14 +133,14 @@ void unicast(char *buffer, struct user_table *UserTable, int i, int nb_clients, 
     char *temp_pseudo = malloc(sizeof(char) * PSEUDO_LEN_MAX);
     memset(temp_pseudo, '\0', sizeof(temp_pseudo));
     strncpy(temp_pseudo, cur_user->pseudo, strlen(cur_user->pseudo) - strlen("\n"));
-    printf("%s\n", temp_pseudo);
+   
     strcat(pseudo, "\n");
     strcpy(unicast, "_$$_");
     strcat(unicast, "[ ");
     strcat(unicast, temp_pseudo);
     strcat(unicast, " ] : ");
     strcat(unicast, buffer + j + 1);
-    printf("%s\n", unicast);
+    
     do_send(user_to_send->n_socket, unicast, BUFF_LEN_MAX);
 }
 
@@ -179,11 +187,8 @@ void main_join_channel(struct user_table *UserTable, int i, int nb_clients, stru
 
     if (to_join->id_channel != -1)
     {
-        printf("curuser : %s\n", curUser->pseudo);
-        printf("%d\n", to_join->actual_number);
-        printf("%s\n", channel_name);
         join_channel(to_join, curUser->pseudo, to_join->actual_number, channel_name, fds[i].fd, curUser);
-        printf("%d\n", to_join->actual_number);
+        
         do_send(fds[i].fd, channel_name, strlen(channel_name));
     }
     else
@@ -228,7 +233,7 @@ void send_canal_msg(struct user_table *UserTable, int i, int nb_clients, struct 
                 if (k != i)
                 {
                     do_send(fds[k].fd, pseudo_send, BUFF_LEN_MAX);
-                    memset(pseudo_send, '\0', BUFF_LEN_MAX);
+                    
                 }
             }
             else
@@ -236,5 +241,6 @@ void send_canal_msg(struct user_table *UserTable, int i, int nb_clients, struct 
                 UserTable = UserTable->next_user;
             }
         }
+        memset(pseudo_send, '\0', BUFF_LEN_MAX);
     }
 }

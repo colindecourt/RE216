@@ -20,13 +20,13 @@
 //specify the socket to be a server socket and listen for at most 20 concurrent client
 #define BACKLOG 21 //Maximum clients = 20
 
-struct sockaddr_in init_client_addr(int port)
+struct sockaddr_in6 init_client_addr(int port)
 {
-    struct sockaddr_in client_addr;
+    struct sockaddr_in6 client_addr;
     memset(&client_addr, '\0', sizeof(client_addr));
-    client_addr.sin_family = AF_INET;
-    client_addr.sin_port = htons(port);
-    inet_aton("127.0.0.1", &client_addr.sin_addr);
+    client_addr.sin6_family = AF_INET6;
+    client_addr.sin6_port = htons(port);
+    inet_pton(AF_INET6, "localhost", &(client_addr.sin6_addr));
     return client_addr;
 }
 
@@ -34,8 +34,8 @@ struct sockaddr_in init_client_addr(int port)
 
 // ------------------------------------------------------ //
 
-int do_connect(int sockfd, const struct sockaddr_in addr) {
-  int res = connect(sockfd, (struct sockaddr *) &addr, sizeof(struct sockaddr_in));
+int do_connect(int sockfd, const struct sockaddr_in6 addr) {
+  int res = connect(sockfd, (struct sockaddr *) &addr, sizeof(struct sockaddr_in6));
   if (res != 0) {
     //fprintf(stderr,"Error : Unable to connect\n");
     perror("error connection : ");
