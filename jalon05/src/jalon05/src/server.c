@@ -139,6 +139,7 @@ int main(int argc, char **argv)
           if (strncmp(buffer, "/quit", 5) == 0)
           {
             leave_chat(UserTable, nb_clients, fds, i);
+            nb_clients --;
             break;
           }
 
@@ -148,7 +149,7 @@ int main(int argc, char **argv)
             struct user_table *curUser = NULL;
             curUser = searchUser(UserTable, i, nb_clients, curUser);
             strcpy(curUser->pseudo, pseudo);
-            
+
             send_line(fds[i].fd, pseudo, PSEUDO_LEN_MAX);
           }
 

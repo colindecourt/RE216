@@ -123,7 +123,7 @@ void quit_channel(struct channel *channel_table, char *pseudo, int socket)
       channel_table->actual_number--;
       exist_channel = 1;
     }
-  
+
     i++;
   }
   if ( exist_channel == 0 ){
@@ -212,12 +212,10 @@ void deleteUser(struct user_table *UserTable, struct user_table *temp, struct us
   {
     if (temp->next_user->next_user == NULL)
     {
-      //temp->next_user = NULL;
       free(temp);
     }
     else
     {
-      temp->next_user = to_delete->next_user;
       free(to_delete);
     }
   }
