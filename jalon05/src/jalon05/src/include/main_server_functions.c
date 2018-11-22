@@ -25,13 +25,12 @@ void leave_chat(struct user_table *UserTable, int nb_clients, struct pollfd fds[
     struct user_table *to_delete = NULL;
     struct user_table *temp = NULL;
     to_delete = searchUser(UserTable, i, nb_clients, to_delete);
-
-    close(fds[i].fd);
-    fds[i].fd = -1;
-    fds[i].events = -1;
-    printf("Client n°%i close connection\n", i);
     deleteUser(UserTable, temp, to_delete);
-    nb_clients--;
+    close(fds[i].fd);
+    
+    printf("Client n°%i close connection\n", i);
+    
+    
 }
 
 void whois(char *buffer, struct user_table *UserTable, int nb_clients, struct pollfd fds[BACKLOG + 1], int i, struct sockaddr_in6 serv_addr)
@@ -71,10 +70,10 @@ void who(char *buffer, struct user_table *UserTable, int nb_clients, int i, stru
     char msg_who[PSEUDO_LEN_MAX * 20];
     strcpy(msg_who, "\n");
 
-    printf("nb : %d\n", nb_clients);
+    
     for (int k = 1; k <= nb_clients; k++)
     {
-        struct user_table *curUser = malloc(sizeof(struct user_table));
+        struct user_table *curUser = NULL;
         curUser = searchUser(UserTable, k, nb_clients, curUser);
         strcat(msg_who, "-");
         strcat(msg_who, curUser->pseudo);

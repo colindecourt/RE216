@@ -70,6 +70,13 @@ int main(int argc, char **argv)
     do_send(s, ip, strlen(ip));
     do_recv(s, user_name);
     printf("Connection with server ok \n");
+    printf("Welcome on the chat programming by Dronet Elsa and Colin Decourt. To know\
+    the pseudo of connected user enter '/who'. To obtain informations about someone\
+    enter '/whois <pseudo>'.  To send a message\
+    to another user enter '/msg <user_name> <your message'. To send a message to all user enter '/msgall <your message>\
+    .\n You have the possibility to create a channel. To do this enter '/create <channel_name>'. To join this\
+    channel enter '/join <channel_name>'. To send a message in this channel write something and users\
+    in the channel will receive your message. To quit channel enter '/leave <channel_name>.\n");
     printf(">> %s : Please login with /nick <your pseudo> \n", user_name);
     int display = 0;
     char *channel_name = malloc(sizeof(char) * PSEUDO_LEN_MAX);
@@ -111,6 +118,7 @@ int main(int argc, char **argv)
         else if (strncmp(user_input, "/nick", 5) == 0)
         {
           pseudo(display, user_name, s);
+          display = 0;
           printf("Welcome on the chat %s\n", user_name);
         }
 

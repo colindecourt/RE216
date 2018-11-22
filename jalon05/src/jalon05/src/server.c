@@ -139,7 +139,9 @@ int main(int argc, char **argv)
           if (strncmp(buffer, "/quit", 5) == 0)
           {
             leave_chat(UserTable, nb_clients, fds, i);
-            nb_clients --;
+            fds[i].fd = -1;
+            fds[i].events = -1;
+            nb_clients--;
             break;
           }
 
@@ -165,7 +167,7 @@ int main(int argc, char **argv)
 
           else if (strncmp(buffer, "/msgall", 7) == 0)
           {
-            printf("Nb cli %i\n",nb_clients);
+            printf("Nb cli %i\n", nb_clients);
             broadcast(buffer, UserTable, i, nb_clients, fds);
           }
 
@@ -221,7 +223,7 @@ int main(int argc, char **argv)
             struct channel *to_quit = malloc(sizeof(struct channel));
             to_quit = search_channel(channel_table, channel_name, to_quit);
             quit_channel(to_quit, curUser->pseudo, fds[i].fd);
-            curUser->channel=0;
+            curUser->channel = 0;
           }
 
           else

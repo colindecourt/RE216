@@ -2,8 +2,7 @@
 <projectDescription>
 	<name>RE216-Debug@build</name>
 	<comment></comment>
-	<projects>
-	</projects>
+	<projects></projects>
 	<buildSpec>
 		<buildCommand>
 			<name>org.eclipse.cdt.make.core.makeBuilder</name>
@@ -47,7 +46,7 @@
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.buildLocation</key>
-					<value>/home/elsa/Documents/RE216/jalon05/build</value>
+					<value>/home/cdecourt/Documents/RE216/jalon05/build</value>
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.useDefaultBuildCmd</key>
@@ -83,7 +82,7 @@
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.build.location</key>
-					<value>/home/elsa/Documents/RE216/jalon05/build</value>
+					<value>/home/cdecourt/Documents/RE216/jalon05/build</value>
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.autoBuildTarget</key>
@@ -97,8 +96,7 @@
 		</buildCommand>
 		<buildCommand>
 			<name>org.eclipse.cdt.make.core.ScannerConfigBuilder</name>
-			<arguments>
-			</arguments>
+			<arguments/>
 		</buildCommand>
 	</buildSpec>
 	<natures>
@@ -111,7 +109,7 @@
 		<link>
 			<name>[Source directory]</name>
 			<type>2</type>
-			<location>/home/elsa/Documents/RE216/jalon05/src</location>
+			<location>/home/cdecourt/Documents/RE216/jalon05/src</location>
 		</link>
 		<link>
 			<name>[Subprojects]</name>
@@ -121,95 +119,15 @@
 		<link>
 			<name>[Subprojects]/RE216</name>
 			<type>2</type>
-			<location>/home/elsa/Documents/RE216/jalon05/src</location>
+			<location>/home/cdecourt/Documents/RE216/jalon05/src</location>
 		</link>
 		<link>
 			<name>[Subprojects]/RE216_JALON05</name>
 			<type>2</type>
-			<location>/home/elsa/Documents/RE216/jalon05/src/jalon05/src</location>
+			<location>/home/cdecourt/Documents/RE216/jalon05/src/jalon05/src</location>
 		</link>
 		<link>
 			<name>[Targets]</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>[Targets]/[exe] RE216_JALON05_SERVER</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>[Targets]/[exe] RE216_JALON05_SERVER/</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>[Targets]/[exe] RE216_JALON05_SERVER/Source Files</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>[Targets]/[exe] RE216_JALON05_SERVER/Source Files/server.c</name>
-			<type>1</type>
-			<location>/home/elsa/Documents/RE216/jalon05/src/jalon05/src/server.c</location>
-		</link>
-		<link>
-			<name>[Targets]/[exe] RE216_JALON05_SERVER/Source Files/common_tools.c</name>
-			<type>1</type>
-			<location>/home/elsa/Documents/RE216/jalon05/src/jalon05/src/include/common_tools.c</location>
-		</link>
-		<link>
-			<name>[Targets]/[exe] RE216_JALON05_SERVER/Source Files/server_tools.c</name>
-			<type>1</type>
-			<location>/home/elsa/Documents/RE216/jalon05/src/jalon05/src/include/server_tools.c</location>
-		</link>
-		<link>
-			<name>[Targets]/[exe] RE216_JALON05_SERVER/Source Files/main_server_functions.c</name>
-			<type>1</type>
-			<location>/home/elsa/Documents/RE216/jalon05/src/jalon05/src/include/main_server_functions.c</location>
-		</link>
-		<link>
-			<name>[Targets]/[exe] RE216_JALON05_SERVER/Source Files/lines.c</name>
-			<type>1</type>
-			<location>/home/elsa/Documents/RE216/jalon05/src/jalon05/src/include/lines.c</location>
-		</link>
-		<link>
-			<name>[Targets]/[exe] RE216_JALON05_SERVER/Header Files</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>[Targets]/[exe] RE216_JALON05_SERVER/Header Files/common_tools.h</name>
-			<type>1</type>
-			<location>/home/elsa/Documents/RE216/jalon05/src/jalon05/src/include/common_tools.h</location>
-		</link>
-		<link>
-			<name>[Targets]/[exe] RE216_JALON05_SERVER/Header Files/server_tools.h</name>
-			<type>1</type>
-			<location>/home/elsa/Documents/RE216/jalon05/src/jalon05/src/include/server_tools.h</location>
-		</link>
-		<link>
-			<name>[Targets]/[exe] RE216_JALON05_SERVER/Header Files/main_server_functions.h</name>
-			<type>1</type>
-			<location>/home/elsa/Documents/RE216/jalon05/src/jalon05/src/include/main_server_functions.h</location>
-		</link>
-		<link>
-			<name>[Targets]/[exe] RE216_JALON05_SERVER/Header Files/lines.h</name>
-			<type>1</type>
-			<location>/home/elsa/Documents/RE216/jalon05/src/jalon05/src/include/lines.h</location>
-		</link>
-		<link>
-			<name>[Targets]/[exe] RE216_JALON05_SERVER/CMake Rules</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>[Targets]/[exe] RE216_JALON05_SERVER/Resources</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>[Targets]/[exe] RE216_JALON05_SERVER/Object Files</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
@@ -231,32 +149,32 @@
 		<link>
 			<name>[Targets]/[exe] RE216_JALON05_CLIENT/Source Files/client.c</name>
 			<type>1</type>
-			<location>/home/elsa/Documents/RE216/jalon05/src/jalon05/src/client.c</location>
+			<location>/home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/client.c</location>
 		</link>
 		<link>
 			<name>[Targets]/[exe] RE216_JALON05_CLIENT/Source Files/common_tools.c</name>
 			<type>1</type>
-			<location>/home/elsa/Documents/RE216/jalon05/src/jalon05/src/include/common_tools.c</location>
+			<location>/home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/common_tools.c</location>
 		</link>
 		<link>
 			<name>[Targets]/[exe] RE216_JALON05_CLIENT/Source Files/client_tools.c</name>
 			<type>1</type>
-			<location>/home/elsa/Documents/RE216/jalon05/src/jalon05/src/include/client_tools.c</location>
+			<location>/home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/client_tools.c</location>
 		</link>
 		<link>
 			<name>[Targets]/[exe] RE216_JALON05_CLIENT/Source Files/server_tools.c</name>
 			<type>1</type>
-			<location>/home/elsa/Documents/RE216/jalon05/src/jalon05/src/include/server_tools.c</location>
+			<location>/home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/server_tools.c</location>
 		</link>
 		<link>
 			<name>[Targets]/[exe] RE216_JALON05_CLIENT/Source Files/main_client_functions.c</name>
 			<type>1</type>
-			<location>/home/elsa/Documents/RE216/jalon05/src/jalon05/src/include/main_client_functions.c</location>
+			<location>/home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/main_client_functions.c</location>
 		</link>
 		<link>
 			<name>[Targets]/[exe] RE216_JALON05_CLIENT/Source Files/lines.c</name>
 			<type>1</type>
-			<location>/home/elsa/Documents/RE216/jalon05/src/jalon05/src/include/lines.c</location>
+			<location>/home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/lines.c</location>
 		</link>
 		<link>
 			<name>[Targets]/[exe] RE216_JALON05_CLIENT/Header Files</name>
@@ -266,27 +184,27 @@
 		<link>
 			<name>[Targets]/[exe] RE216_JALON05_CLIENT/Header Files/common_tools.h</name>
 			<type>1</type>
-			<location>/home/elsa/Documents/RE216/jalon05/src/jalon05/src/include/common_tools.h</location>
+			<location>/home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/common_tools.h</location>
 		</link>
 		<link>
 			<name>[Targets]/[exe] RE216_JALON05_CLIENT/Header Files/client_tools.h</name>
 			<type>1</type>
-			<location>/home/elsa/Documents/RE216/jalon05/src/jalon05/src/include/client_tools.h</location>
+			<location>/home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/client_tools.h</location>
 		</link>
 		<link>
 			<name>[Targets]/[exe] RE216_JALON05_CLIENT/Header Files/server_tools.h</name>
 			<type>1</type>
-			<location>/home/elsa/Documents/RE216/jalon05/src/jalon05/src/include/server_tools.h</location>
+			<location>/home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/server_tools.h</location>
 		</link>
 		<link>
 			<name>[Targets]/[exe] RE216_JALON05_CLIENT/Header Files/main_client_functions.h</name>
 			<type>1</type>
-			<location>/home/elsa/Documents/RE216/jalon05/src/jalon05/src/include/main_client_functions.h</location>
+			<location>/home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/main_client_functions.h</location>
 		</link>
 		<link>
 			<name>[Targets]/[exe] RE216_JALON05_CLIENT/Header Files/lines.h</name>
 			<type>1</type>
-			<location>/home/elsa/Documents/RE216/jalon05/src/jalon05/src/include/lines.h</location>
+			<location>/home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/lines.h</location>
 		</link>
 		<link>
 			<name>[Targets]/[exe] RE216_JALON05_CLIENT/CMake Rules</name>
@@ -300,6 +218,96 @@
 		</link>
 		<link>
 			<name>[Targets]/[exe] RE216_JALON05_CLIENT/Object Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] RE216_JALON05_CLIENT/Object Libraries</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] RE216_JALON05_SERVER</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] RE216_JALON05_SERVER/</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] RE216_JALON05_SERVER/Source Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] RE216_JALON05_SERVER/Source Files/server.c</name>
+			<type>1</type>
+			<location>/home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/server.c</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] RE216_JALON05_SERVER/Source Files/common_tools.c</name>
+			<type>1</type>
+			<location>/home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/common_tools.c</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] RE216_JALON05_SERVER/Source Files/server_tools.c</name>
+			<type>1</type>
+			<location>/home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/server_tools.c</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] RE216_JALON05_SERVER/Source Files/main_server_functions.c</name>
+			<type>1</type>
+			<location>/home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/main_server_functions.c</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] RE216_JALON05_SERVER/Source Files/lines.c</name>
+			<type>1</type>
+			<location>/home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/lines.c</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] RE216_JALON05_SERVER/Header Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] RE216_JALON05_SERVER/Header Files/common_tools.h</name>
+			<type>1</type>
+			<location>/home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/common_tools.h</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] RE216_JALON05_SERVER/Header Files/server_tools.h</name>
+			<type>1</type>
+			<location>/home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/server_tools.h</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] RE216_JALON05_SERVER/Header Files/main_server_functions.h</name>
+			<type>1</type>
+			<location>/home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/main_server_functions.h</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] RE216_JALON05_SERVER/Header Files/lines.h</name>
+			<type>1</type>
+			<location>/home/cdecourt/Documents/RE216/jalon05/src/jalon05/src/include/lines.h</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] RE216_JALON05_SERVER/CMake Rules</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] RE216_JALON05_SERVER/Resources</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] RE216_JALON05_SERVER/Object Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] RE216_JALON05_SERVER/Object Libraries</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
