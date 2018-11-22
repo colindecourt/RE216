@@ -18,7 +18,7 @@
 #define BUFF_LEN_MAX 1000
 #define PSEUDO_LEN_MAX 100
 //specify the socket to be a server socket and listen for at most 20 concurrent client
-#define BACKLOG 21 //Maximum clients = 20
+#define BACKLOG 3 //Maximum clients = 20
 #define CHANNEL_LEN_MAX 100
 
 // ------- MAIN -------- //
